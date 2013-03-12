@@ -42,8 +42,8 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 
 == Screenshots ==
 
-1. Google Analytics Dashboard for WP
-2. Google Analytics Dashboard Settings
+1. Google Analytics Dashboard for WP.
+2. Google Analytics Dashboard Settings.
 
 == License ==
 
