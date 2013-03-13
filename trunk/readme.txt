@@ -19,7 +19,8 @@ Using this plugin, your data is collected in a fast and secure manner because Go
 
 Related Links:
 
-* <a href="http://www.deconf.com" title="Google Analytics Dashboard for WP Plugin">Plugin Homepage</a>
+* <a href="http://www.deconf.com" title="Google Analytics Dashboard for WP Plugin">Google Analytics Dashboard Plugin Homepage</a>
+* <a href="http://forum.deconf.com/en/wordpress-plugins-f182/" title="Google Analytics Dashboard for WP Plugin">Google Analytics Dashboard Plugin Support</a>
 
 == Installation ==
 
@@ -28,7 +29,7 @@ Related Links:
 3. Open the plugin configuration page, which is located under Settings -> GA Dashboard and enter your API Key, Client Secret, Client ID and Table ID.
 4. Go to your Admin Dashboard, look for the widget called Google Analytics Dashboard and authorize the application.
 
-A step by step setup tutorial is available here [Google Analytics Dashboard for WP video tutorial](http://www.youtube.com/watch?v=636nZWIx2Ao)
+A step by step tutorial is available here: [Google Analytics Dashboard for WP video tutorial](http://www.youtube.com/watch?v=636nZWIx2Ao)
 
 == Frequently Asked Questions == 
 
@@ -42,8 +43,8 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 
 == Screenshots ==
 
-1. Google Analytics Dashboard for WP.
-2. Google Analytics Dashboard Settings.
+1. Google Analytics Dashboard for WP
+2. Google Analytics Dashboard Settings
 
 == License ==
 
