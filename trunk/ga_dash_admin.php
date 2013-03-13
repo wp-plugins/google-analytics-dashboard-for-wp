@@ -40,10 +40,9 @@ $token = get_option('ga_dash_token') ? "<font color='green'>Authorized</font>" :
 
 <div class="wrap">  
     <?php    echo "<h2>" . __( 'Google Analytics Dashboard Settings', 'ga_dash_trdom' ) . "</h2>"; ?>  
-      
-    <form name="ga_dash_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">  
+        <form name="ga_dash_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">  
         <input type="hidden" name="ga_dash_hidden" value="Y">  
-        <?php    echo "<h3>" . __( 'Google Analytics API', 'ga_dash_trdom' ) . "</h3>"; ?>  
+        <?php    echo "<h3>" . __( 'Google Analytics API', 'ga_dash_trdom' ); echo " (watch this <a href='http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/' target='_blank'>Step by step video tutorial</a>)"."</h3>"; ?>  
         <p><?php _e("<b>API Key: </b>" ); ?><input type="text" name="ga_dash_apikey" value="<?php echo $apikey; ?>" size="61"><?php _e("<i> ex: AIzaSyASK7dLaii4326AZVyZ6MCOIQOY6F30G_1</i>" ); ?></p>  
         <p><?php _e("<b>Client ID: </b>" ); ?><input type="text" name="ga_dash_clientid" value="<?php echo $clientid; ?>" size="60"><?php _e("<i> ex: 111342334706.apps.googleusercontent.com</i>" ); ?></p>  
         <p><?php _e("<b>Client Secret: </b>" ); ?><input type="text" name="ga_dash_clientsecret" value="<?php echo $clientsecret; ?>" size="55"><?php _e("<i> ex: c62POy23C_2qK5fd3fdsec2o</i>" ); ?></p>  
