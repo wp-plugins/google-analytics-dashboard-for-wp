@@ -6,7 +6,7 @@
 	function ga_dash_get_token (){
 
 		if (get_option('ga_dash_token')){
-			return get_option('ga_dash_token', $token);
+			return get_option('ga_dash_token');
 		}
 		else{
 			return;
