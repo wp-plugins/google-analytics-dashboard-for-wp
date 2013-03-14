@@ -36,13 +36,13 @@ function ga_dash_setup() {
 function ga_dash_content() {
 	
 	require_once 'functions.php';
-	require_once 'src/apiClient.php';
+	require_once 'src/Google_Client.php';
 		
-	require_once 'src/contrib/apiAnalyticsService.php';
+	require_once 'src/contrib/Google_AnalyticsService.php';
 	
 	$scriptUri = "http://".$_SERVER["HTTP_HOST"].$_SERVER['PHP_SELF'];
 
-	$client = new apiClient();
+	$client = new Google_Client();
 	$client->setAccessType('offline'); // default: offline
 	$client->setApplicationName('GA Dashboard');
 	$client->setClientId(get_option('ga_dash_clientid'));
@@ -57,9 +57,9 @@ function ga_dash_content() {
 		
 	}	
 	// $service implements the client interface, has to be set before auth call
-	$service = new apiAnalyticsService($client);
+	$service = new Google_AnalyticsService($client);
 
-	if (isset($_GET['code'])) { // we received the positive auth callback, get the token and store it in session
+	if (isset($_GET['code']) AND !(ga_dash_get_token())) { // we received the positive auth callback, get the token and store it in session
 		$client->authenticate();
 		ga_dash_store_token($client->getAccessToken());
 
@@ -215,6 +215,9 @@ function ga_dash_content() {
 	</div>';
 
 	echo $code;
+
+	unset($client);
+	unset($service);
     
 }	
 ?>
