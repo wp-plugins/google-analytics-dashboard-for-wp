@@ -7,11 +7,9 @@ Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin will display Google Analytics data and statistics into Admin Dashboard.
+This plugin will display Google Analytics data and statistics inside your WordPress Blog, on your Administration Dashboard.
 
 == Description ==
-
-This plugin will display Google Analytics data and statistics into Admin Dashboard.
 
 Using a widget, Google Analytics Dashboard for WP displays detailed info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Admin Dashboard.
 
