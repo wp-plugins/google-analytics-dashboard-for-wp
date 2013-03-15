@@ -36,7 +36,10 @@ function ga_dash_setup() {
 function ga_dash_content() {
 	
 	require_once 'functions.php';
-	require_once 'src/Google_Client.php';
+	
+	if (!class_exists('Google_Exception')) {
+		require_once 'src/Google_Client.php';
+	}
 		
 	require_once 'src/contrib/Google_AnalyticsService.php';
 	
