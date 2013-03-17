@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 1.3 
+Version: 1.4 
 Author URI: http://www.deconf.com
 */  
 
@@ -12,8 +12,10 @@ function ga_dash_admin() {
     include('ga_dash_admin.php');  
 } 
 	
-function ga_dash_admin_actions() {  
-    add_options_page("Google Analytics Dashboard", "GA Dashboard", 1, "Google_Analytics_Dashboard", "ga_dash_admin");     
+function ga_dash_admin_actions() {
+	if (current_user_can('manage_options')) {  
+		add_options_page("Google Analytics Dashboard", "GA Dashboard", 1, "Google_Analytics_Dashboard", "ga_dash_admin");
+	}		
 }  
   
 add_action('admin_menu', 'ga_dash_admin_actions'); 
@@ -23,7 +25,7 @@ wp_register_style( 'ga_dash', plugins_url('ga_dash.css', __FILE__) );
 wp_enqueue_style( 'ga_dash' );
 
 function ga_dash_setup() {
-	if ( current_user_can( 'manage_options' ) ) {
+	if (current_user_can(get_option('ga_dash_access'))) {
 		wp_add_dashboard_widget(
 			'ga-dash-widget',
 			'Google Analytics Dashboard',
@@ -78,6 +80,10 @@ function ga_dash_content() {
 		$authUrl = $client->createAuthUrl();
 		
 		if (!isset($_REQUEST['authorize'])){
+			if (!current_user_can('manage_options')){
+				echo "Ask an admin to authorize this Application";
+				return;
+			}
 			echo '<div style="padding:20px;"><form name="input" action="#" method="get">
 			<input type="submit" class="button button-primary" name="authorize" value="Authorize Google Analytics Dashboard"/>
 		</form></div>';
