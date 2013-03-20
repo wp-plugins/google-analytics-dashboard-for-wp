@@ -10,6 +10,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 This plugin will display Google Analytics data and statistics inside your WordPress Blog, on your Administration Dashboard.
 
 == Description ==
+This plugin is the only one allowing users to create their own Google API Project. Is a little more complicated to setup but using this plugin you will have your own API Key, Client Secret and Client ID and you won't have to worry about changes made by the developer in its API Project or about limit exceeded because of Google Analytics courtesy limit.
 
 Using a widget, Google Analytics Dashboard for WP displays detailed info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Admin Dashboard.
 
