@@ -2,6 +2,7 @@
 if ( !current_user_can( 'manage_options' ) ) {
 	return;
 }
+
 if (isset($_REQUEST['Reset'])){
 	require_once 'functions.php';
 	ga_dash_reset_token();
@@ -19,18 +20,26 @@ if (isset($_REQUEST['Reset'])){
         update_option('ga_dash_clientsecret', sanitize_text_field($clientsecret));  
 
         $dashaccess = $_POST['ga_dash_access'];  
-        update_option('ga_dash_access', $dashaccess); 
-
+        update_option('ga_dash_access', $dashaccess);
+		
+		$ga_dash_tableid_jail = $_POST['ga_dash_tableid_jail'];  
+        update_option('ga_dash_tableid_jail', $ga_dash_tableid_jail); 
+		
         ?>  
         <div class="updated"><p><strong><?php _e('Options saved.' ); ?></strong></p></div>  
 <?php  
     }
+
+if(!get_option('ga_dash_access')){
+	update_option('ga_dash_access', "manage_options");	
+}
 	
 $apikey = get_option('ga_dash_apikey');  
 $clientid = get_option('ga_dash_clientid');  
 $clientsecret = get_option('ga_dash_clientsecret');  
 $dashaccess = get_option('ga_dash_access'); 
-$token = get_option('ga_dash_token') ? "<font color='green'>Authorized</font>" : "<font color='red'>Not Authorized</font> - <i>You will need to authorize the application from your Admin Dashboard</i>";
+$token = get_option('ga_dash_token') ? "<font color='green'>Authorized</font>" : "<font color='red'>Not Authorized</font> - <i>You will need to Update Options and to authorize the application from your Admin Dashboard</i>";
+$ga_dash_tableid_jail = get_option('ga_dash_tableid_jail');
 
 ?>  
 
@@ -42,6 +51,7 @@ $token = get_option('ga_dash_token') ? "<font color='green'>Authorized</font>" :
         <p><?php _e("<b>API Key: </b>" ); ?><input type="text" name="ga_dash_apikey" value="<?php echo $apikey; ?>" size="61"><?php _e("<i> ex: AIzaSyASK7dLaii4326AZVyZ6MCOIQOY6F30G_1</i>" ); ?></p>  
         <p><?php _e("<b>Client ID: </b>" ); ?><input type="text" name="ga_dash_clientid" value="<?php echo $clientid; ?>" size="60"><?php _e("<i> ex: 111342334706.apps.googleusercontent.com</i>" ); ?></p>  
         <p><?php _e("<b>Client Secret: </b>" ); ?><input type="text" name="ga_dash_clientsecret" value="<?php echo $clientsecret; ?>" size="55"><?php _e("<i> ex: c62POy23C_2qK5fd3fdsec2o</i>" ); ?></p>  
+		<p><?php _e("<b>Application Status: </b>" ); echo $token; ?></p>  
 		<p><?php _e("<b>View Access Level: </b>" ); ?>
 		<select id="ga_dash_access" name="ga_dash_access">
 			<option value="manage_options" <?php if (($dashaccess=="manage_options") OR ($dashaccess=="")) echo "selected='yes'"?>>Administrators</option>
@@ -49,7 +59,25 @@ $token = get_option('ga_dash_token') ? "<font color='green'>Authorized</font>" :
 			<option value="publish_posts" <?php if ($dashaccess=="publish_posts") echo "selected='yes'"?>>Authors</option>
 			<option value="edit_posts" <?php if ($dashaccess=="edit_posts") echo "selected='yes'"?>>Contributors</option>
 		</select>
-		<p><?php _e("<b>Application Status: </b>" ); echo $token; ?></p>  
+		<p><?php
+		if (get_option('ga_dash_profile_list')){
+			_e("<b>Profile for selected access level: </b>" );
+			$profiles=explode(';',get_option('ga_dash_profile_list'));
+			echo '<select id="ga_dash_tableid_jail" name="ga_dash_tableid_jail">';
+			foreach ($profiles as $element) {
+				if ($element){
+					$items=explode(',',$element);
+					if (!get_option('ga_dash_tableid_jail')) {
+						update_option('ga_dash_tableid_jail',$items[1]);
+					}
+					echo '<option value="'.$items[1].'"'; 
+					if ((get_option('ga_dash_tableid_jail')==$items[1])) echo "selected='yes'";
+					echo '>'.$items[0].'</option>';
+				}	
+			}
+			echo '</select> <i>(this list will be available after authorizing)</i>';
+		
+		}?>
       
         <p class="submit">  
         <input type="submit" name="Submit" class="button button-primary" value="<?php _e('Update Options', 'ga_dash_trdom' ) ?>" />
