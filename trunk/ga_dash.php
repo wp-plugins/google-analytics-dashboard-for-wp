@@ -96,6 +96,30 @@ function ga_dash_content() {
 
 	}
 	
+	if (isset($_REQUEST['ga_dash_profiles'])) update_option('ga_dash_tableid',$_REQUEST['ga_dash_profiles']);
+
+	try {
+		$client->setUseObjects(true);
+		$profiles = $service->management_profiles->listManagementProfiles('~all','~all');
+		$items = $profiles->getItems();
+		echo '<form><select id="ga_dash_profiles" name="ga_dash_profiles" onchange="this.form.submit()">';
+		if (count($items) != 0) {
+			foreach ($items as &$profile) {
+				if (!get_option('ga_dash_tableid')) {
+					update_option('ga_dash_tableid',$profile->getId());
+				}
+				echo '<option value="'.$profile->getId().'"'; 
+				if ((get_option('ga_dash_tableid')==$profile->getId())) echo "selected='yes'";
+				echo '>'.$profile->getName().'</option>';
+			}
+		}
+		echo "</select></form><br />";
+		$client->setUseObjects(false);
+	} catch (exception $e) {
+		echo "<div style='padding:20px;'>Can't retrive your Google Analytics Profiles</div>";
+		return;
+	}
+	
 	$projectId = get_option('ga_dash_tableid');
 	
 	$query = ($_REQUEST['query']=="") ? "visits" : $_REQUEST['query'];

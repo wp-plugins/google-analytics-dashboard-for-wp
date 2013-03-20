@@ -16,7 +16,8 @@
 	
 	function ga_dash_reset_token (){
 
-		update_option('ga_dash_token', ""); 
+		update_option('ga_dash_token', "");
+		update_option('ga_dash_tableid', "");		
 	
 	}
 ?>
