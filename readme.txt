@@ -42,8 +42,9 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 
 == Screenshots ==
 
-1. Google Analytics Dashboard for WP
+1. Google Analytics Dashboard Blue Theme
 2. Google Analytics Dashboard Settings
+3. Google Analytics Dashboard Light Theme
 
 == License ==
 
