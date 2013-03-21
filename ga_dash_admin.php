@@ -63,7 +63,8 @@ $ga_dash_style = get_option('ga_dash_style');
     <?php echo "<h2>" . __( 'Google Analytics Dashboard Settings', 'ga_dash_trdom' ) . "</h2>"; ?>  
         <form name="ga_dash_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">  
         <input type="hidden" name="ga_dash_hidden" value="Y">  
-        <?php echo "<h3><u>" . __( 'Google Analytics API', 'ga_dash_trdom' ); echo " (watch this <a href='http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/' target='_blank'>Step by step video tutorial</a>)"."</u></h3>"; ?>  
+        <hr />
+		<?php echo "<h3><u>" . __( 'Google Analytics API', 'ga_dash_trdom' ); echo " (watch this <a href='http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/' target='_blank'>Step by step video tutorial</a>)"."</u></h3>"; ?>  
         <p><?php _e("<b>API Key: </b>" ); ?><input type="text" name="ga_dash_apikey" value="<?php echo $apikey; ?>" size="61"><?php _e("<i> ex: AIzaSyASK7dLaii4326AZVyZ6MCOIQOY6F30G_1</i>" ); ?></p>  
         <p><?php _e("<b>Client ID: </b>" ); ?><input type="text" name="ga_dash_clientid" value="<?php echo $clientid; ?>" size="60"><?php _e("<i> ex: 111342334706.apps.googleusercontent.com</i>" ); ?></p>  
         <p><?php _e("<b>Client Secret: </b>" ); ?><input type="text" name="ga_dash_clientsecret" value="<?php echo $clientsecret; ?>" size="55"><?php _e("<i> ex: c62POy23C_2qK5fd3fdsec2o</i>" ); ?></p>  
@@ -99,8 +100,6 @@ $ga_dash_style = get_option('ga_dash_style');
 		<?php echo "<h3><u>" . __( 'Display Settings', 'ga_dash_trdom' ). "</u></h3>";?>
 		<p><input name="ga_dash_pgd" type="checkbox" id="ga_dash_pgd" value="1"<?php if (get_option('ga_dash_pgd')) echo " checked='checked'"; ?>  /><?php _e(" show top five pages" ); ?></p>
 		<p><input name="ga_dash_rsd" type="checkbox" id="ga_dash_rsd" value="1"<?php if (get_option('ga_dash_rsd')) echo " checked='checked'"; ?>  /><?php _e(" show top five referrers and searches" ); ?></p>		
-        		<?php echo "<h3><u>" . __( 'Access Level', 'ga_dash_trdom' ). "</u></h3>";?>
-		<hr />
 		<p><?php _e("<b>CSS Settings: </b>" ); ?>
 		<select id="ga_dash_style" name="ga_dash_style">
 			<option value="blue" <?php if ($ga_dash_style=="blue") echo "selected='yes'"?>>Blue Theme</option>
