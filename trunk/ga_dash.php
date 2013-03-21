@@ -21,8 +21,13 @@ function ga_dash_admin_actions() {
 add_action('admin_menu', 'ga_dash_admin_actions'); 
 add_action( 'wp_dashboard_setup', 'ga_dash_setup' );
 
-wp_register_style( 'ga_dash', plugins_url('ga_dash.css', __FILE__) );
-wp_enqueue_style( 'ga_dash' );
+if (get_option('ga_dash_style')=="blue"){
+	wp_register_style( 'ga_dash', plugins_url('ga_dash.css', __FILE__) );
+	wp_enqueue_style( 'ga_dash' );
+} else{
+	wp_register_style( 'ga_dash', plugins_url('ga_dash_light.css', __FILE__) );
+	wp_enqueue_style( 'ga_dash' );
+}	
 
 function ga_dash_setup() {
 	if (current_user_can(get_option('ga_dash_access'))) {
@@ -104,6 +109,7 @@ function ga_dash_content() {
 			$profiles = $service->management_profiles->listManagementProfiles('~all','~all');
 			$items = $profiles->getItems();
 			echo '<form><select id="ga_dash_profiles" name="ga_dash_profiles" onchange="this.form.submit()">';
+			
 			if (count($items) != 0) {
 				$ga_dash_profile_list="";
 				foreach ($items as &$profile) {
@@ -113,7 +119,7 @@ function ga_dash_content() {
 					echo '<option value="'.$profile->getId().'"'; 
 					if ((get_option('ga_dash_tableid')==$profile->getId())) echo "selected='yes'";
 					echo '>'.$profile->getName().'</option>';
-					$ga_dash_profile_list=$ga_dash_profile_list.";".$profile->getName().",".$profile->getId();
+					$ga_dash_profile_list[]=array($profile->getName(),$profile->getId());
 				}
 				update_option('ga_dash_profile_list',$ga_dash_profile_list);
 			}
@@ -194,8 +200,21 @@ function ga_dash_content() {
 
 	$metrics = 'ga:visits,ga:visitors,ga:pageviews,ga:visitBounceRate,ga:organicSearches,ga:timeOnSite';
 	$dimensions = 'ga:year';
-	$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));	
-
+	try{
+		$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));	
+	}  
+		catch(exception $e) {
+		echo "<br />ERROR LOG:<br /><br />".$e; 
+	}
+	
+	if (get_option('ga_dash_style')=="light"){ 
+		$css="colors:['gray','darkgray'],";
+		$colors="black";
+	} else{
+		$css="";
+		$colors="darkblue";
+	}
+	
     $code='<script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
@@ -210,10 +229,10 @@ function ga_dash_content() {
 
         var options = {
 		  legend: {position: 'none'},	
-		  pointSize: 3,
+		  pointSize: 3,".$css."
           title: '".$title."',
-		  chartArea: {width: '80%', height: '50%'},
-          hAxis: { title: 'Date',  titleTextStyle: {color: 'darkblue'}, showTextEvery: 5}
+		  chartArea: {width: '85%'},
+          hAxis: { title: 'Date',  titleTextStyle: {color: '".$colors."'}, showTextEvery: 5}
 		};
 
         var chart = new google.visualization.AreaChart(document.getElementById('chart1_div'));
@@ -260,11 +279,13 @@ function ga_dash_content() {
 		</div>
 	</center>		
 	</div>';
+	$code .= '<table width="95%" align="center">';
+	if (get_option('ga_dash_pgd'))
+		$code .= '<tr><td colspan="2" align="center"><h3>Top Pages</h3></td></tr><tr><td colspan="2">'.ga_dash_top_pages($service, $projectId, $from, $to).'</td></tr>';
+	if (get_option('ga_dash_rsd'))	
+		$code .= '<tr><td align="center"><h3>Top Referrers</h3></td><td align="center"><h3>Top Searches</h3></td></tr><tr><td width="50%" valign="top">'.ga_dash_top_referrers($service, $projectId, $from, $to).'</td><td width="50%" valign="top">'.ga_dash_top_searches($service, $projectId, $from, $to).'</td></tr>';
+	$code .= '</table>';	
+	echo $code;    
 
-	echo $code;
-
-	unset($client);
-	unset($service);
-    
 }	
 ?>
