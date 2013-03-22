@@ -3,7 +3,7 @@ Contributors: Deconf
 Tags: google, analytics, statistics, dashboard, widget, ga, stats
 Requires at least: 2.8
 Tested up to: 3.5.1
-Stable tag: 2.0
+Stable tag: 2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,16 +25,21 @@ Related Links:
 
 1. Upload the full directory into your wp-content/plugins directory
 2. Activate the plugin at the plugin administration page
-3. Open the plugin configuration page, which is located under Settings -> GA Dashboard and enter your API Key, Client Secret, Client ID and Table ID.
-4. Go to your Admin Dashboard, look for the widget called Google Analytics Dashboard and authorize the application.
+3. Open the plugin configuration page, which is located under Settings -> GA Dashboard and enter your API Key, Client Secret and Client ID.
+4. Authorize the application using the 'Authorize Application' button
+5. Go back to the plugin configuration page, which is located under Settings -> GA Dashboard to update the final settings.
 
 A step by step tutorial is available here: [Google Analytics Dashboard for WP video tutorial](http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/)
 
 == Frequently Asked Questions == 
 
-= Where can I find my Google API Key, Client Secret, Client ID and Table ID? =
+= Where can I find my Google API Key, Client Secret, Client ID? =
 
 Follow this step by step video tutorial: [Google Analytics Dashboard for WP](http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/)
+
+= Some settings are missing from your video tutorial ... =
+
+We are constantly improving our plugin, sometimes the video tutorial may be a little outdated.
 
 = More Questions? =
 
@@ -43,8 +48,8 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 == Screenshots ==
 
 1. Google Analytics Dashboard Blue Theme
-2. Google Analytics Dashboard Settings
-3. Google Analytics Dashboard Light Theme
+2. Google Analytics Dashboard Light Theme
+3. Google Analytics Dashboard Settings
 
 == License ==
 
