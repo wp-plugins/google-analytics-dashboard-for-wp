@@ -28,12 +28,21 @@
 		$metrics = 'ga:pageviews'; 
 		$dimensions = 'ga:pageTitle';
 		try{
-			$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions, 'sort' => '-ga:pageviews', 'max-results' => '5', 'filters' => 'ga:pagePath!=/'));	
+			$serial='gadash_qr4'.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to);
+			$transient = get_transient($serial);
+			if ( empty( $transient ) ){
+				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions, 'sort' => '-ga:pageviews', 'max-results' => '5', 'filters' => 'ga:pagePath!=/'));
+				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+			}else{
+				$data = $transient;		
+			}			
 		}  
 			catch(exception $e) {
 			echo "<br />ERROR LOG:<br /><br />".$e; 
 		}	
-		
+		if (!$data['rows']){
+			return;
+		}
 		$code .= '<ol>';
 		foreach ($data['rows'] as $items){
 			$code .= '<li><i>'.substr(esc_html($items[0]),0,70).'</i> - '.number_format($items[1]).' views</li>';
@@ -48,12 +57,21 @@
 		$metrics = 'ga:visits'; 
 		$dimensions = 'ga:source,ga:medium';
 		try{
-			$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions, 'sort' => '-ga:visits', 'max-results' => '6', 'filters' => 'ga:medium==referral'));	
+			$serial='gadash_qr5'.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to);
+			$transient = get_transient($serial);
+			if ( empty( $transient ) ){
+				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions, 'sort' => '-ga:visits', 'max-results' => '6', 'filters' => 'ga:medium==referral'));	
+				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+			}else{
+				$data = $transient;		
+			}			
 		}  
 			catch(exception $e) {
 			echo "<br />ERROR LOG:<br /><br />".$e; 
 		}	
-		
+		if (!$data['rows']){
+			return;
+		}
 		$code .= '<ul>';
 		foreach ($data['rows'] as $items){
 			$code .= '<li><i>'.esc_html($items[0]).'</i> - '.number_format($items[2]).' visits</li>';
@@ -68,17 +86,26 @@
 		$metrics = 'ga:visits'; 
 		$dimensions = 'ga:keyword';
 		try{
-			$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions, 'sort' => '-ga:visits', 'max-results' => '6', 'filters' => 'ga:keyword!=(not provided);ga:keyword!=(not set)'));	
+			$serial='gadash_qr6'.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to);
+			$transient = get_transient($serial);
+			if ( empty( $transient ) ){
+				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions, 'sort' => '-ga:visits', 'max-results' => '6', 'filters' => 'ga:keyword!=(not provided);ga:keyword!=(not set)'));
+				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+			}else{
+				$data = $transient;		
+			}			
 		}  
 			catch(exception $e) {
 			echo "<br />ERROR LOG:<br /><br />".$e; 
 		}	
-		
+		if (!$data['rows']){
+			return;
+		}
 		$code .= '<ul>';
 		foreach ($data['rows'] as $items){
 			$code .= '<li><i>'.esc_html($items[0]).'</i> - '.number_format($items[1]).' visits</li>';
 		}
 		$code .= '</ul>';
 		return $code;
-	}	
+	}
 ?>
