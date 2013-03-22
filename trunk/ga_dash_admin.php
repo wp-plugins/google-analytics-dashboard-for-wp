@@ -2,7 +2,10 @@
 if ( !current_user_can( 'manage_options' ) ) {
 	return;
 }
-
+if (isset($_REQUEST['Clear'])){
+	global $wpdb;
+	$sqlquery=$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_gadash%%'");
+}
 if (isset($_REQUEST['Reset'])){
 	require_once 'functions.php';
 	ga_dash_reset_token();
@@ -34,11 +37,23 @@ if (isset($_REQUEST['Reset'])){
 		$ga_dash_style = $_POST['ga_dash_style'];
 		update_option('ga_dash_style', $ga_dash_style);
 		
+		$ga_dash_cachetime = $_POST['ga_dash_cachetime'];
+		update_option('ga_dash_cachetime', $ga_dash_cachetime);
+		
         ?>  
         <div class="updated"><p><strong><?php _e('Options saved.' ); ?></strong></p></div>  
 <?php  
     }
 
+if (isset($_REQUEST['Authorize']) AND get_option('ga_dash_apikey') AND get_option('ga_dash_clientid') AND get_option('ga_dash_clientsecret')){
+	$adminurl = admin_url("#ga-dash-widget");
+	echo '<script> window.location="'.$adminurl.'"; </script> ';
+}
+else if (isset($_REQUEST['Authorize'])){
+	?><div class="updated"><p><strong><?php _e('API Key, Client ID or Client Secret is missing.' ); ?></strong></p></div>  
+	<?php
+}
+	
 if(!get_option('ga_dash_access')){
 	update_option('ga_dash_access', "manage_options");	
 }
@@ -46,16 +61,16 @@ if(!get_option('ga_dash_access')){
 if(!get_option('ga_dash_style')){
 	update_option('ga_dash_style', "blue");	
 }
-	
+
 $apikey = get_option('ga_dash_apikey');  
 $clientid = get_option('ga_dash_clientid');  
 $clientsecret = get_option('ga_dash_clientsecret');  
 $dashaccess = get_option('ga_dash_access'); 
-$token = get_option('ga_dash_token') ? "<font color='green'>Authorized</font>" : "<font color='red'>Not Authorized</font> - <i>You will need to Update Options and to authorize the application from your Admin Dashboard</i>";
 $ga_dash_tableid_jail = get_option('ga_dash_tableid_jail');
 $ga_dash_pgd = get_option('ga_dash_pgd');
 $ga_dash_rsd = get_option('ga_dash_rsd');
 $ga_dash_style = get_option('ga_dash_style');
+$ga_dash_cachetime = get_option('ga_dash_cachetime');
 
 ?>  
 
@@ -68,7 +83,13 @@ $ga_dash_style = get_option('ga_dash_style');
         <p><?php _e("<b>API Key: </b>" ); ?><input type="text" name="ga_dash_apikey" value="<?php echo $apikey; ?>" size="61"><?php _e("<i> ex: AIzaSyASK7dLaii4326AZVyZ6MCOIQOY6F30G_1</i>" ); ?></p>  
         <p><?php _e("<b>Client ID: </b>" ); ?><input type="text" name="ga_dash_clientid" value="<?php echo $clientid; ?>" size="60"><?php _e("<i> ex: 111342334706.apps.googleusercontent.com</i>" ); ?></p>  
         <p><?php _e("<b>Client Secret: </b>" ); ?><input type="text" name="ga_dash_clientsecret" value="<?php echo $clientsecret; ?>" size="55"><?php _e("<i> ex: c62POy23C_2qK5fd3fdsec2o</i>" ); ?></p>  
-		<p><?php _e("<b>Application Status: </b>" ); echo $token; ?></p>  
+		<p><?php 
+			if (get_option('ga_dash_token')){
+				echo "<input type=\"submit\" name=\"Reset\" class=\"button button-primary\" value=\"Clear Authorization\" />";
+			} else{
+				echo "<input type=\"submit\" name=\"Authorize\" class=\"button button-primary\" value=\"Authorize Application\" />";
+			} ?>
+		</p>  
 		<hr />
 		<?php echo "<h3><u>" . __( 'Access Level', 'ga_dash_trdom' ). "</u></h3>";?>
 		<p><?php _e("<b>View Access Level: </b>" ); ?>
@@ -105,9 +126,18 @@ $ga_dash_style = get_option('ga_dash_style');
 			<option value="blue" <?php if ($ga_dash_style=="blue") echo "selected='yes'"?>>Blue Theme</option>
 			<option value="light" <?php if ($ga_dash_style=="light") echo "selected='yes'"?>>Light Theme</option>
 		</select></p>
+		<hr />
+		<?php echo "<h3><u>" . __( 'Cache Settings', 'ga_dash_trdom' ). "</u></h3>";?>
+		<p><?php _e("<b>Cache Time: </b>" ); ?>
+		<select id="ga_dash_cachetime" name="ga_dash_cachetime">
+			<option value="10" <?php if (($ga_dash_cachetime=="10") OR ($ga_dash_cachetime=="")) echo "selected='yes'"?>>None</option>
+			<option value="900" <?php if ($ga_dash_cachetime=="900") echo "selected='yes'"?>>15 minutes</option>
+			<option value="1800" <?php if ($ga_dash_cachetime=="1800") echo "selected='yes'"?>>30 minutes</option>
+			<option value="3600" <?php if ($ga_dash_cachetime=="3600") echo "selected='yes'"?>>1 hour</option>
+		</select></p>		
 		<p class="submit">  
         <input type="submit" name="Submit" class="button button-primary" value="<?php _e('Update Options', 'ga_dash_trdom' ) ?>" />
-		<input type="submit" name="Reset" class="button button-primary" value="<?php _e('Reset Token', 'ga_dash_trdom' ) ?>" />		
+		<input type="submit" name="Clear" class="button button-primary" value="<?php _e('Clear Cache', 'ga_dash_trdom' ) ?>" />		
         </p>  
     </form>  
 </div> 

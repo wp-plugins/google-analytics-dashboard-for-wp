@@ -44,6 +44,10 @@ function ga_dash_content() {
 	
 	require_once 'functions.php';
 	
+	if(!get_option('ga_dash_cachetime')){
+		update_option('ga_dash_cachetime', "900");	
+	}
+
 	if (!class_exists('Google_Exception')) {
 		require_once 'src/Google_Client.php';
 	}
@@ -106,7 +110,14 @@ function ga_dash_content() {
 
 		try {
 			$client->setUseObjects(true);
-			$profiles = $service->management_profiles->listManagementProfiles('~all','~all');
+			$serial='gadash_qr1';
+			$transient = get_transient($serial);
+			if ( empty( $transient ) ){
+				$profiles = $service->management_profiles->listManagementProfiles('~all','~all');
+				set_transient( $serial, $profiles, get_option('ga_dash_cachetime') );
+			}else{
+				$profiles = $transient;		
+			}
 			$items = $profiles->getItems();
 			echo '<form><select id="ga_dash_profiles" name="ga_dash_profiles" onchange="this.form.submit()">';
 			
@@ -141,9 +152,15 @@ function ga_dash_content() {
 		}	
 	}
 	
-	
-	$query = ($_REQUEST['query']=="") ? "visits" : $_REQUEST['query'];
-	$period = ($_REQUEST['period']=="") ? "last30days" : $_REQUEST['period'];
+	if(isset($_REQUEST['query']))
+		$query = $_REQUEST['query'];
+	else	
+		$query = "visits";
+		
+	if(isset($_REQUEST['period']))	
+		$period = $_REQUEST['period'];
+	else
+		$period = "last30days"; 	
 
 	switch ($period){
 
@@ -185,23 +202,37 @@ function ga_dash_content() {
 
 	$metrics = 'ga:'.$query;
 	$dimensions = 'ga:year,ga:month,ga:day';
-	
-	try{		
-		$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));
+
+	try{
+		$serial='gadash_qr2'.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to.$metrics);
+		$transient = get_transient($serial);
+		if ( empty( $transient ) ){
+			echo "Not cached";
+			$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));
+			set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+		}else{
+			$data = $transient;		
+		}	
 	}  
 		catch(exception $e) {
 		echo "<br />ERROR LOG:<br /><br />".$e; 
 	}
+	$chart1_data="";
 	for ($i=0;$i<$data['totalResults'];$i++){
-
-	$chart1_data.="['".$data['rows'][$i][0]."-".$data['rows'][$i][1]."-".$data['rows'][$i][2]."',".round($data['rows'][$i][3],2)."],";
-
+		$chart1_data.="['".$data['rows'][$i][0]."-".$data['rows'][$i][1]."-".$data['rows'][$i][2]."',".round($data['rows'][$i][3],2)."],";
 	}
 
 	$metrics = 'ga:visits,ga:visitors,ga:pageviews,ga:visitBounceRate,ga:organicSearches,ga:timeOnSite';
 	$dimensions = 'ga:year';
 	try{
-		$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));	
+		$serial='gadash_qr3'.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to);;
+		$transient = get_transient($serial);
+		if ( empty( $transient ) ){
+			$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));
+			set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+		}else{
+			$data = $transient;		
+		}	
 	}  
 		catch(exception $e) {
 		echo "<br />ERROR LOG:<br /><br />".$e; 
@@ -284,8 +315,10 @@ function ga_dash_content() {
 		$code .= '<tr><td colspan="2" align="center"><h3>Top Pages</h3></td></tr><tr><td colspan="2">'.ga_dash_top_pages($service, $projectId, $from, $to).'</td></tr>';
 	if (get_option('ga_dash_rsd'))	
 		$code .= '<tr><td align="center"><h3>Top Referrers</h3></td><td align="center"><h3>Top Searches</h3></td></tr><tr><td width="50%" valign="top">'.ga_dash_top_referrers($service, $projectId, $from, $to).'</td><td width="50%" valign="top">'.ga_dash_top_searches($service, $projectId, $from, $to).'</td></tr>';
-	$code .= '</table>';	
-	echo $code;    
+	$code .= '</table>';
+	
+	echo $code; 
+   
 
 }	
 ?>
