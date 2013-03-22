@@ -16,6 +16,15 @@ Using a widget, Google Analytics Dashboard for WP displays detailed info and sta
 
 Using this plugin, your data is collected in a fast and secure manner because Google Analytics Dashboard for WP uses OAuth2 protocol and Google Analytics API.
 
+Main benefits:
+
+- you can access all websites statistics in a single widget (websites within same Google Account)
+- cache feature, this improves loading speed up to 7 times and avoids dailyLimitExceeded, usageLimits.userRateLimitExceededUnreg, userRateLimitExceeded errors from Google Analytics API
+- two themes: Blue Theme and Light Theme
+- access level settings and jail profile feature
+- option to display top five pages, referrers and searches
+- simple Authorization process
+
 Related Links:
 
 * <a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" title="Google Analytics Dashboard for WP Plugin">Google Analytics Dashboard Plugin Homepage</a>
