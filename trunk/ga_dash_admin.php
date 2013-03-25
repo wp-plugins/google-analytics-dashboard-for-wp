@@ -5,6 +5,8 @@ if ( !current_user_can( 'manage_options' ) ) {
 if (isset($_REQUEST['Clear'])){
 	global $wpdb;
 	$sqlquery=$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_gadash%%'");
+	?><div class="updated"><p><strong><?php _e('Cleared Cache.' ); ?></strong></p></div>  
+	<?php
 }
 if (isset($_REQUEST['Reset'])){
 	require_once 'functions.php';
@@ -45,10 +47,11 @@ if (isset($_REQUEST['Reset'])){
 		
 		$ga_dash_cachetime = $_POST['ga_dash_cachetime'];
 		update_option('ga_dash_cachetime', $ga_dash_cachetime);
-		
-        ?>  
-        <div class="updated"><p><strong><?php _e('Options saved.' ); ?></strong></p></div>  
-<?php  
+		if (!isset($_REQUEST['Clear']) AND !isset($_REQUEST['Reset'])){
+			?>  
+			<div class="updated"><p><strong><?php _e('Options saved.' ); ?></strong></p></div>  
+			<?php
+		}
     }
 
 if (isset($_REQUEST['Authorize']) AND get_option('ga_dash_apikey') AND get_option('ga_dash_clientid') AND get_option('ga_dash_clientsecret')){
