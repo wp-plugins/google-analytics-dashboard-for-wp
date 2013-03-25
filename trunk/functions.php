@@ -24,7 +24,7 @@
 	
 // Get Top Pages
 	function ga_dash_top_pages($service, $projectId, $from, $to){
-		$code="";
+
 		$metrics = 'ga:pageviews'; 
 		$dimensions = 'ga:pageTitle';
 		try{
@@ -56,7 +56,7 @@
 	
 // Get Top referrers
 	function ga_dash_top_referrers($service, $projectId, $from, $to){
-		$code="";
+
 		$metrics = 'ga:visits'; 
 		$dimensions = 'ga:source,ga:medium';
 		try{
@@ -88,7 +88,7 @@
 
 // Get Top searches
 	function ga_dash_top_searches($service, $projectId, $from, $to){
-		$code="";
+
 		$metrics = 'ga:visits'; 
 		$dimensions = 'ga:keyword';
 		try{
@@ -119,11 +119,72 @@
 	}
 // Get Visits by Country
 	function ga_dash_visits_country($service, $projectId, $from, $to){
-		$code="";
+
 		$metrics = 'ga:visits'; 
 		$dimensions = 'ga:country';
 		try{
 			$serial='gadash_qr7'.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to);
+			$transient = get_transient($serial);
+			if ( empty( $transient ) ){
+				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));
+				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+			}else{
+				$data = $transient;		
+			}			
+		}  
+			catch(exception $e) {
+			echo "<br />ERROR LOG:<br /><br />".$e; 
+		}	
+		if (!$data['rows']){
+			return 0;
+		}
+		
+		$ga_dash_data="";
+		for ($i=0;$i<$data['totalResults'];$i++){
+			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
+		}
+
+		return $ga_dash_data;
+
+	}	
+// Get Traffic Sources
+	function ga_dash_traffic_sources($service, $projectId, $from, $to){
+
+		$metrics = 'ga:visits'; 
+		$dimensions = 'ga:medium';
+		try{
+			$serial='gadash_qr8'.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to);
+			$transient = get_transient($serial);
+			if ( empty( $transient ) ){
+				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));
+				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+			}else{
+				$data = $transient;		
+			}			
+		}  
+			catch(exception $e) {
+			echo "<br />ERROR LOG:<br /><br />".$e; 
+		}	
+		if (!$data['rows']){
+			return 0;
+		}
+		
+		$ga_dash_data="";
+		for ($i=0;$i<$data['totalResults'];$i++){
+			$ga_dash_data.="['".str_replace("(none)","direct",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
+		}
+
+		return $ga_dash_data;
+
+	}
+
+// Get New vs. Returning
+	function ga_dash_new_return($service, $projectId, $from, $to){
+
+		$metrics = 'ga:visits'; 
+		$dimensions = 'ga:visitorType';
+		try{
+			$serial='gadash_qr9'.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to);
 			$transient = get_transient($serial);
 			if ( empty( $transient ) ){
 				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));

@@ -42,6 +42,9 @@ if (isset($_REQUEST['Reset'])){
 		$ga_dash_map = $_POST['ga_dash_map'];
 		update_option('ga_dash_map', $ga_dash_map);
 		
+		$ga_dash_traffic = $_POST['ga_dash_traffic'];
+		update_option('ga_dash_traffic', $ga_dash_traffic);		
+		
 		$ga_dash_style = $_POST['ga_dash_style'];
 		update_option('ga_dash_style', $ga_dash_style);
 		
@@ -80,6 +83,7 @@ $ga_dash_pgd = get_option('ga_dash_pgd');
 $ga_dash_rd = get_option('ga_dash_rd');
 $ga_dash_sd = get_option('ga_dash_sd');
 $ga_dash_map = get_option('ga_dash_map');
+$ga_dash_traffic = get_option('ga_dash_traffic');
 $ga_dash_style = get_option('ga_dash_style');
 $ga_dash_cachetime = get_option('ga_dash_cachetime');
 
@@ -131,6 +135,7 @@ $ga_dash_cachetime = get_option('ga_dash_cachetime');
 		<hr />
 		<?php echo "<h3><u>" . __( 'Display Settings', 'ga_dash_trdom' ). "</u></h3>";?>
 		<p><input name="ga_dash_map" type="checkbox" id="ga_dash_map" value="1"<?php if (get_option('ga_dash_map')) echo " checked='checked'"; ?>  /><?php _e(" show geo map for visits" ); ?></p>
+		<p><input name="ga_dash_traffic" type="checkbox" id="ga_dash_traffic" value="1"<?php if (get_option('ga_dash_traffic')) echo " checked='checked'"; ?>  /><?php _e(" show traffic overview" ); ?></p>
 		<p><input name="ga_dash_pgd" type="checkbox" id="ga_dash_pgd" value="1"<?php if (get_option('ga_dash_pgd')) echo " checked='checked'"; ?>  /><?php _e(" show top pages" ); ?></p>
 		<p><input name="ga_dash_rd" type="checkbox" id="ga_dash_rd" value="1"<?php if (get_option('ga_dash_rd')) echo " checked='checked'"; ?>  /><?php _e(" show top referrers" ); ?></p>		
 		<p><input name="ga_dash_sd" type="checkbox" id="ga_dash_sd" value="1"<?php if (get_option('ga_dash_sd')) echo " checked='checked'"; ?>  /><?php _e(" show top searches" ); ?></p>		
