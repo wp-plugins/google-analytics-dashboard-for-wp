@@ -22,8 +22,8 @@ Main benefits:
 - cache feature, this improves loading speed up to 7 times and avoids dailyLimitExceeded, usageLimits.userRateLimitExceededUnreg, userRateLimitExceeded errors from Google Analytics API
 - two themes: Blue Theme and Light Theme
 - access level settings and jail profile feature
-- option to display top 20 pages, referrers and searches and (sortable by columns)
-- option to display Visitors by Country on Geo Chart
+- option to display top 20 pages, referrers and searches (sortable by columns)
+- option to display Visitors by Country on Geo Map
 - simple Authorization process
 
 Related Links:
