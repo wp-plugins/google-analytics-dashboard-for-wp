@@ -48,9 +48,10 @@ a.gatable:hover {
 	text-decoration: none;
 }
 
-#chart1_div{
+#ga_dash_statsdata{
 	width: 90%;
-	display: block and margin: 0 auto;
+	display: block;
+	margin: 0 auto;
 }
 
 table.gatable {
