@@ -263,6 +263,9 @@ function ga_dash_content() {
 			}
 			if(typeof ga_dash_drawsd == "function"){
 				ga_dash_drawsd();
+			}
+			if(typeof ga_dash_drawtraffic == "function"){
+				ga_dash_drawtraffic();
 			}			
 	  }	
 
@@ -304,7 +307,42 @@ function ga_dash_content() {
 		chart.draw(data, options);
 		
       }";
-	}	  
+	}
+
+	if (get_option('ga_dash_traffic') AND ga_dash_traffic_sources($service, $projectId, $from, $to)){
+	 $code.='
+		google.load("visualization", "1", {packages:["corechart"]})
+	    function ga_dash_drawtraffic() {
+        var data = google.visualization.arrayToDataTable(['."
+          ['Source', 'Visits'],"
+		  .ga_dash_traffic_sources($service, $projectId, $from, $to).
+		'  
+        ]);
+
+        var datanvr = google.visualization.arrayToDataTable(['."
+          ['Type', 'Visits'],"
+		  .ga_dash_new_return($service, $projectId, $from, $to).
+		"  
+        ]);
+		
+        var chart = new google.visualization.PieChart(document.getElementById('ga_dash_trafficdata'));
+		chart.draw(data, {
+			is3D: true,
+			tooltipText: 'percentage',
+			legend: 'none',
+			title: 'Traffic Sources'
+		});
+		
+		var chart1 = new google.visualization.PieChart(document.getElementById('ga_dash_nvrdata'));
+		chart1.draw(datanvr,  {
+			is3D: true,
+			tooltipText: 'percentage',
+			legend: 'none',
+			title: 'New vs. Returning'
+		});
+		
+      }";
+	}	
 
 	if (get_option('ga_dash_pgd') AND ga_dash_top_pages($service, $projectId, $from, $to)){
 	 $code.='
@@ -409,14 +447,21 @@ function ga_dash_content() {
 			</table>
 					
 		</div>';
-		if (get_option('ga_dash_map')){
-			$code.='<br /><h3>Visits by Country</h3>
-			<div id="ga_dash_mapdata"></div>';
-		}
+		
+	if (get_option('ga_dash_map')){
+		$code.='<br /><h3>Visits by Country</h3>
+		<div id="ga_dash_mapdata"></div>';
+	}
+	
+	if (get_option('ga_dash_traffic')){
+		$code.='<br /><h3>Traffic Overview</h3>
+		<table width="100%"><tr><td width="50%"><div id="ga_dash_trafficdata"></div></td><td width="50%"><div id="ga_dash_nvrdata"></div></td></tr></table>';
+	}
+	
 	$code.='</center>		
 	</div>';
 	if (get_option('ga_dash_pgd'))
-		$code .= '<br /><div id="ga_dash_pgddata"></div>';
+		$code .= '<div id="ga_dash_pgddata"></div>';
 	if (get_option('ga_dash_rd'))	
 		$code .= '<div id="ga_dash_rdata"></div>';
 	if (get_option('ga_dash_sd'))	
