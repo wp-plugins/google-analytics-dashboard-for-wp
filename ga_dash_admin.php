@@ -31,8 +31,14 @@ if (isset($_REQUEST['Reset'])){
 		$ga_dash_pgd = $_POST['ga_dash_pgd'];
 		update_option('ga_dash_pgd', $ga_dash_pgd);
 
-		$ga_dash_rsd = $_POST['ga_dash_rsd'];
-		update_option('ga_dash_rsd', $ga_dash_rsd);
+		$ga_dash_rd = $_POST['ga_dash_rd'];
+		update_option('ga_dash_rd', $ga_dash_rd);
+
+		$ga_dash_sd = $_POST['ga_dash_sd'];
+		update_option('ga_dash_sd', $ga_dash_sd);		
+		
+		$ga_dash_map = $_POST['ga_dash_map'];
+		update_option('ga_dash_map', $ga_dash_map);
 		
 		$ga_dash_style = $_POST['ga_dash_style'];
 		update_option('ga_dash_style', $ga_dash_style);
@@ -68,7 +74,9 @@ $clientsecret = get_option('ga_dash_clientsecret');
 $dashaccess = get_option('ga_dash_access'); 
 $ga_dash_tableid_jail = get_option('ga_dash_tableid_jail');
 $ga_dash_pgd = get_option('ga_dash_pgd');
-$ga_dash_rsd = get_option('ga_dash_rsd');
+$ga_dash_rd = get_option('ga_dash_rd');
+$ga_dash_sd = get_option('ga_dash_sd');
+$ga_dash_map = get_option('ga_dash_map');
 $ga_dash_style = get_option('ga_dash_style');
 $ga_dash_cachetime = get_option('ga_dash_cachetime');
 
@@ -119,8 +127,10 @@ $ga_dash_cachetime = get_option('ga_dash_cachetime');
 		}?></p>
 		<hr />
 		<?php echo "<h3><u>" . __( 'Display Settings', 'ga_dash_trdom' ). "</u></h3>";?>
-		<p><input name="ga_dash_pgd" type="checkbox" id="ga_dash_pgd" value="1"<?php if (get_option('ga_dash_pgd')) echo " checked='checked'"; ?>  /><?php _e(" show top five pages" ); ?></p>
-		<p><input name="ga_dash_rsd" type="checkbox" id="ga_dash_rsd" value="1"<?php if (get_option('ga_dash_rsd')) echo " checked='checked'"; ?>  /><?php _e(" show top five referrers and searches" ); ?></p>		
+		<p><input name="ga_dash_map" type="checkbox" id="ga_dash_map" value="1"<?php if (get_option('ga_dash_map')) echo " checked='checked'"; ?>  /><?php _e(" show geo map for visits" ); ?></p>
+		<p><input name="ga_dash_pgd" type="checkbox" id="ga_dash_pgd" value="1"<?php if (get_option('ga_dash_pgd')) echo " checked='checked'"; ?>  /><?php _e(" show top pages" ); ?></p>
+		<p><input name="ga_dash_rd" type="checkbox" id="ga_dash_rd" value="1"<?php if (get_option('ga_dash_rd')) echo " checked='checked'"; ?>  /><?php _e(" show top referrers" ); ?></p>		
+		<p><input name="ga_dash_sd" type="checkbox" id="ga_dash_sd" value="1"<?php if (get_option('ga_dash_sd')) echo " checked='checked'"; ?>  /><?php _e(" show top searches" ); ?></p>		
 		<p><?php _e("<b>CSS Settings: </b>" ); ?>
 		<select id="ga_dash_style" name="ga_dash_style">
 			<option value="blue" <?php if ($ga_dash_style=="blue") echo "selected='yes'"?>>Blue Theme</option>

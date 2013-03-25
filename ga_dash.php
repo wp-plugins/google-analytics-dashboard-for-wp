@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 2.5.1
+Version: 3.0
 Author URI: http://www.deconf.com
 */  
 
@@ -216,9 +216,9 @@ function ga_dash_content() {
 		catch(exception $e) {
 		echo "<br />ERROR LOG:<br /><br />".$e; 
 	}
-	$chart1_data="";
+	$ga_dash_statsdata="";
 	for ($i=0;$i<$data['totalResults'];$i++){
-		$chart1_data.="['".$data['rows'][$i][0]."-".$data['rows'][$i][1]."-".$data['rows'][$i][2]."',".round($data['rows'][$i][3],2)."],";
+		$ga_dash_statsdata.="['".$data['rows'][$i][0]."-".$data['rows'][$i][1]."-".$data['rows'][$i][2]."',".round($data['rows'][$i][3],2)."],";
 	}
 
 	$metrics = 'ga:visits,ga:visitors,ga:pageviews,ga:visitBounceRate,ga:organicSearches,ga:timeOnSite';
@@ -242,18 +242,34 @@ function ga_dash_content() {
 		$colors="black";
 	} else{
 		$css="";
-		$colors="darkblue";
+		$colors="blue";
 	}
 	
     $code='<script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart1);
+      google.setOnLoadCallback(ga_dash_callback);
 
-      function drawChart1() {
+	  function ga_dash_callback(){
+			ga_dash_drawstats();
+			if(typeof ga_dash_drawmap == "function"){
+				ga_dash_drawmap();
+			}
+			if(typeof ga_dash_drawpgd == "function"){
+				ga_dash_drawpgd();
+			}			
+			if(typeof ga_dash_drawrd == "function"){
+				ga_dash_drawrd();
+			}
+			if(typeof ga_dash_drawsd == "function"){
+				ga_dash_drawsd();
+			}			
+	  }	
+
+      function ga_dash_drawstats() {
         var data = google.visualization.arrayToDataTable(['."
           ['Date', '".$title."'],"
-		  .$chart1_data.
+		  .$ga_dash_statsdata.
 		"  
         ]);
 
@@ -265,13 +281,100 @@ function ga_dash_content() {
           hAxis: { title: 'Date',  titleTextStyle: {color: '".$colors."'}, showTextEvery: 5}
 		};
 
-        var chart = new google.visualization.AreaChart(document.getElementById('chart1_div'));
+        var chart = new google.visualization.AreaChart(document.getElementById('ga_dash_statsdata'));
 		chart.draw(data, options);
 		
-      }
+      }";
 
-    </script>".'
-	<div id="ga-dash">
+	if (get_option('ga_dash_map') AND ga_dash_visits_country($service, $projectId, $from, $to)){
+	 $code.='
+		google.load("visualization", "1", {packages:["geochart"]})
+	    function ga_dash_drawmap() {
+        var data = google.visualization.arrayToDataTable(['."
+          ['Country', 'Visits'],"
+		  .ga_dash_visits_country($service, $projectId, $from, $to).
+		"  
+        ]);
+        
+		var options = {
+			colors: ['white', '".$colors."']
+		};
+		
+        var chart = new google.visualization.GeoChart(document.getElementById('ga_dash_mapdata'));
+		chart.draw(data, options);
+		
+      }";
+	}	  
+
+	if (get_option('ga_dash_pgd') AND ga_dash_top_pages($service, $projectId, $from, $to)){
+	 $code.='
+		google.load("visualization", "1", {packages:["table"]})
+	    function ga_dash_drawpgd() {
+        var data = google.visualization.arrayToDataTable(['."
+          ['Top Pages', 'Visits'],"
+		  .ga_dash_top_pages($service, $projectId, $from, $to).
+		"  
+        ]);
+		
+		var options = {
+			page: 'enable',
+			pageSize: 6,
+			width: '100%'
+		};        
+		
+        var chart = new google.visualization.Table(document.getElementById('ga_dash_pgddata'));
+		chart.draw(data, options);
+		
+      }";
+	}
+	
+	if (get_option('ga_dash_rd') AND ga_dash_top_referrers($service, $projectId, $from, $to)){
+	 $code.='
+		google.load("visualization", "1", {packages:["table"]})
+	    function ga_dash_drawrd() {
+        var datar = google.visualization.arrayToDataTable(['."
+          ['Top Referrers', 'Visits'],"
+		  .ga_dash_top_referrers($service, $projectId, $from, $to).
+		"  
+        ]);
+		
+		var options = {
+			page: 'enable',
+			pageSize: 6,
+			width: '100%'
+		};        
+		
+        var chart = new google.visualization.Table(document.getElementById('ga_dash_rdata'));
+		chart.draw(datar, options);
+		
+      }";
+	}
+
+	if (get_option('ga_dash_sd') AND ga_dash_top_searches($service, $projectId, $from, $to)){
+	 $code.='
+		google.load("visualization", "1", {packages:["table"]})
+	    function ga_dash_drawsd() {
+		
+        var datas = google.visualization.arrayToDataTable(['."
+          ['Top Searches', 'Visits'],"
+		  .ga_dash_top_searches($service, $projectId, $from, $to).
+		"  
+        ]);
+		
+		var options = {
+			page: 'enable',
+			pageSize: 6,
+			width: '100%'
+		};        
+		
+		var chart = new google.visualization.Table(document.getElementById('ga_dash_sdata'));
+		chart.draw(datas, options);
+		
+      }";
+	}
+	
+    $code.="</script>";
+	$code.='<div id="ga-dash">
 	<center>
 		<div id="buttons_div">
 		
@@ -283,8 +386,7 @@ function ga_dash_content() {
 		
 		</div>
 		
-		<div id="chart1_div"></div>
-		
+		<div id="ga_dash_statsdata"></div>
 		<div id="details_div">
 			
 			<table class="gatable" cellpadding="4">
@@ -306,15 +408,19 @@ function ga_dash_content() {
 			</tr>
 			</table>
 					
-		</div>
-	</center>		
+		</div>';
+		if (get_option('ga_dash_map')){
+			$code.='<br /><h3>Visits by Country</h3>
+			<div id="ga_dash_mapdata"></div>';
+		}
+	$code.='</center>		
 	</div>';
-	$code .= '<table width="95%" align="center">';
 	if (get_option('ga_dash_pgd'))
-		$code .= '<tr><td colspan="2" align="center"><h3>Top Pages</h3></td></tr><tr><td colspan="2">'.ga_dash_top_pages($service, $projectId, $from, $to).'</td></tr>';
-	if (get_option('ga_dash_rsd'))	
-		$code .= '<tr><td align="center"><h3>Top Referrers</h3></td><td align="center"><h3>Top Searches</h3></td></tr><tr><td width="50%" valign="top">'.ga_dash_top_referrers($service, $projectId, $from, $to).'</td><td width="50%" valign="top">'.ga_dash_top_searches($service, $projectId, $from, $to).'</td></tr>';
-	$code .= '</table>';
+		$code .= '<br /><div id="ga_dash_pgddata"></div>';
+	if (get_option('ga_dash_rd'))	
+		$code .= '<div id="ga_dash_rdata"></div>';
+	if (get_option('ga_dash_sd'))	
+		$code .= '<div id="ga_dash_sdata"></div>';
 	
 	echo $code; 
    

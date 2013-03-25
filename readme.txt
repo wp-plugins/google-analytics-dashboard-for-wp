@@ -3,7 +3,7 @@ Contributors: Deconf
 Tags: google, analytics, statistics, dashboard, widget, ga, stats
 Requires at least: 2.8
 Tested up to: 3.5.1
-Stable tag: 2.5.1
+Stable tag: 3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,7 +22,8 @@ Main benefits:
 - cache feature, this improves loading speed up to 7 times and avoids dailyLimitExceeded, usageLimits.userRateLimitExceededUnreg, userRateLimitExceeded errors from Google Analytics API
 - two themes: Blue Theme and Light Theme
 - access level settings and jail profile feature
-- option to display top five pages, referrers and searches
+- option to display top 20 pages, referrers and searches and (sortable by columns)
+- option to display Visitors by Country on Geo Chart
 - simple Authorization process
 
 Related Links:
@@ -59,6 +60,8 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 1. Google Analytics Dashboard Blue Theme
 2. Google Analytics Dashboard Light Theme
 3. Google Analytics Dashboard Settings
+4. Google Analytics Dashboard Geo Map
+5. Google Analytics Dashboard Top Pages, Top Referrers and Top Searches
 
 == License ==
 
