@@ -1,4 +1,12 @@
-<?php	
+<?php
+
+	function ga_dash_safe_get($key) {
+		if (array_key_exists($key, $_POST)) {
+			return $_POST[$key];
+		}
+		return false;
+	}
+	
 	function ga_dash_store_token ($token){
 		update_option('ga_dash_token', $token);
 	}		
@@ -46,7 +54,7 @@
 		
 		$ga_dash_data="";
 		$i=0;
-		while ($data['rows'][$i][0]){
+		while (isset($data['rows'][$i][0])){
 			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 			$i++;
 		}
@@ -78,7 +86,7 @@
 		
 		$ga_dash_data="";
 		$i=0;
-		while ($data['rows'][$i][0]){
+		while (isset($data['rows'][$i][0])){
 			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][2]."],";
 			$i++;
 		}
@@ -110,7 +118,7 @@
 		
 		$ga_dash_data="";
 		$i=0;
-		while ($data['rows'][$i][0]){
+		while (isset($data['rows'][$i][0])){
 			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 			$i++;
 		}

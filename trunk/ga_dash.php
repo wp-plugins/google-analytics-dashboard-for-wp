@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 3.1
+Version: 3.1.1
 Author URI: http://www.deconf.com
 */  
 
@@ -14,20 +14,24 @@ function ga_dash_admin() {
 	
 function ga_dash_admin_actions() {
 	if (current_user_can('manage_options')) {  
-		add_options_page("Google Analytics Dashboard", "GA Dashboard", 1, "Google_Analytics_Dashboard", "ga_dash_admin");
-	}		
+		add_options_page("Google Analytics Dashboard", "GA Dashboard", "manage_options", "Google_Analytics_Dashboard", "ga_dash_admin");
+
+	}
 }  
   
 add_action('admin_menu', 'ga_dash_admin_actions'); 
-add_action( 'wp_dashboard_setup', 'ga_dash_setup' );
+add_action('wp_dashboard_setup', 'ga_dash_setup');
+add_action('admin_enqueue_scripts', 'ga_dash_admin_enqueue_scripts');
 
-if (get_option('ga_dash_style')=="blue"){
-	wp_register_style( 'ga_dash', plugins_url('ga_dash.css', __FILE__) );
-	wp_enqueue_style( 'ga_dash' );
-} else{
-	wp_register_style( 'ga_dash', plugins_url('ga_dash_light.css', __FILE__) );
-	wp_enqueue_style( 'ga_dash' );
-}	
+function ga_dash_admin_enqueue_scripts() {
+	if (get_option('ga_dash_style')=="blue"){
+		wp_register_style( 'ga_dash', plugins_url('ga_dash.css', __FILE__) );
+		wp_enqueue_style( 'ga_dash' );
+	} else{
+		wp_register_style( 'ga_dash', plugins_url('ga_dash_light.css', __FILE__) );
+		wp_enqueue_style( 'ga_dash' );
+	}	
+}
 
 function ga_dash_setup() {
 	if (current_user_can(get_option('ga_dash_access'))) {
