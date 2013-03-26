@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 3.0
+Version: 3.1
 Author URI: http://www.deconf.com
 */  
 
@@ -110,6 +110,7 @@ function ga_dash_content() {
 
 		try {
 			$client->setUseObjects(true);
+			$profile_switch="";
 			$serial='gadash_qr1';
 			$transient = get_transient($serial);
 			if ( empty( $transient ) ){
@@ -119,7 +120,7 @@ function ga_dash_content() {
 				$profiles = $transient;		
 			}
 			$items = $profiles->getItems();
-			echo '<form><select id="ga_dash_profiles" name="ga_dash_profiles" onchange="this.form.submit()">';
+			$profile_switch.= '<form><select id="ga_dash_profiles" name="ga_dash_profiles" onchange="this.form.submit()">';
 			
 			if (count($items) != 0) {
 				$ga_dash_profile_list="";
@@ -127,22 +128,27 @@ function ga_dash_content() {
 					if (!get_option('ga_dash_tableid')) {
 						update_option('ga_dash_tableid',$profile->getId());
 					}
-					echo '<option value="'.$profile->getId().'"'; 
-					if ((get_option('ga_dash_tableid')==$profile->getId())) echo "selected='yes'";
-					echo '>'.$profile->getName().'</option>';
+					$profile_switch.= '<option value="'.$profile->getId().'"'; 
+					if ((get_option('ga_dash_tableid')==$profile->getId())) $profile_switch.= "selected='yes'";
+					$profile_switch.= '>'.$profile->getName().'</option>';
 					$ga_dash_profile_list[]=array($profile->getName(),$profile->getId());
 				}
 				update_option('ga_dash_profile_list',$ga_dash_profile_list);
 			}
-			echo "</select></form><br />";
+			$profile_switch.= "</select></form><br />";
 			$client->setUseObjects(false);
 		} catch (exception $e) {
-			echo "<div style='padding:20px;'>Can't retrive your Google Analytics Profiles</div>";
+			$profile_switch.= "<div style='padding:20px;'>Can't retrive your Google Analytics Profiles</div>";
 			return;
 		}
 	}
 	if (current_user_can('manage_options')) { 
-		$projectId = get_option('ga_dash_tableid');
+		if (get_option('ga_dash_jailadmins')){
+			$projectId = get_option('ga_dash_tableid_jail');
+		}else{
+			echo $profile_switch;
+			$projectId = get_option('ga_dash_tableid');
+		}	
 	} else{
 		if (get_option('ga_dash_tableid_jail')){
 			$projectId = get_option('ga_dash_tableid_jail');
@@ -288,129 +294,139 @@ function ga_dash_content() {
 		chart.draw(data, options);
 		
       }";
-
-	if (get_option('ga_dash_map') AND ga_dash_visits_country($service, $projectId, $from, $to)){
-	 $code.='
-		google.load("visualization", "1", {packages:["geochart"]})
-	    function ga_dash_drawmap() {
-        var data = google.visualization.arrayToDataTable(['."
-          ['Country', 'Visits'],"
-		  .ga_dash_visits_country($service, $projectId, $from, $to).
-		"  
-        ]);
-        
-		var options = {
-			colors: ['white', '".$colors."']
-		};
-		
-        var chart = new google.visualization.GeoChart(document.getElementById('ga_dash_mapdata'));
-		chart.draw(data, options);
-		
-      }";
+	if (get_option('ga_dash_map')){
+		$ga_dash_visits_country=ga_dash_visits_country($service, $projectId, $from, $to);
+		if ($ga_dash_visits_country){
+		 $code.='
+			google.load("visualization", "1", {packages:["geochart"]})
+			function ga_dash_drawmap() {
+			var data = google.visualization.arrayToDataTable(['."
+			  ['Country', 'Visits'],"
+			  .$ga_dash_visits_country.
+			"  
+			]);
+			
+			var options = {
+				colors: ['white', '".$colors."']
+			};
+			
+			var chart = new google.visualization.GeoChart(document.getElementById('ga_dash_mapdata'));
+			chart.draw(data, options);
+			
+		  }";
+		}
 	}
+	if (get_option('ga_dash_traffic')){
+		$ga_dash_traffic_sources=ga_dash_traffic_sources($service, $projectId, $from, $to);
+		$ga_dash_new_return=ga_dash_new_return($service, $projectId, $from, $to);
+		if ($ga_dash_traffic_sources AND $ga_dash_new_return){
+		 $code.='
+			google.load("visualization", "1", {packages:["corechart"]})
+			function ga_dash_drawtraffic() {
+			var data = google.visualization.arrayToDataTable(['."
+			  ['Source', 'Visits'],"
+			  .$ga_dash_traffic_sources.
+			'  
+			]);
 
-	if (get_option('ga_dash_traffic') AND ga_dash_traffic_sources($service, $projectId, $from, $to)){
-	 $code.='
-		google.load("visualization", "1", {packages:["corechart"]})
-	    function ga_dash_drawtraffic() {
-        var data = google.visualization.arrayToDataTable(['."
-          ['Source', 'Visits'],"
-		  .ga_dash_traffic_sources($service, $projectId, $from, $to).
-		'  
-        ]);
-
-        var datanvr = google.visualization.arrayToDataTable(['."
-          ['Type', 'Visits'],"
-		  .ga_dash_new_return($service, $projectId, $from, $to).
-		"  
-        ]);
-		
-        var chart = new google.visualization.PieChart(document.getElementById('ga_dash_trafficdata'));
-		chart.draw(data, {
-			is3D: true,
-			tooltipText: 'percentage',
-			legend: 'none',
-			title: 'Traffic Sources'
-		});
-		
-		var chart1 = new google.visualization.PieChart(document.getElementById('ga_dash_nvrdata'));
-		chart1.draw(datanvr,  {
-			is3D: true,
-			tooltipText: 'percentage',
-			legend: 'none',
-			title: 'New vs. Returning'
-		});
-		
-      }";
+			var datanvr = google.visualization.arrayToDataTable(['."
+			  ['Type', 'Visits'],"
+			  .$ga_dash_new_return.
+			"  
+			]);
+			
+			var chart = new google.visualization.PieChart(document.getElementById('ga_dash_trafficdata'));
+			chart.draw(data, {
+				is3D: true,
+				tooltipText: 'percentage',
+				legend: 'none',
+				title: 'Traffic Sources'
+			});
+			
+			var chart1 = new google.visualization.PieChart(document.getElementById('ga_dash_nvrdata'));
+			chart1.draw(datanvr,  {
+				is3D: true,
+				tooltipText: 'percentage',
+				legend: 'none',
+				title: 'New vs. Returning'
+			});
+			
+		  }";
+		}
 	}	
-
-	if (get_option('ga_dash_pgd') AND ga_dash_top_pages($service, $projectId, $from, $to)){
-	 $code.='
-		google.load("visualization", "1", {packages:["table"]})
-	    function ga_dash_drawpgd() {
-        var data = google.visualization.arrayToDataTable(['."
-          ['Top Pages', 'Visits'],"
-		  .ga_dash_top_pages($service, $projectId, $from, $to).
-		"  
-        ]);
-		
-		var options = {
-			page: 'enable',
-			pageSize: 6,
-			width: '100%'
-		};        
-		
-        var chart = new google.visualization.Table(document.getElementById('ga_dash_pgddata'));
-		chart.draw(data, options);
-		
-      }";
+	if (get_option('ga_dash_pgd')){
+		$ga_dash_top_pages=ga_dash_top_pages($service, $projectId, $from, $to);
+		if ($ga_dash_top_pages){
+		 $code.='
+			google.load("visualization", "1", {packages:["table"]})
+			function ga_dash_drawpgd() {
+			var data = google.visualization.arrayToDataTable(['."
+			  ['Top Pages', 'Visits'],"
+			  .$ga_dash_top_pages.
+			"  
+			]);
+			
+			var options = {
+				page: 'enable',
+				pageSize: 6,
+				width: '100%'
+			};        
+			
+			var chart = new google.visualization.Table(document.getElementById('ga_dash_pgddata'));
+			chart.draw(data, options);
+			
+		  }";
+		}
 	}
-	
-	if (get_option('ga_dash_rd') AND ga_dash_top_referrers($service, $projectId, $from, $to)){
-	 $code.='
-		google.load("visualization", "1", {packages:["table"]})
-	    function ga_dash_drawrd() {
-        var datar = google.visualization.arrayToDataTable(['."
-          ['Top Referrers', 'Visits'],"
-		  .ga_dash_top_referrers($service, $projectId, $from, $to).
-		"  
-        ]);
-		
-		var options = {
-			page: 'enable',
-			pageSize: 6,
-			width: '100%'
-		};        
-		
-        var chart = new google.visualization.Table(document.getElementById('ga_dash_rdata'));
-		chart.draw(datar, options);
-		
-      }";
+	if (get_option('ga_dash_rd')){
+		$ga_dash_top_referrers=ga_dash_top_referrers($service, $projectId, $from, $to);
+		if ($ga_dash_top_referrers){
+		 $code.='
+			google.load("visualization", "1", {packages:["table"]})
+			function ga_dash_drawrd() {
+			var datar = google.visualization.arrayToDataTable(['."
+			  ['Top Referrers', 'Visits'],"
+			  .$ga_dash_top_referrers.
+			"  
+			]);
+			
+			var options = {
+				page: 'enable',
+				pageSize: 6,
+				width: '100%'
+			};        
+			
+			var chart = new google.visualization.Table(document.getElementById('ga_dash_rdata'));
+			chart.draw(datar, options);
+			
+		  }";
+		}
 	}
-
-	if (get_option('ga_dash_sd') AND ga_dash_top_searches($service, $projectId, $from, $to)){
-	 $code.='
-		google.load("visualization", "1", {packages:["table"]})
-	    function ga_dash_drawsd() {
-		
-        var datas = google.visualization.arrayToDataTable(['."
-          ['Top Searches', 'Visits'],"
-		  .ga_dash_top_searches($service, $projectId, $from, $to).
-		"  
-        ]);
-		
-		var options = {
-			page: 'enable',
-			pageSize: 6,
-			width: '100%'
-		};        
-		
-		var chart = new google.visualization.Table(document.getElementById('ga_dash_sdata'));
-		chart.draw(datas, options);
-		
-      }";
+	if (get_option('ga_dash_sd')){
+		$ga_dash_top_searches=ga_dash_top_searches($service, $projectId, $from, $to);
+		if ($ga_dash_top_searches){
+		 $code.='
+			google.load("visualization", "1", {packages:["table"]})
+			function ga_dash_drawsd() {
+			
+			var datas = google.visualization.arrayToDataTable(['."
+			  ['Top Searches', 'Visits'],"
+			  .$ga_dash_top_searches.
+			"  
+			]);
+			
+			var options = {
+				page: 'enable',
+				pageSize: 6,
+				width: '100%'
+			};        
+			
+			var chart = new google.visualization.Table(document.getElementById('ga_dash_sdata'));
+			chart.draw(datas, options);
+			
+		  }";
+		}
 	}
-	
     $code.="</script>";
 	$code.='<div id="ga-dash">
 	<center>
