@@ -3,16 +3,16 @@ Contributors: Deconf
 Tags: google, analytics, statistics, dashboard, widget, ga, stats
 Requires at least: 2.8
 Tested up to: 3.5.1
-Stable tag: 3.0
+Stable tag: 3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Google Analytics Dashboard for WP will display Google Analytics data and statistics inside your WordPress Blog, on your Administration Dashboard.
+This plugin will display Google Analytics data and statistics inside your WordPress Blog, on your Administration Dashboard.
 
 == Description ==
-Google Analytics Dashboard for WP allows users to create their own Google API Project. Using this plugin you will have your own API Key, Client Secret and Client ID and you won't have to worry about changes made by the developer in its API Project or about limit exceeded error because of Analytics API Project daily courtesy limit.
-
 Using a widget, Google Analytics Dashboard for WP displays detailed info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Admin Dashboard.
+
+This plugin will allow users to create their own Google API Project. Using this plugin you will have your own API Key, Client Secret and Client ID and you won't have to worry about changes made by the developer in its API Project or about limit exceeded error because of Analytics API Project daily courtesy limit.
 
 Using this plugin, your data is collected in a fast and secure manner because Google Analytics Dashboard for WP uses OAuth2 protocol and Google Analytics API.
 
@@ -62,6 +62,7 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 3. Google Analytics Dashboard Settings
 4. Google Analytics Dashboard Geo Map
 5. Google Analytics Dashboard Top Pages, Top Referrers and Top Searches
+6. Google Analytics Dashboard Traffic Overview
 
 == License ==
 

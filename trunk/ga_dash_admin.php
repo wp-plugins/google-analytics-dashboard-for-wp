@@ -48,6 +48,9 @@ if (isset($_REQUEST['Reset'])){
 		$ga_dash_style = $_POST['ga_dash_style'];
 		update_option('ga_dash_style', $ga_dash_style);
 		
+		$ga_dash_jailadmins = $_POST['ga_dash_jailadmins'];
+		update_option('ga_dash_jailadmins', $ga_dash_jailadmins);
+		
 		$ga_dash_cachetime = $_POST['ga_dash_cachetime'];
 		update_option('ga_dash_cachetime', $ga_dash_cachetime);
 		if (!isset($_REQUEST['Clear']) AND !isset($_REQUEST['Reset'])){
@@ -86,6 +89,7 @@ $ga_dash_map = get_option('ga_dash_map');
 $ga_dash_traffic = get_option('ga_dash_traffic');
 $ga_dash_style = get_option('ga_dash_style');
 $ga_dash_cachetime = get_option('ga_dash_cachetime');
+$ga_dash_jailadmins = get_option('ga_dash_jailadmins');
 
 ?>  
 
@@ -107,16 +111,17 @@ $ga_dash_cachetime = get_option('ga_dash_cachetime');
 		</p>  
 		<hr />
 		<?php echo "<h3><u>" . __( 'Access Level', 'ga_dash_trdom' ). "</u></h3>";?>
-		<p><?php _e("<b>View Access Level: </b>" ); ?>
+		<p><?php _e("View Access Level: " ); ?>
 		<select id="ga_dash_access" name="ga_dash_access">
 			<option value="manage_options" <?php if (($dashaccess=="manage_options") OR ($dashaccess=="")) echo "selected='yes'"?>>Administrators</option>
 			<option value="edit_pages" <?php if ($dashaccess=="edit_pages") echo "selected='yes'"?>>Editors</option>
 			<option value="publish_posts" <?php if ($dashaccess=="publish_posts") echo "selected='yes'"?>>Authors</option>
 			<option value="edit_posts" <?php if ($dashaccess=="edit_posts") echo "selected='yes'"?>>Contributors</option>
 		</select></p>
+
 		<p><?php
 		if (get_option('ga_dash_profile_list')){
-			_e("<b>Profile for selected access level: </b>" );
+			_e("Lock selected access level to this profile: " );
 			$profiles=get_option('ga_dash_profile_list');
 			echo '<select id="ga_dash_tableid_jail" name="ga_dash_tableid_jail">';
 			foreach ($profiles as $items) {
@@ -129,9 +134,12 @@ $ga_dash_cachetime = get_option('ga_dash_cachetime');
 					echo '>'.$items[0].'</option>';
 				}	
 			}
-			echo '</select> <i>(this list will be available after authorizing)</i>';
+			echo '</select>';
 		
 		}?></p>
+		
+		<p><input name="ga_dash_jailadmins" type="checkbox" id="ga_dash_jailadmins" value="1"<?php if (get_option('ga_dash_jailadmins')) echo " checked='checked'"; ?>  /><?php _e(" disable dashboard's Switch Profile functionality" ); ?></p>
+		
 		<hr />
 		<?php echo "<h3><u>" . __( 'Display Settings', 'ga_dash_trdom' ). "</u></h3>";?>
 		<p><input name="ga_dash_map" type="checkbox" id="ga_dash_map" value="1"<?php if (get_option('ga_dash_map')) echo " checked='checked'"; ?>  /><?php _e(" show geo map for visits" ); ?></p>
@@ -139,18 +147,18 @@ $ga_dash_cachetime = get_option('ga_dash_cachetime');
 		<p><input name="ga_dash_pgd" type="checkbox" id="ga_dash_pgd" value="1"<?php if (get_option('ga_dash_pgd')) echo " checked='checked'"; ?>  /><?php _e(" show top pages" ); ?></p>
 		<p><input name="ga_dash_rd" type="checkbox" id="ga_dash_rd" value="1"<?php if (get_option('ga_dash_rd')) echo " checked='checked'"; ?>  /><?php _e(" show top referrers" ); ?></p>		
 		<p><input name="ga_dash_sd" type="checkbox" id="ga_dash_sd" value="1"<?php if (get_option('ga_dash_sd')) echo " checked='checked'"; ?>  /><?php _e(" show top searches" ); ?></p>		
-		<p><?php _e("<b>CSS Settings: </b>" ); ?>
+		<p><?php _e("CSS Settings: " ); ?>
 		<select id="ga_dash_style" name="ga_dash_style">
 			<option value="blue" <?php if ($ga_dash_style=="blue") echo "selected='yes'"?>>Blue Theme</option>
 			<option value="light" <?php if ($ga_dash_style=="light") echo "selected='yes'"?>>Light Theme</option>
 		</select></p>
 		<hr />
 		<?php echo "<h3><u>" . __( 'Cache Settings', 'ga_dash_trdom' ). "</u></h3>";?>
-		<p><?php _e("<b>Cache Time: </b>" ); ?>
+		<p><?php _e("Cache Time: " ); ?>
 		<select id="ga_dash_cachetime" name="ga_dash_cachetime">
-			<option value="10" <?php if (($ga_dash_cachetime=="10") OR ($ga_dash_cachetime=="")) echo "selected='yes'"?>>None</option>
+			<option value="10" <?php if ($ga_dash_cachetime=="10") echo "selected='yes'"?>>None</option>
 			<option value="900" <?php if ($ga_dash_cachetime=="900") echo "selected='yes'"?>>15 minutes</option>
-			<option value="1800" <?php if ($ga_dash_cachetime=="1800") echo "selected='yes'"?>>30 minutes</option>
+			<option value="1800" <?php if (($ga_dash_cachetime=="1800") OR ($ga_dash_cachetime=="")) echo "selected='yes'"?>>30 minutes</option>
 			<option value="3600" <?php if ($ga_dash_cachetime=="3600") echo "selected='yes'"?>>1 hour</option>
 		</select></p>		
 		<p class="submit">  
