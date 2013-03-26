@@ -21,9 +21,10 @@ Main benefits:
 - you can access all websites statistics in a single widget (websites within same Google Account)
 - cache feature, this improves loading speed up to 7 times and avoids dailyLimitExceeded, usageLimits.userRateLimitExceededUnreg, userRateLimitExceeded errors from Google Analytics API
 - two themes: Blue Theme and Light Theme
-- access level settings and jail profile feature
+- access level settings and lock profile feature
 - option to display top 20 pages, referrers and searches (sortable by columns)
 - option to display Visitors by Country on Geo Map
+- option to display Traffic Overview in Pie Charts
 - simple Authorization process
 
 Related Links:
