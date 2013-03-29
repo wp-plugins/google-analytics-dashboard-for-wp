@@ -234,7 +234,7 @@ function ga_dash_content() {
 	$metrics = 'ga:visits,ga:visitors,ga:pageviews,ga:visitBounceRate,ga:organicSearches,ga:timeOnSite';
 	$dimensions = 'ga:year';
 	try{
-		$serial='gadash_qr3'.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to);;
+		$serial='gadash_qr3'.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to);
 		$transient = get_transient($serial);
 		if ( empty( $transient ) ){
 			$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));
