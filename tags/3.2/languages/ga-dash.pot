@@ -1,0 +1,322 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Google Analytics Dashboard for WP\n"
+"POT-Creation-Date: 2013-04-01 17:12+0200\n"
+"PO-Revision-Date: 2013-04-01 17:13+0200\n"
+"Last-Translator: Deconf <admin@deconf.com>\n"
+"Language-Team: Deconf <admin@deconf.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: ../.\n"
+
+#: .././functions.php:49 .././functions.php:81 .././functions.php:113
+#: .././functions.php:144 .././functions.php:174 .././functions.php:205
+#: .././ga_dash.php:227 .././ga_dash.php:247
+msgid "ERROR LOG:"
+msgstr ""
+
+#: .././ga_dash.php:73
+msgid "Client ID, Client Secret or API Key is missing"
+msgstr ""
+
+#: .././ga_dash.php:97
+msgid "Ask an admin to authorize this Application"
+msgstr ""
+
+#: .././ga_dash.php:101
+msgid "Authorize Google Analytics Dashboard"
+msgstr ""
+
+#: .././ga_dash.php:145
+msgid "Can't retrive your Google Analytics Profiles"
+msgstr ""
+
+#: .././ga_dash.php:160
+msgid "Ask an admin to asign a Google Analytics Profile"
+msgstr ""
+
+#: .././ga_dash.php:201
+msgid "Visitors"
+msgstr ""
+
+#: .././ga_dash.php:203
+msgid "Page Views"
+msgstr ""
+
+#: .././ga_dash.php:205
+msgid "Bounce Rate"
+msgstr ""
+
+#: .././ga_dash.php:207
+msgid "Organic Searches"
+msgstr ""
+
+#: .././ga_dash.php:209 .././ga_dash.php:308 .././ga_dash.php:331
+#: .././ga_dash.php:337 .././ga_dash.php:368 .././ga_dash.php:392
+#: .././ga_dash.php:417
+msgid "Visits"
+msgstr ""
+
+#: .././ga_dash.php:284 .././ga_dash.php:294
+msgid "Date"
+msgstr ""
+
+#: .././ga_dash.php:308
+msgid "Country"
+msgstr ""
+
+#: .././ga_dash.php:331
+msgid "Source"
+msgstr ""
+
+#: .././ga_dash.php:337
+msgid "Type"
+msgstr ""
+
+#: .././ga_dash.php:347
+msgid "Traffic Sources"
+msgstr ""
+
+#: .././ga_dash.php:355
+msgid "New vs. Returning"
+msgstr ""
+
+#: .././ga_dash.php:368
+msgid "Top Pages"
+msgstr ""
+
+#: .././ga_dash.php:392
+msgid "Top Referrers"
+msgstr ""
+
+#: .././ga_dash.php:417
+msgid "Top Searches"
+msgstr ""
+
+#: .././ga_dash.php:439
+msgid "Today"
+msgstr ""
+
+#: .././ga_dash.php:440
+msgid "Yesterday"
+msgstr ""
+
+#: .././ga_dash.php:441
+msgid "Last 7 days"
+msgstr ""
+
+#: .././ga_dash.php:442
+msgid "Last 14 days"
+msgstr ""
+
+#: .././ga_dash.php:443
+msgid "Last 30 days"
+msgstr ""
+
+#: .././ga_dash.php:452
+msgid "Visits:"
+msgstr ""
+
+#: .././ga_dash.php:454
+msgid "Visitors:"
+msgstr ""
+
+#: .././ga_dash.php:456
+msgid "Page Views:"
+msgstr ""
+
+#: .././ga_dash.php:460
+msgid "Bounce Rate:"
+msgstr ""
+
+#: .././ga_dash.php:462
+msgid "Organic Search:"
+msgstr ""
+
+#: .././ga_dash.php:464
+msgid "Pages per Visit:"
+msgstr ""
+
+#: .././ga_dash.php:472
+msgid "Visits by Country"
+msgstr ""
+
+#: .././ga_dash.php:477
+msgid "Traffic Overview"
+msgstr ""
+
+#: .././ga_dash_admin.php:10
+msgid "Cleared Cache."
+msgstr ""
+
+#: .././ga_dash_admin.php:16
+msgid "Token Reseted."
+msgstr ""
+
+#: .././ga_dash_admin.php:60
+msgid "Options saved."
+msgstr ""
+
+#: .././ga_dash_admin.php:70
+msgid "API Key, Client ID or Client Secret is missing."
+msgstr ""
+
+#: .././ga_dash_admin.php:99
+msgid "Google Analytics Dashboard Settings"
+msgstr ""
+
+#: .././ga_dash_admin.php:103
+msgid "Google Analytics API"
+msgstr ""
+
+#: .././ga_dash_admin.php:103
+msgid "watch this"
+msgstr ""
+
+#: .././ga_dash_admin.php:103
+msgid "Step by step video tutorial"
+msgstr ""
+
+#: .././ga_dash_admin.php:104
+msgid "API Key:"
+msgstr ""
+
+#: .././ga_dash_admin.php:104
+msgid "ex: AIzaSyASK7dLaii4326AZVyZ6MCOIQOY6F30G_1"
+msgstr ""
+
+#: .././ga_dash_admin.php:105
+msgid "Client ID:"
+msgstr ""
+
+#: .././ga_dash_admin.php:105
+msgid "ex: 111342334706.apps.googleusercontent.com"
+msgstr ""
+
+#: .././ga_dash_admin.php:106
+msgid "Client Secret:"
+msgstr ""
+
+#: .././ga_dash_admin.php:106
+msgid "ex: c62POy23C_2qK5fd3fdsec2o"
+msgstr ""
+
+#: .././ga_dash_admin.php:109
+msgid "Clear Authorization"
+msgstr ""
+
+#: .././ga_dash_admin.php:111
+msgid "Authorize Application"
+msgstr ""
+
+#: .././ga_dash_admin.php:115
+msgid "Access Level"
+msgstr ""
+
+#: .././ga_dash_admin.php:116
+msgid "View Access Level: "
+msgstr ""
+
+#: .././ga_dash_admin.php:118
+msgid "Administrators"
+msgstr ""
+
+#: .././ga_dash_admin.php:119
+msgid "Editors"
+msgstr ""
+
+#: .././ga_dash_admin.php:120
+msgid "Authors"
+msgstr ""
+
+#: .././ga_dash_admin.php:121
+msgid "Contributors"
+msgstr ""
+
+#: .././ga_dash_admin.php:126
+msgid "Lock selected access level to this profile: "
+msgstr ""
+
+#: .././ga_dash_admin.php:143
+msgid " disable dashboard's Switch Profile functionality"
+msgstr ""
+
+#: .././ga_dash_admin.php:146
+msgid "Display Settings"
+msgstr ""
+
+#: .././ga_dash_admin.php:147
+msgid " show geo map for visits"
+msgstr ""
+
+#: .././ga_dash_admin.php:148
+msgid " show traffic overview"
+msgstr ""
+
+#: .././ga_dash_admin.php:149
+msgid " show top pages"
+msgstr ""
+
+#: .././ga_dash_admin.php:150
+msgid " show top referrers"
+msgstr ""
+
+#: .././ga_dash_admin.php:151
+msgid " show top searches"
+msgstr ""
+
+#: .././ga_dash_admin.php:152
+msgid "CSS Settings: "
+msgstr ""
+
+#: .././ga_dash_admin.php:154
+msgid "Blue Theme"
+msgstr ""
+
+#: .././ga_dash_admin.php:155
+msgid "Light Theme"
+msgstr ""
+
+#: .././ga_dash_admin.php:158
+msgid "Cache Settings"
+msgstr ""
+
+#: .././ga_dash_admin.php:159
+msgid "Cache Time: "
+msgstr ""
+
+#: .././ga_dash_admin.php:161
+msgid "None"
+msgstr ""
+
+#: .././ga_dash_admin.php:162
+msgid "15 minutes"
+msgstr ""
+
+#: .././ga_dash_admin.php:163
+msgid "30 minutes"
+msgstr ""
+
+#: .././ga_dash_admin.php:164
+msgid "1 hour"
+msgstr ""
+
+#: .././ga_dash_admin.php:167
+msgid "Update Options"
+msgstr ""
+
+#: .././ga_dash_admin.php:168
+msgid "Clear Cache"
+msgstr ""
+
+#~ msgid ""
+#~ " (watch this <a href='http://www.deconf.com/en/projects/google-analytics-"
+#~ "dashboard-for-wordpress/' target='_blank'>Step by step video tutorial</a>)"
+#~ msgstr ""
+#~ " (watch this <a href='http://www.deconf.com/en/projects/google-analytics-"
+#~ "dashboard-for-wordpress/' target='_blank'>Step by step video tutorial</a>)"
