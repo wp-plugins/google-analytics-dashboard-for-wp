@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 3.1.1
+Version: 3.2
 Author URI: http://www.deconf.com
 */  
 
@@ -22,6 +22,11 @@ function ga_dash_admin_actions() {
 add_action('admin_menu', 'ga_dash_admin_actions'); 
 add_action('wp_dashboard_setup', 'ga_dash_setup');
 add_action('admin_enqueue_scripts', 'ga_dash_admin_enqueue_scripts');
+add_action('plugins_loaded', 'ga_dash_init');
+
+function ga_dash_init() {
+  	load_plugin_textdomain( 'ga-dash', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+}
 
 function ga_dash_admin_enqueue_scripts() {
 	if (get_option('ga_dash_style')=="blue"){
@@ -70,7 +75,7 @@ function ga_dash_content() {
 	//$client->setUseObjects(true);
 	if ((!get_option('ga_dash_clientid')) OR (!get_option('ga_dash_clientsecret')) OR (!get_option('ga_dash_apikey'))){
 		
-		echo "<div style='padding:20px;'>Client ID, Client Secret or API Key is missing</div>";
+		echo "<div style='padding:20px;'>".__("Client ID, Client Secret or API Key is missing", 'ga-dash')."</div>";
 		return;
 		
 	}	
@@ -94,11 +99,11 @@ function ga_dash_content() {
 		
 		if (!isset($_REQUEST['authorize'])){
 			if (!current_user_can('manage_options')){
-				echo "Ask an admin to authorize this Application";
+				_e("Ask an admin to authorize this Application", 'ga-dash');
 				return;
 			}
 			echo '<div style="padding:20px;"><form name="input" action="#" method="get">
-			<input type="submit" class="button button-primary" name="authorize" value="Authorize Google Analytics Dashboard"/>
+			<input type="submit" class="button button-primary" name="authorize" value="'.__("Authorize Google Analytics Dashboard", 'ga-dash').'"/>
 		</form></div>';
 			return;
 		}		
@@ -109,8 +114,11 @@ function ga_dash_content() {
 
 	}
 	
-	if (current_user_can('manage_options')) { 
-		if (isset($_REQUEST['ga_dash_profiles'])) update_option('ga_dash_tableid',$_REQUEST['ga_dash_profiles']);
+	if (current_user_can('manage_options')) {
+	
+		if (isset($_REQUEST['ga_dash_profiles'])){ 
+			update_option('ga_dash_tableid',$_REQUEST['ga_dash_profiles']);
+		}	
 
 		try {
 			$client->setUseObjects(true);
@@ -142,13 +150,18 @@ function ga_dash_content() {
 			$profile_switch.= "</select></form><br />";
 			$client->setUseObjects(false);
 		} catch (exception $e) {
-			$profile_switch.= "<div style='padding:20px;'>Can't retrive your Google Analytics Profiles</div>";
+			$profile_switch.= "<div style='padding:20px;'>".__("Can't retrive your Google Analytics Profiles", 'ga-dash')."</div>";
 			return;
 		}
 	}
 	if (current_user_can('manage_options')) { 
 		if (get_option('ga_dash_jailadmins')){
-			$projectId = get_option('ga_dash_tableid_jail');
+			if (get_option('ga_dash_tableid_jail')){
+				$projectId = get_option('ga_dash_tableid_jail');
+			}else{
+				_e("Ask an admin to asign a Google Analytics Profile", 'ga-dash');
+				return;
+			}
 		}else{
 			echo $profile_switch;
 			$projectId = get_option('ga_dash_tableid');
@@ -157,7 +170,7 @@ function ga_dash_content() {
 		if (get_option('ga_dash_tableid_jail')){
 			$projectId = get_option('ga_dash_tableid_jail');
 		}else{
-			echo "Ask an admin to asign a Google Analytics Profile";
+			_e("Ask an admin to asign a Google Analytics Profile", 'ga-dash');
 			return;
 		}	
 	}
@@ -198,15 +211,15 @@ function ga_dash_content() {
 
 	switch ($query){
 
-		case 'visitors'	:	$title="Visitors"; break;
+		case 'visitors'	:	$title=__("Visitors",'ga-dash'); break;
 
-		case 'pageviews'	:	$title="Page Views"; break;
+		case 'pageviews'	:	$title=__("Page Views",'ga-dash'); break;
 		
-		case 'visitBounceRate'	:	$title="Bounce Rate"; break;	
+		case 'visitBounceRate'	:	$title=__("Bounce Rate",'ga-dash'); break;	
 
-		case 'organicSearches'	:	$title="Organic Searches"; break;
+		case 'organicSearches'	:	$title=__("Organic Searches",'ga-dash'); break;
 		
-		default	:	$title="Visits";
+		default	:	$title=__("Visits",'ga-dash');
 
 	}
 
@@ -224,7 +237,7 @@ function ga_dash_content() {
 		}	
 	}  
 		catch(exception $e) {
-		echo "<br />ERROR LOG:<br /><br />".$e; 
+		echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
 	}
 	$ga_dash_statsdata="";
 	for ($i=0;$i<$data['totalResults'];$i++){
@@ -244,7 +257,7 @@ function ga_dash_content() {
 		}	
 	}  
 		catch(exception $e) {
-		echo "<br />ERROR LOG:<br /><br />".$e; 
+		echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
 	}
 	
 	if (get_option('ga_dash_style')=="light"){ 
@@ -281,7 +294,7 @@ function ga_dash_content() {
 
       function ga_dash_drawstats() {
         var data = google.visualization.arrayToDataTable(['."
-          ['Date', '".$title."'],"
+          ['".__("Date", 'ga-dash')."', '".$title."'],"
 		  .$ga_dash_statsdata.
 		"  
         ]);
@@ -291,7 +304,7 @@ function ga_dash_content() {
 		  pointSize: 3,".$css."
           title: '".$title."',
 		  chartArea: {width: '85%'},
-          hAxis: { title: 'Date',  titleTextStyle: {color: '".$colors."'}, showTextEvery: 5}
+          hAxis: { title: '".__("Date",'ga-dash')."',  titleTextStyle: {color: '".$colors."'}, showTextEvery: 5}
 		};
 
         var chart = new google.visualization.AreaChart(document.getElementById('ga_dash_statsdata'));
@@ -305,7 +318,7 @@ function ga_dash_content() {
 			google.load("visualization", "1", {packages:["geochart"]})
 			function ga_dash_drawmap() {
 			var data = google.visualization.arrayToDataTable(['."
-			  ['Country', 'Visits'],"
+			  ['".__("Country",'ga-dash')."', '".__("Visits",'ga-dash')."'],"
 			  .$ga_dash_visits_country.
 			"  
 			]);
@@ -328,13 +341,13 @@ function ga_dash_content() {
 			google.load("visualization", "1", {packages:["corechart"]})
 			function ga_dash_drawtraffic() {
 			var data = google.visualization.arrayToDataTable(['."
-			  ['Source', 'Visits'],"
+			  ['".__("Source",'ga-dash')."', '".__("Visits",'ga-dash')."'],"
 			  .$ga_dash_traffic_sources.
 			'  
 			]);
 
 			var datanvr = google.visualization.arrayToDataTable(['."
-			  ['Type', 'Visits'],"
+			  ['".__("Type",'ga-dash')."', '".__("Visits",'ga-dash')."'],"
 			  .$ga_dash_new_return.
 			"  
 			]);
@@ -344,7 +357,7 @@ function ga_dash_content() {
 				is3D: true,
 				tooltipText: 'percentage',
 				legend: 'none',
-				title: 'Traffic Sources'
+				title: '".__("Traffic Sources",'ga-dash')."'
 			});
 			
 			var chart1 = new google.visualization.PieChart(document.getElementById('ga_dash_nvrdata'));
@@ -352,7 +365,7 @@ function ga_dash_content() {
 				is3D: true,
 				tooltipText: 'percentage',
 				legend: 'none',
-				title: 'New vs. Returning'
+				title: '".__("New vs. Returning",'ga-dash')."'
 			});
 			
 		  }";
@@ -365,7 +378,7 @@ function ga_dash_content() {
 			google.load("visualization", "1", {packages:["table"]})
 			function ga_dash_drawpgd() {
 			var data = google.visualization.arrayToDataTable(['."
-			  ['Top Pages', 'Visits'],"
+			  ['".__("Top Pages",'ga-dash')."', '".__("Visits",'ga-dash')."'],"
 			  .$ga_dash_top_pages.
 			"  
 			]);
@@ -389,7 +402,7 @@ function ga_dash_content() {
 			google.load("visualization", "1", {packages:["table"]})
 			function ga_dash_drawrd() {
 			var datar = google.visualization.arrayToDataTable(['."
-			  ['Top Referrers', 'Visits'],"
+			  ['".__("Top Referrers",'ga-dash')."', '".__("Visits",'ga-dash')."'],"
 			  .$ga_dash_top_referrers.
 			"  
 			]);
@@ -414,7 +427,7 @@ function ga_dash_content() {
 			function ga_dash_drawsd() {
 			
 			var datas = google.visualization.arrayToDataTable(['."
-			  ['Top Searches', 'Visits'],"
+			  ['".__("Top Searches",'ga-dash')."', '".__("Visits",'ga-dash')."'],"
 			  .$ga_dash_top_searches.
 			"  
 			]);
@@ -436,11 +449,11 @@ function ga_dash_content() {
 	<center>
 		<div id="buttons_div">
 		
-			<input class="gabutton" type="button" value="Today" onClick="window.location=\'?period=today&query='.$query.'\'" />
-			<input class="gabutton" type="button" value="Yesterday" onClick="window.location=\'?period=yesterday&query='.$query.'\'" />
-			<input class="gabutton" type="button" value="Last 7 days" onClick="window.location=\'?period=last7days&query='.$query.'\'" />
-			<input class="gabutton" type="button" value="Last 14 days" onClick="window.location=\'?period=last14days&query='.$query.'\'" />
-			<input class="gabutton" type="button" value="Last 30 days" onClick="window.location=\'?period=last30days&query='.$query.'\'" />
+			<input class="gabutton" type="button" value="'.__("Today",'ga-dash').'" onClick="window.location=\'?period=today&query='.$query.'\'" />
+			<input class="gabutton" type="button" value="'.__("Yesterday",'ga-dash').'" onClick="window.location=\'?period=yesterday&query='.$query.'\'" />
+			<input class="gabutton" type="button" value="'.__("Last 7 days",'ga-dash').'" onClick="window.location=\'?period=last7days&query='.$query.'\'" />
+			<input class="gabutton" type="button" value="'.__("Last 14 days",'ga-dash').'" onClick="window.location=\'?period=last14days&query='.$query.'\'" />
+			<input class="gabutton" type="button" value="'.__("Last 30 days",'ga-dash').'" onClick="window.location=\'?period=last30days&query='.$query.'\'" />
 		
 		</div>
 		
@@ -449,19 +462,19 @@ function ga_dash_content() {
 			
 			<table class="gatable" cellpadding="4">
 			<tr>
-			<td width="24%">Visits:</td>
+			<td width="24%">'.__("Visits:",'ga-dash').'</td>
 			<td width="12%" class="gavalue"><a href="?query=visits&period='.$period.'" class="gatable">'.$data['rows'][0][1].'</td>
-			<td width="24%">Visitors:</td>
+			<td width="24%">'.__("Visitors:",'ga-dash').'</td>
 			<td width="12%" class="gavalue"><a href="?query=visitors&period='.$period.'" class="gatable">'.$data['rows'][0][2].'</a></td>
-			<td width="24%">Page Views:</td>
+			<td width="24%">'.__("Page Views:",'ga-dash').'</td>
 			<td width="12%" class="gavalue"><a href="?query=pageviews&period='.$period.'" class="gatable">'.$data['rows'][0][3].'</a></td>
 			</tr>
 			<tr>
-			<td>Bounce Rate:</td>
+			<td>'.__("Bounce Rate:",'ga-dash').'</td>
 			<td class="gavalue"><a href="?query=visitBounceRate&period='.$period.'" class="gatable">'.round($data['rows'][0][4],2).'%</a></td>
-			<td>Organic Search:</td>
+			<td>'.__("Organic Search:",'ga-dash').'</td>
 			<td class="gavalue"><a href="?query=organicSearches&period='.$period.'" class="gatable">'.$data['rows'][0][5].'</a></td>
-			<td>Pages per Visit:</td>
+			<td>'.__("Pages per Visit:",'ga-dash').'</td>
 			<td class="gavalue"><a href="#" class="gatable">'.(($data['rows'][0][1]) ? round($data['rows'][0][3]/$data['rows'][0][1],2) : '0').'</a></td>
 			</tr>
 			</table>
@@ -469,12 +482,12 @@ function ga_dash_content() {
 		</div>';
 		
 	if (get_option('ga_dash_map')){
-		$code.='<br /><h3>Visits by Country</h3>
+		$code.='<br /><h3>'.__("Visits by Country",'ga-dash').'</h3>
 		<div id="ga_dash_mapdata"></div>';
 	}
 	
 	if (get_option('ga_dash_traffic')){
-		$code.='<br /><h3>Traffic Overview</h3>
+		$code.='<br /><h3>'.__("Traffic Overview",'ga-dash').'</h3>
 		<table width="100%"><tr><td width="50%"><div id="ga_dash_trafficdata"></div></td><td width="50%"><div id="ga_dash_nvrdata"></div></td></tr></table>';
 	}
 	

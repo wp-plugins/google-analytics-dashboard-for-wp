@@ -1,5 +1,9 @@
 <?php
-
+	function ga_dash_clear_cache(){
+		global $wpdb;
+		$sqlquery=$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_gadash%%'");
+	}
+	
 	function ga_dash_safe_get($key) {
 		if (array_key_exists($key, $_POST)) {
 			return $_POST[$key];
@@ -46,7 +50,7 @@
 			}			
 		}  
 			catch(exception $e) {
-			echo "<br />ERROR LOG:<br /><br />".$e; 
+			echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
 		}	
 		if (!$data['rows']){
 			return 0;
@@ -78,7 +82,7 @@
 			}			
 		}  
 			catch(exception $e) {
-			echo "<br />ERROR LOG:<br /><br />".$e; 
+			echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
 		}	
 		if (!$data['rows']){
 			return 0;
@@ -110,7 +114,7 @@
 			}			
 		}  
 			catch(exception $e) {
-			echo "<br />ERROR LOG:<br /><br />".$e; 
+			echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
 		}	
 		if (!$data['rows']){
 			return 0;
@@ -141,7 +145,7 @@
 			}			
 		}  
 			catch(exception $e) {
-			echo "<br />ERROR LOG:<br /><br />".$e; 
+			echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
 		}	
 		if (!$data['rows']){
 			return 0;
@@ -171,7 +175,7 @@
 			}			
 		}  
 			catch(exception $e) {
-			echo "<br />ERROR LOG:<br /><br />".$e; 
+			echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
 		}	
 		if (!$data['rows']){
 			return 0;
@@ -202,7 +206,7 @@
 			}			
 		}  
 			catch(exception $e) {
-			echo "<br />ERROR LOG:<br /><br />".$e; 
+			echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
 		}	
 		if (!$data['rows']){
 			return 0;
