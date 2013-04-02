@@ -150,7 +150,7 @@ function ga_dash_content() {
 			$profile_switch.= "</select></form><br />";
 			$client->setUseObjects(false);
 		} catch (exception $e) {
-			$profile_switch.= "<div style='padding:20px;'>".__("Can't retrive your Google Analytics Profiles", 'ga-dash')."</div>";
+			echo "<div style='padding:20px;'>".__("Can't retrive your Google Analytics Profiles", 'ga-dash')."</div>";
 			return;
 		}
 	}
