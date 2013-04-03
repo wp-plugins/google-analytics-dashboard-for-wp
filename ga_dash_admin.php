@@ -114,10 +114,10 @@ $ga_dash_jailadmins = get_option('ga_dash_jailadmins');
 		<?php echo "<h3><u>" . __( 'Access Level', 'ga_dash' ). "</u></h3>";?>
 		<p><?php _e("View Access Level: ", 'ga-dash' ); ?>
 		<select id="ga_dash_access" name="ga_dash_access">
-			<option value="manage_options" <?php if (($dashaccess=="manage_options") OR (!$dashaccess)) echo "selected='yes'>".__("Administrators", 'ga-dash');?></option>
-			<option value="edit_pages" <?php if ($dashaccess=="edit_pages") echo "selected='yes'>".__("Editors", 'ga-dash');?></option>
-			<option value="publish_posts" <?php if ($dashaccess=="publish_posts") echo "selected='yes'>".__("Authors", 'ga-dash');?></option>
-			<option value="edit_posts" <?php if ($dashaccess=="edit_posts") echo "selected='yes'>".__("Contributors", 'ga-dash');?></option>
+			<option value="manage_options" <?php if (($dashaccess=="manage_options") OR (!$dashaccess)) echo "selected='yes'"; echo ">".__("Administrators", 'ga-dash');?></option>
+			<option value="edit_pages" <?php if ($dashaccess=="edit_pages") echo "selected='yes'"; echo ">".__("Editors", 'ga-dash');?></option>
+			<option value="publish_posts" <?php if ($dashaccess=="publish_posts") echo "selected='yes'"; echo ">".__("Authors", 'ga-dash');?></option>
+			<option value="edit_posts" <?php if ($dashaccess=="edit_posts") echo "selected='yes'"; echo ">".__("Contributors", 'ga-dash');?></option>
 		</select></p>
 
 		<p><?php
