@@ -45,6 +45,9 @@ if (isset($_REQUEST['Reset'])){
 		
 		$ga_dash_traffic = ga_dash_safe_get('ga_dash_traffic');
 		update_option('ga_dash_traffic', $ga_dash_traffic);		
+
+		$ga_dash_frontend = ga_dash_safe_get('ga_dash_frontend');
+		update_option('ga_dash_frontend', $ga_dash_frontend);		
 		
 		$ga_dash_style = ga_dash_safe_get('ga_dash_style');
 		update_option('ga_dash_style', $ga_dash_style);
@@ -59,8 +62,17 @@ if (isset($_REQUEST['Reset'])){
 			<div class="updated"><p><strong><?php _e('Options saved.', 'ga-dash'); ?></strong></p></div>  
 			<?php
 		}
-    }
-
+    }else if(ga_dash_safe_get('ga_dash_hidden') == 'A') {
+        $apikey = ga_dash_safe_get('ga_dash_apikey');  
+        update_option('ga_dash_apikey', sanitize_text_field($apikey));  
+          
+        $clientid = ga_dash_safe_get('ga_dash_clientid');  
+        update_option('ga_dash_clientid', sanitize_text_field($clientid));  
+          
+        $clientsecret = ga_dash_safe_get('ga_dash_clientsecret');  
+        update_option('ga_dash_clientsecret', sanitize_text_field($clientsecret));  
+	}
+	
 if (isset($_REQUEST['Authorize']) AND get_option('ga_dash_apikey') AND get_option('ga_dash_clientid') AND get_option('ga_dash_clientsecret')){
 	$adminurl = admin_url("#ga-dash-widget");
 	echo '<script> window.location="'.$adminurl.'"; </script> ';
@@ -88,6 +100,7 @@ $ga_dash_rd = get_option('ga_dash_rd');
 $ga_dash_sd = get_option('ga_dash_sd');
 $ga_dash_map = get_option('ga_dash_map');
 $ga_dash_traffic = get_option('ga_dash_traffic');
+$ga_dash_frontend = get_option('ga_dash_frontend');
 $ga_dash_style = get_option('ga_dash_style');
 $ga_dash_cachetime = get_option('ga_dash_cachetime');
 $ga_dash_jailadmins = get_option('ga_dash_jailadmins');
@@ -97,7 +110,6 @@ $ga_dash_jailadmins = get_option('ga_dash_jailadmins');
 <div class="wrap">  
     <?php echo "<h2>" . __( 'Google Analytics Dashboard Settings', 'ga_dash' ) . "</h2>"; ?>  
         <form name="ga_dash_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">  
-        <input type="hidden" name="ga_dash_hidden" value="Y">  
         <hr />
 		<?php echo "<h3><u>" . __( 'Google Analytics API', 'ga_dash' ). " (". __("watch this", 'ga-dash')." <a href='http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/' target='_blank'>". __("Step by step video tutorial")."</a>)"."</u></h3>"; ?>  
         <p><?php echo "<b>".__("API Key:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_apikey" value="<?php echo $apikey; ?>" size="61"><?php echo "<i> ".__("ex: AIzaSyASK7dLaii4326AZVyZ6MCOIQOY6F30G_1", 'ga-dash')."</i>"; ?></p>  
@@ -106,8 +118,13 @@ $ga_dash_jailadmins = get_option('ga_dash_jailadmins');
 		<p><?php 
 			if (get_option('ga_dash_token')){
 				echo "<input type=\"submit\" name=\"Reset\" class=\"button button-primary\" value=\"".__("Clear Authorization", 'ga-dash')."\" />";
+				echo '<input type="hidden" name="ga_dash_hidden" value="Y">';  
 			} else{
 				echo "<input type=\"submit\" name=\"Authorize\" class=\"button button-primary\" value=\"".__("Authorize Application", 'ga-dash')."\" />";
+				echo '<input type="hidden" name="ga_dash_hidden" value="A">';
+				echo "</form>";
+				_e("(the rest of the settings will show up after completing the authorization process)", 'ga-dash' );
+				return;
 			} ?>
 		</p>  
 		<hr />
@@ -140,9 +157,11 @@ $ga_dash_jailadmins = get_option('ga_dash_jailadmins');
 		}?></p>
 		
 		<p><input name="ga_dash_jailadmins" type="checkbox" id="ga_dash_jailadmins" value="1"<?php if (get_option('ga_dash_jailadmins')) echo " checked='checked'"; ?>  /><?php _e(" disable dashboard's Switch Profile functionality", 'ga-dash' ); ?></p>
-		
 		<hr />
-		<?php echo "<h3><u>" . __( 'Display Settings', 'ga_dash' ). "</u></h3>";?>
+		<?php echo "<h3><u>" . __( 'Frontend Settings', 'ga_dash' ). "</u></h3>";?>
+		<p><input name="ga_dash_frontend" type="checkbox" id="ga_dash_frontend" value="1"<?php if (get_option('ga_dash_frontend')) echo " checked='checked'"; ?>  /><?php _e(" show page visits and top searches in frontend (after each article)", 'ga-dash' ); ?></p>
+		<hr />
+		<?php echo "<h3><u>" . __( 'Backend Settings', 'ga_dash' ). "</u></h3>";?>
 		<p><input name="ga_dash_map" type="checkbox" id="ga_dash_map" value="1"<?php if (get_option('ga_dash_map')) echo " checked='checked'"; ?>  /><?php _e(" show geo map for visits", 'ga-dash' ); ?></p>
 		<p><input name="ga_dash_traffic" type="checkbox" id="ga_dash_traffic" value="1"<?php if (get_option('ga_dash_traffic')) echo " checked='checked'"; ?>  /><?php _e(" show traffic overview", 'ga-dash' ); ?></p>
 		<p><input name="ga_dash_pgd" type="checkbox" id="ga_dash_pgd" value="1"<?php if (get_option('ga_dash_pgd')) echo " checked='checked'"; ?>  /><?php _e(" show top pages", 'ga-dash' ); ?></p>

@@ -3,14 +3,16 @@ Contributors: Deconf
 Tags: google, analytics, statistics, dashboard, widget, ga, stats
 Requires at least: 2.8
 Tested up to: 3.5.1
-Stable tag: 3.2.1
+Stable tag: 3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin will display Google Analytics data and statistics inside your WordPress Blog, on your Administration Dashboard.
+This plugin will display Google Analytics data and statistics inside your WordPress Blog.
 
 == Description ==
 Using a widget, Google Analytics Dashboard for WP displays detailed info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Admin Dashboard.
+
+Authorized users can also view statistics like visits and top seraches, on frontend, at the end of each article.
 
 This plugin will allow users to create their own Google API Project. Using this plugin you will have your own API Key, Client Secret and Client ID and you won't have to worry about changes made by the developer in its API Project or about limit exceeded error because of Analytics API Project daily courtesy limit.
 
@@ -25,6 +27,7 @@ Main benefits:
 - option to display top 20 pages, referrers and searches (sortable by columns)
 - option to display Visitors by Country on Geo Map
 - option to display Traffic Overview in Pie Charts
+- option to display Google Analytics statistics on frontend, at the end of each article
 - simple Authorization process
 - has multilingual support, a POT file is available for translations. If you have a complete translation, send me the translation file or upload it to our forum and will be included in next release.
 
@@ -66,6 +69,7 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 4. Google Analytics Dashboard Geo Map
 5. Google Analytics Dashboard Top Pages, Top Referrers and Top Searches
 6. Google Analytics Dashboard Traffic Overview
+7. Google Analytics Dashboard statistics per page on Frontend
 
 == License ==
 

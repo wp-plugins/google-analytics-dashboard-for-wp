@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 3.2.1
+Version: 3.3
 Author URI: http://www.deconf.com
 */  
 
@@ -18,11 +18,212 @@ function ga_dash_admin_actions() {
 
 	}
 }  
-  
-add_action('admin_menu', 'ga_dash_admin_actions'); 
+
+
+add_filter('the_content', 'ga_dash_front_content');  
 add_action('wp_dashboard_setup', 'ga_dash_setup');
+add_action('admin_menu', 'ga_dash_admin_actions'); 
 add_action('admin_enqueue_scripts', 'ga_dash_admin_enqueue_scripts');
 add_action('plugins_loaded', 'ga_dash_init');
+
+function ga_dash_front_content($content) {
+	global $post;
+	if (!current_user_can(get_option('ga_dash_access')) OR !get_option('ga_dash_frontend')) {
+		return $content;
+	}
+	if(!is_feed() && !is_home()) {
+	
+		require_once 'functions.php';
+		
+		if(!get_option('ga_dash_cachetime')){
+			update_option('ga_dash_cachetime', "900");	
+		}
+
+		if (!class_exists('Google_Exception')) {
+			require_once 'src/Google_Client.php';
+		}
+			
+		require_once 'src/contrib/Google_AnalyticsService.php';
+		
+		$scriptUri = "http://".$_SERVER["HTTP_HOST"].$_SERVER['PHP_SELF'];
+
+		$client = new Google_Client();
+		$client->setAccessType('offline'); 
+		$client->setApplicationName('GA Dashboard');
+		$client->setClientId(get_option('ga_dash_clientid'));
+		$client->setClientSecret(get_option('ga_dash_clientsecret'));
+		$client->setRedirectUri($scriptUri);
+		$client->setDeveloperKey(get_option('ga_dash_APIKEY'));
+		
+		if ((!get_option('ga_dash_clientid')) OR (!get_option('ga_dash_clientsecret')) OR (!get_option('ga_dash_apikey'))){
+			return $content;
+		}	
+		
+		$service = new Google_AnalyticsService($client);
+
+		if (ga_dash_get_token()) { 
+			$token = ga_dash_get_token();
+			$client->setAccessToken($token);
+		}else{
+			return $content;
+		}		
+		
+		$from = date('Y-m-d', time()-30*24*60*60);
+		$to = date('Y-m-d');		
+		$metrics = 'ga:visits';
+		$dimensions = 'ga:year,ga:month,ga:day';
+		$page_url = $_SERVER["REQUEST_URI"];
+		//echo $page_url;
+		$post_id = $post->ID;
+		$title = "Visits";
+		if (get_option('ga_dash_style')=="light"){ 
+			$css="colors:['gray','darkgray'],";
+			$colors="black";
+		} else{
+			$css="";
+			$colors="blue";
+		}		
+
+		if (current_user_can('manage_options')) { 
+			if (get_option('ga_dash_jailadmins')){
+				if (get_option('ga_dash_tableid_jail')){
+					$projectId = get_option('ga_dash_tableid_jail');
+				}else{
+					//_e("Ask an admin to asign a Google Analytics Profile", 'ga-dash');
+					return $content;
+				}
+			}else{
+
+				$projectId = get_option('ga_dash_tableid');
+			}	
+		} else{
+			if (get_option('ga_dash_tableid_jail')){
+				$projectId = get_option('ga_dash_tableid_jail');
+			}else{
+				//_e("Ask an admin to asign a Google Analytics Profile", 'ga-dash');
+				return $content;
+			}	
+		}		
+		
+		try{
+			$serial='gadash_qr21'.$post_id.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to.$metrics);
+			$transient = get_transient($serial);
+			if ( empty( $transient ) ){
+				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions,'filters' => 'ga:pagePath=='.$page_url));
+				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+			}else{
+				$data = $transient;		
+			}	
+		}  
+			catch(exception $e) {
+			return $content;
+		}
+		if (!$data['rows']){
+			return $content;
+		}
+		
+		$ga_dash_statsdata="";
+		for ($i=0;$i<$data['totalResults'];$i++){
+			$ga_dash_statsdata.="['".$data['rows'][$i][0]."-".$data['rows'][$i][1]."-".$data['rows'][$i][2]."',".round($data['rows'][$i][3],2)."],";
+		}
+		
+		$metrics = 'ga:visits'; 
+		$dimensions = 'ga:keyword';
+		try{
+			$serial='gadash_qr22'.$post_id.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to);
+			$transient = get_transient($serial);
+			if ( empty( $transient ) ){
+				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions, 'sort' => '-ga:visits', 'max-results' => '24', 'filters' => 'ga:keyword!=(not provided);ga:keyword!=(not set);ga:pagePath=='.$page_url));
+				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+			}else{
+				$data = $transient;		
+			}			
+		}  
+			catch(exception $e) {
+			return $content; 
+		}	
+
+		$ga_dash_organicdata="";
+		if (isset($data['rows'])){
+			$i=0;
+			while (isset($data['rows'][$i][0])){
+				$ga_dash_organicdata.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
+				$i++;
+			}		
+		
+		}	
+
+		$content.='<style>
+		#ga_dash_sdata td{
+			line-height:1.5em;
+			padding:2px;
+			font-size:1em;
+		}
+		#ga_dash_sdata{
+			line-height:10px;
+		}
+		</style>';
+		
+		$content.='<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script type="text/javascript">
+		  google.load("visualization", "1", {packages:["corechart"]});
+		  google.setOnLoadCallback(ga_dash_callback);
+
+		  function ga_dash_callback(){
+				ga_dash_drawstats();
+				if(typeof ga_dash_drawsd == "function"){
+					ga_dash_drawsd();
+				}				
+		  }	
+
+		  function ga_dash_drawstats() {
+			var data = google.visualization.arrayToDataTable(['."
+			  ['".__("Date", 'ga-dash')."', '".$title."'],"
+			  .$ga_dash_statsdata.
+			"  
+			]);
+
+			var options = {
+			  legend: {position: 'none'},	
+			  pointSize: 3,".$css."
+			  title: '".$title."',
+			  chartArea: {width: '85%'},
+			  hAxis: { showTextEvery: 5}
+			};
+
+			var chart = new google.visualization.AreaChart(document.getElementById('ga_dash_statsdata'));
+			chart.draw(data, options);
+			
+			}";
+		if ($ga_dash_organicdata){
+			$content.='
+					google.load("visualization", "1", {packages:["table"]})
+					function ga_dash_drawsd() {
+					
+					var datas = google.visualization.arrayToDataTable(['."
+					  ['".__("Top Searches",'ga-dash')."', '".__("Visits",'ga-dash')."'],"
+					  .$ga_dash_organicdata.
+					"  
+					]);
+					
+					var options = {
+						page: 'enable',
+						pageSize: 6,
+						width: '100%',
+					};        
+					
+					var chart = new google.visualization.Table(document.getElementById('ga_dash_sdata'));
+					chart.draw(datas, options);
+					
+				  }";
+		}
+		  $content.="</script>";		
+		
+		
+		$content .= '<div id="ga_dash_statsdata"></div><div id="ga_dash_sdata" ></div>';
+	}
+	return $content;
+}
 
 function ga_dash_init() {
   	load_plugin_textdomain( 'ga-dash', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
@@ -66,34 +267,33 @@ function ga_dash_content() {
 	$scriptUri = "http://".$_SERVER["HTTP_HOST"].$_SERVER['PHP_SELF'];
 
 	$client = new Google_Client();
-	$client->setAccessType('offline'); // default: offline
+	$client->setAccessType('offline');
 	$client->setApplicationName('GA Dashboard');
 	$client->setClientId(get_option('ga_dash_clientid'));
 	$client->setClientSecret(get_option('ga_dash_clientsecret'));
 	$client->setRedirectUri($scriptUri);
-	$client->setDeveloperKey(get_option('ga_dash_APIKEY')); // API key
-	//$client->setUseObjects(true);
+	$client->setDeveloperKey(get_option('ga_dash_APIKEY'));
+
 	if ((!get_option('ga_dash_clientid')) OR (!get_option('ga_dash_clientsecret')) OR (!get_option('ga_dash_apikey'))){
 		
 		echo "<div style='padding:20px;'>".__("Client ID, Client Secret or API Key is missing", 'ga-dash')."</div>";
 		return;
 		
 	}	
-	// $service implements the client interface, has to be set before auth call
 	$service = new Google_AnalyticsService($client);
 
-	if (isset($_GET['code']) AND !(ga_dash_get_token())) { // we received the positive auth callback, get the token and store it in session
+	if (isset($_GET['code']) AND !(ga_dash_get_token())) {
 		$client->authenticate();
 		ga_dash_store_token($client->getAccessToken());
 
 	}
 
-	if (ga_dash_get_token()) { // extract token from session and configure client
+	if (ga_dash_get_token()) { 
 		$token = ga_dash_get_token();
 		$client->setAccessToken($token);
 	}
 
-	if (!$client->getAccessToken()) { // auth call to google
+	if (!$client->getAccessToken()) {
 		
 		$authUrl = $client->createAuthUrl();
 		
