@@ -12,7 +12,7 @@ This plugin will display Google Analytics data and statistics inside your WordPr
 == Description ==
 Using a widget, Google Analytics Dashboard for WP displays detailed info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Admin Dashboard.
 
-Authorized users can also view statistics like visits and top seraches, on frontend, at the end of each article.
+Authorized users can also view statistics like visits and top searches, on frontend, at the end of each article.
 
 This plugin will allow users to create their own Google API Project. Using this plugin you will have your own API Key, Client Secret and Client ID and you won't have to worry about changes made by the developer in its API Project or about limit exceeded error because of Analytics API Project daily courtesy limit.
 
@@ -24,7 +24,7 @@ Main benefits:
 - cache feature, this improves loading speed up to 7 times and avoids dailyLimitExceeded, usageLimits.userRateLimitExceededUnreg, userRateLimitExceeded errors from Google Analytics API
 - two themes: Blue Theme and Light Theme
 - access level settings and lock profile feature
-- option to display top 20 pages, referrers and searches (sortable by columns)
+- option to display top 24 pages, referrers and searches (sortable by columns)
 - option to display Visitors by Country on Geo Map
 - option to display Traffic Overview in Pie Charts
 - option to display Google Analytics statistics on frontend, at the end of each article
