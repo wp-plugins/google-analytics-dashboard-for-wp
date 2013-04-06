@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 3.3
+Version: 3.3.1
 Author URI: http://www.deconf.com
 */  
 
@@ -84,26 +84,11 @@ function ga_dash_front_content($content) {
 			$colors="blue";
 		}		
 
-		if (current_user_can('manage_options')) { 
-			if (get_option('ga_dash_jailadmins')){
-				if (get_option('ga_dash_tableid_jail')){
-					$projectId = get_option('ga_dash_tableid_jail');
-				}else{
-					//_e("Ask an admin to asign a Google Analytics Profile", 'ga-dash');
-					return $content;
-				}
-			}else{
-
-				$projectId = get_option('ga_dash_tableid');
-			}	
+		if (get_option('ga_dash_tableid_jail')) {
+			$projectId = get_option('ga_dash_tableid_jail');
 		} else{
-			if (get_option('ga_dash_tableid_jail')){
-				$projectId = get_option('ga_dash_tableid_jail');
-			}else{
-				//_e("Ask an admin to asign a Google Analytics Profile", 'ga-dash');
-				return $content;
-			}	
-		}		
+			return $content;
+		}	
 		
 		try{
 			$serial='gadash_qr21'.$post_id.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to.$metrics);

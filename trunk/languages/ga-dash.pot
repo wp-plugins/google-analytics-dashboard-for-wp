@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Google Analytics Dashboard for WP\n"
-"POT-Creation-Date: 2013-04-04 20:10+0200\n"
-"PO-Revision-Date: 2013-04-04 20:10+0200\n"
+"POT-Creation-Date: 2013-04-06 14:27+0200\n"
+"PO-Revision-Date: 2013-04-06 14:27+0200\n"
 "Last-Translator: Deconf <admin@deconf.com>\n"
 "Language-Team: Deconf <admin@deconf.com>\n"
 "MIME-Version: 1.0\n"
@@ -16,137 +16,137 @@ msgstr ""
 
 #: .././functions.php:53 .././functions.php:85 .././functions.php:117
 #: .././functions.php:148 .././functions.php:178 .././functions.php:209
-#: .././ga_dash.php:440 .././ga_dash.php:460
+#: .././ga_dash.php:425 .././ga_dash.php:445
 msgid "ERROR LOG:"
 msgstr ""
 
-#: .././ga_dash.php:181 .././ga_dash.php:497 .././ga_dash.php:507
+#: .././ga_dash.php:166 .././ga_dash.php:482 .././ga_dash.php:492
 msgid "Date"
 msgstr ""
 
-#: .././ga_dash.php:204 .././ga_dash.php:630
+#: .././ga_dash.php:189 .././ga_dash.php:615
 msgid "Top Searches"
 msgstr ""
 
-#: .././ga_dash.php:204 .././ga_dash.php:422 .././ga_dash.php:521
-#: .././ga_dash.php:544 .././ga_dash.php:550 .././ga_dash.php:581
-#: .././ga_dash.php:605 .././ga_dash.php:630
+#: .././ga_dash.php:189 .././ga_dash.php:407 .././ga_dash.php:506
+#: .././ga_dash.php:529 .././ga_dash.php:535 .././ga_dash.php:566
+#: .././ga_dash.php:590 .././ga_dash.php:615
 msgid "Visits"
 msgstr ""
 
-#: .././ga_dash.php:279
+#: .././ga_dash.php:264
 msgid "Client ID, Client Secret or API Key is missing"
 msgstr ""
 
-#: .././ga_dash.php:302
+#: .././ga_dash.php:287
 msgid "Ask an admin to authorize this Application"
 msgstr ""
 
-#: .././ga_dash.php:306
+#: .././ga_dash.php:291
 msgid "Authorize Google Analytics Dashboard"
 msgstr ""
 
-#: .././ga_dash.php:353
+#: .././ga_dash.php:338
 msgid "Can't retrive your Google Analytics Profiles"
 msgstr ""
 
-#: .././ga_dash.php:362 .././ga_dash.php:373
+#: .././ga_dash.php:347 .././ga_dash.php:358
 msgid "Ask an admin to asign a Google Analytics Profile"
 msgstr ""
 
-#: .././ga_dash.php:414
+#: .././ga_dash.php:399
 msgid "Visitors"
 msgstr ""
 
-#: .././ga_dash.php:416
+#: .././ga_dash.php:401
 msgid "Page Views"
 msgstr ""
 
-#: .././ga_dash.php:418
+#: .././ga_dash.php:403
 msgid "Bounce Rate"
 msgstr ""
 
-#: .././ga_dash.php:420
+#: .././ga_dash.php:405
 msgid "Organic Searches"
 msgstr ""
 
-#: .././ga_dash.php:521
+#: .././ga_dash.php:506
 msgid "Country"
 msgstr ""
 
-#: .././ga_dash.php:544
+#: .././ga_dash.php:529
 msgid "Source"
 msgstr ""
 
-#: .././ga_dash.php:550
+#: .././ga_dash.php:535
 msgid "Type"
 msgstr ""
 
-#: .././ga_dash.php:560
+#: .././ga_dash.php:545
 msgid "Traffic Sources"
 msgstr ""
 
-#: .././ga_dash.php:568
+#: .././ga_dash.php:553
 msgid "New vs. Returning"
 msgstr ""
 
-#: .././ga_dash.php:581
+#: .././ga_dash.php:566
 msgid "Top Pages"
 msgstr ""
 
-#: .././ga_dash.php:605
+#: .././ga_dash.php:590
 msgid "Top Referrers"
 msgstr ""
 
-#: .././ga_dash.php:652
+#: .././ga_dash.php:637
 msgid "Today"
 msgstr ""
 
-#: .././ga_dash.php:653
+#: .././ga_dash.php:638
 msgid "Yesterday"
 msgstr ""
 
-#: .././ga_dash.php:654
+#: .././ga_dash.php:639
 msgid "Last 7 days"
 msgstr ""
 
-#: .././ga_dash.php:655
+#: .././ga_dash.php:640
 msgid "Last 14 days"
 msgstr ""
 
-#: .././ga_dash.php:656
+#: .././ga_dash.php:641
 msgid "Last 30 days"
 msgstr ""
 
-#: .././ga_dash.php:665
+#: .././ga_dash.php:650
 msgid "Visits:"
 msgstr ""
 
-#: .././ga_dash.php:667
+#: .././ga_dash.php:652
 msgid "Visitors:"
 msgstr ""
 
-#: .././ga_dash.php:669
+#: .././ga_dash.php:654
 msgid "Page Views:"
 msgstr ""
 
-#: .././ga_dash.php:673
+#: .././ga_dash.php:658
 msgid "Bounce Rate:"
 msgstr ""
 
-#: .././ga_dash.php:675
+#: .././ga_dash.php:660
 msgid "Organic Search:"
 msgstr ""
 
-#: .././ga_dash.php:677
+#: .././ga_dash.php:662
 msgid "Pages per Visit:"
 msgstr ""
 
-#: .././ga_dash.php:685
+#: .././ga_dash.php:670
 msgid "Visits by Country"
 msgstr ""
 
-#: .././ga_dash.php:690
+#: .././ga_dash.php:675
 msgid "Traffic Overview"
 msgstr ""
 
