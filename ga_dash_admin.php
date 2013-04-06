@@ -169,17 +169,17 @@ $ga_dash_jailadmins = get_option('ga_dash_jailadmins');
 		<p><input name="ga_dash_sd" type="checkbox" id="ga_dash_sd" value="1"<?php if (get_option('ga_dash_sd')) echo " checked='checked'"; ?>  /><?php _e(" show top searches", 'ga-dash' ); ?></p>		
 		<p><?php _e("CSS Settings: ", 'ga-dash' ); ?>
 		<select id="ga_dash_style" name="ga_dash_style">
-			<option value="blue" <?php if ($ga_dash_style=="blue") echo "selected='yes'>".__("Blue Theme", 'ga-dash');?></option>
-			<option value="light" <?php if ($ga_dash_style=="light") echo "selected='yes'>".__("Light Theme", 'ga-dash');?></option>
+			<option value="blue" <?php if (($ga_dash_style=="blue") OR (!$ga_dash_style)) echo "selected='yes'"; echo ">".__("Blue Theme", 'ga-dash');?></option>
+			<option value="light" <?php if ($ga_dash_style=="light") echo "selected='yes'"; echo ">".__("Light Theme", 'ga-dash');?></option>
 		</select></p>
 		<hr />
 		<?php echo "<h3><u>" . __( 'Cache Settings', 'ga_dash' ). "</u></h3>";?>
 		<p><?php _e("Cache Time: ", 'ga-dash' ); ?>
 		<select id="ga_dash_cachetime" name="ga_dash_cachetime">
-			<option value="10" <?php if ($ga_dash_cachetime=="10") echo "selected='yes'>".__("None", 'ga-dash');?></option>
-			<option value="900" <?php if ($ga_dash_cachetime=="900") echo "selected='yes'>".__("15 minutes", 'ga-dash');?></option>
-			<option value="1800" <?php if (($ga_dash_cachetime=="1800") OR (!$ga_dash_cachetime)) echo "selected='yes'>".__("30 minutes", 'ga-dash');?></option>
-			<option value="3600" <?php if ($ga_dash_cachetime=="3600") echo "selected='yes'>".__("1 hour", 'ga-dash');?></option>
+			<option value="10" <?php if ($ga_dash_cachetime=="10") echo "selected='yes'"; echo ">".__("None", 'ga-dash');?></option>
+			<option value="900" <?php if ($ga_dash_cachetime=="900") echo "selected='yes'"; echo ">".__("15 minutes", 'ga-dash');?></option>
+			<option value="1800" <?php if (($ga_dash_cachetime=="1800") OR (!$ga_dash_cachetime)) echo "selected='yes'"; echo ">".__("30 minutes", 'ga-dash');?></option>
+			<option value="3600" <?php if ($ga_dash_cachetime=="3600") echo "selected='yes'"; echo ">".__("1 hour", 'ga-dash');?></option>
 		</select></p>		
 		<p class="submit">  
         <input type="submit" name="Submit" class="button button-primary" value="<?php _e('Update Options', 'ga_dash' ) ?>" />
