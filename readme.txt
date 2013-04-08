@@ -3,7 +3,7 @@ Contributors: Deconf
 Tags: google, analytics, statistics, dashboard, widget, ga, stats
 Requires at least: 2.8
 Tested up to: 3.5.1
-Stable tag: 3.3.1
+Stable tag: 3.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ This plugin will display Google Analytics data and statistics inside your WordPr
 == Description ==
 Using a widget, Google Analytics Dashboard for WP displays detailed info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Admin Dashboard.
 
-Authorized users can also view statistics like visits and top searches, on frontend, at the end of each article.
+Authorized users can also view statistics like Views, UniqueViews and top searches, on frontend, at the end of each article.
 
 This plugin will allow users to create their own Google API Project. Using this plugin you will have your own API Key, Client Secret and Client ID and you won't have to worry about changes made by the developer in its API Project or about limit exceeded error because of Analytics API Project daily courtesy limit.
 
