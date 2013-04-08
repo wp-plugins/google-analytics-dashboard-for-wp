@@ -106,8 +106,8 @@ $ga_dash_cachetime = get_option('ga_dash_cachetime');
 $ga_dash_jailadmins = get_option('ga_dash_jailadmins');
 
 ?>  
-
-<div class="wrap">  
+<div class="wrap">
+<div style="width:70%;float:left;">  
     <?php echo "<h2>" . __( 'Google Analytics Dashboard Settings', 'ga_dash' ) . "</h2>"; ?>  
         <form name="ga_dash_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">  
         <hr />
@@ -186,4 +186,23 @@ $ga_dash_jailadmins = get_option('ga_dash_jailadmins');
 		<input type="submit" name="Clear" class="button button-primary" value="<?php _e('Clear Cache', 'ga_dash' ) ?>" />		
         </p>  
     </form>  
-</div> 
+</div>
+<div style="width:25%;float:right;margin-top:15px;"> 
+	<div class="note">
+		<center>
+			<u>Setup Tutorial</u><br /><br />
+			<a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" target="_blank"><img src="../wp-content/plugins/google-analytics-dashboard-for-wp/img/video-tutorial.png" width="95%" /></a>
+		</center>
+	</div> 
+	<div class="note">
+		<center>
+			<u>Useful Links</u><br />
+		</center>			
+		<ul>
+			<li><a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" target="_blank">Google Analytics Dashboard Official Page</a></li>
+			<li><a href="http://wordpress.org/support/plugin/google-analytics-dashboard-for-wp" target="_blank">Google Analytics Dashboard Wordpress Support</a></li>
+			<li><a href="http://forum.deconf.com/en/wordpress-plugins-f182/" target="_blank">Google Analytics Dashboard on Deconf Forum</a></li>			
+		</ul>	
+	</div>	
+</div>
+</div>
