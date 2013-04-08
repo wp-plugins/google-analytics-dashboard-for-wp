@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Google Analytics Dashboard for WP\n"
-"POT-Creation-Date: 2013-04-06 14:27+0200\n"
-"PO-Revision-Date: 2013-04-06 14:27+0200\n"
+"POT-Creation-Date: 2013-04-08 17:27+0200\n"
+"PO-Revision-Date: 2013-04-08 17:28+0200\n"
 "Last-Translator: Deconf <admin@deconf.com>\n"
 "Language-Team: Deconf <admin@deconf.com>\n"
 "MIME-Version: 1.0\n"
@@ -20,8 +20,20 @@ msgstr ""
 msgid "ERROR LOG:"
 msgstr ""
 
+#: .././ga_dash.php:78
+msgid "Views vs UniqueViews"
+msgstr ""
+
 #: .././ga_dash.php:166 .././ga_dash.php:482 .././ga_dash.php:492
 msgid "Date"
+msgstr ""
+
+#: .././ga_dash.php:166
+msgid "Views"
+msgstr ""
+
+#: .././ga_dash.php:166
+msgid "UniqueViews"
 msgstr ""
 
 #: .././ga_dash.php:189 .././ga_dash.php:615
