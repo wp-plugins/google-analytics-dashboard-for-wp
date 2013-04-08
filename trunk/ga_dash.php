@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 3.3.1
+Version: 3.3.2
 Author URI: http://www.deconf.com
 */  
 
@@ -70,17 +70,17 @@ function ga_dash_front_content($content) {
 		
 		$from = date('Y-m-d', time()-30*24*60*60);
 		$to = date('Y-m-d');		
-		$metrics = 'ga:visits';
+		$metrics = 'ga:pageviews,ga:uniquePageviews';
 		$dimensions = 'ga:year,ga:month,ga:day';
 		$page_url = $_SERVER["REQUEST_URI"];
 		//echo $page_url;
 		$post_id = $post->ID;
-		$title = "Visits";
+		$title = __("Views vs UniqueViews", 'ga-dash');
 		if (get_option('ga_dash_style')=="light"){ 
 			$css="colors:['gray','darkgray'],";
 			$colors="black";
 		} else{
-			$css="";
+			$css="colors:['#3366CC','#3366CC'],";
 			$colors="blue";
 		}		
 
@@ -109,7 +109,7 @@ function ga_dash_front_content($content) {
 		
 		$ga_dash_statsdata="";
 		for ($i=0;$i<$data['totalResults'];$i++){
-			$ga_dash_statsdata.="['".$data['rows'][$i][0]."-".$data['rows'][$i][1]."-".$data['rows'][$i][2]."',".round($data['rows'][$i][3],2)."],";
+			$ga_dash_statsdata.="['".$data['rows'][$i][0]."-".$data['rows'][$i][1]."-".$data['rows'][$i][2]."',".round($data['rows'][$i][3],2).",".round($data['rows'][$i][4],2)."],";
 		}
 		
 		$metrics = 'ga:visits'; 
@@ -163,7 +163,7 @@ function ga_dash_front_content($content) {
 
 		  function ga_dash_drawstats() {
 			var data = google.visualization.arrayToDataTable(['."
-			  ['".__("Date", 'ga-dash')."', '".$title."'],"
+			  ['".__("Date", 'ga-dash')."', '".__("Views", 'ga-dash')."', '".__("UniqueViews", 'ga-dash')."'],"
 			  .$ga_dash_statsdata.
 			"  
 			]);
