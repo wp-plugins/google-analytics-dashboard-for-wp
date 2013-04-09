@@ -41,7 +41,7 @@ Related Links:
 
 1. Upload the full directory into your wp-content/plugins directory
 2. Activate the plugin at the plugin administration page
-3. Open the plugin configuration page, which is located under Settings -> GA Dashboard and enter your API Key, Client Secret and Client ID.
+3. Open plugin's configuration page, which is located under Settings -> GA Dashboard and enter your API Key, Client Secret and Client ID.
 4. Authorize the application using the 'Authorize Application' button
 5. Go back to the plugin configuration page, which is located under Settings -> GA Dashboard to update the final settings.
 
