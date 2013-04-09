@@ -1,7 +1,13 @@
 <?php
+	
+	function ga_dash_pretty_error($e){
+		return "<center><table><tr><td colspan='2' style='word-break:break-all;'>".$e->getMessage()."<br /><br /></td></tr><tr><td width='50%'><a href='http://wordpress.org/support/plugin/google-analytics-dashboard-for-wp' target='_blank'>".__("Help on Wordpress Forum",'ga-dash')."</a><td width='50%'><a href='http://forum.deconf.com/en/wordpress-plugins-f182/' target='_blank'>".__("Support on Deconf Forum",'ga-dash')."</a></td></tr></table></center>";	
+	}
+
 	function ga_dash_clear_cache(){
 		global $wpdb;
 		$sqlquery=$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_gadash%%'");
+		$sqlquery=$wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_gadash%%'");
 	}
 	
 	function ga_dash_safe_get($key) {
@@ -48,9 +54,9 @@
 			}else{
 				$data = $transient;	
 			}			
-		}  
-			catch(exception $e) {
-			echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
+		} catch (Google_ServiceException $e) {
+			echo ga_dash_pretty_error($e);
+			return;
 		}	
 		if (!$data['rows']){
 			return 0;
@@ -80,10 +86,10 @@
 			}else{
 				$data = $transient;		
 			}			
-		}  
-			catch(exception $e) {
-			echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
-		}	
+		} catch (Google_ServiceException $e) {
+			echo ga_dash_pretty_error($e);
+			return;
+		}
 		if (!$data['rows']){
 			return 0;
 		}
@@ -112,9 +118,9 @@
 			}else{
 				$data = $transient;		
 			}			
-		}  
-			catch(exception $e) {
-			echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
+		} catch (Google_ServiceException $e) {
+			echo ga_dash_pretty_error($e);
+			return;
 		}	
 		if (!$data['rows']){
 			return 0;
@@ -143,10 +149,10 @@
 			}else{
 				$data = $transient;		
 			}			
-		}  
-			catch(exception $e) {
-			echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
-		}	
+		} catch (Google_ServiceException $e) {
+			echo ga_dash_pretty_error($e);
+			return;
+		}
 		if (!$data['rows']){
 			return 0;
 		}
@@ -173,9 +179,9 @@
 			}else{
 				$data = $transient;		
 			}			
-		}  
-			catch(exception $e) {
-			echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
+		} catch (Google_ServiceException $e) {
+			echo ga_dash_pretty_error($e);
+			return;
 		}	
 		if (!$data['rows']){
 			return 0;
@@ -204,9 +210,9 @@
 			}else{
 				$data = $transient;		
 			}			
-		}  
-			catch(exception $e) {
-			echo "<br />".__("ERROR LOG:")."<br /><br />".$e; 
+		} catch (Google_ServiceException $e) {
+			echo ga_dash_pretty_error($e);
+			return;
 		}	
 		if (!$data['rows']){
 			return 0;
