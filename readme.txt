@@ -3,7 +3,7 @@ Contributors: Deconf
 Tags: google analytics dashboard, analytics dashboard, google statistics, google dashboard, google analytics widget, google analytics
 Requires at least: 2.8
 Tested up to: 3.5.1
-Stable tag: 3.3.4
+Stable tag: 3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,6 +30,12 @@ Main benefits:
 - option to display Google Analytics statistics on frontend, at the end of each article
 - simple Authorization process
 - has multilingual support, a POT file is available for translations. If you have a complete translation, send me the translation file or upload it to our forum and will be included in next release.
+
+This plugin also includes Google Analytics tracking. Main tracking options:
+
+- enable/disable Google Analytics tracking
+- track single domain, domain and all subdomains, multiple TLD domains
+- anonymize IPs feature
 
 Related Links:
 
