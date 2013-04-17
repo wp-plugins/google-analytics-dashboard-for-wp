@@ -1,9 +1,9 @@
 === Google Analytics Dashboard for WP ===
 Contributors: Deconf
-Tags: google analytics dashboard, analytics dashboard, google statistics, google dashboard, google analytics widget, google analytics
+Tags: google analytics dashboard, analytics dashboard, google statistics, google dashboard, google analytics widget, google analytics, tracking, code
 Requires at least: 2.8
 Tested up to: 3.5.1
-Stable tag: 3.3.4
+Stable tag: 3.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,11 +31,19 @@ Main benefits:
 - simple Authorization process
 - has multilingual support, a POT file is available for translations. If you have a complete translation, send me the translation file or upload it to our forum and will be included in next release.
 
+This plugin also includes Google Analytics tracking. Main tracking options:
+
+- enable/disable Google Analytics tracking
+- track single domain, domain and all subdomains, multiple TLD domains
+- anonymize IPs feature
+
+You will need a <a href="https://www.google.com/analytics/" target="_blank">Google Analytics</a> account before using this plugin!
+ 
 Related Links:
 
-* <a href="http://forum.deconf.com/en/wordpress-plugins-f182/google-analytics-dashboard-for-wp-translations-t532.html">Submit Google Analytics Dashboard translations</a>
+* <a href="http://forum.deconf.com/en/wordpress-plugins-f182/google-analytics-dashboard-for-wp-translations-t532.html" target="_blank">Support and Google Analytics Dashboard translations</a>
 
-* <a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" title="Google Analytics Dashboard for WP Plugin">Google Analytics Dashboard Plugin Homepage</a>
+* <a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" title="Google Analytics Dashboard for WP Plugin"  target="_blank">Google Analytics Dashboard Plugin Homepage</a>
 
 == Installation ==
 
