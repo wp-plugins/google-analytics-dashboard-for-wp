@@ -163,17 +163,28 @@ if ( is_rtl() ) {
 			_e("Lock selected access level to this profile: ", 'ga-dash' );
 			$profiles=get_option('ga_dash_profile_list');
 			echo '<select id="ga_dash_tableid_jail" name="ga_dash_tableid_jail">';
+			
+			$not_ready=false;
+			
 			foreach ($profiles as $items) {
-				if ($items[0]){
+				if ($items[3]){
 					if (!get_option('ga_dash_tableid_jail')) {
 						update_option('ga_dash_tableid_jail',$items[1]);
 					}
 					echo '<option value="'.$items[1].'"'; 
 					if ((get_option('ga_dash_tableid_jail')==$items[1])) echo "selected='yes'";
-					echo '>'.$items[0].'</option>';
+					echo '>'.str_ireplace(array('http://','https://'),'',$items[3]).'</option>';
+				} else {
+					$not_ready=true;
+					ga_dash_clear_cache();
 				}
 			}
 			echo '</select>';
+			if ($not_ready){
+				echo '<font color="red"> '.__("your profile list needs an update:",'ga-dash').'</font>';
+				$adminurl = admin_url("#ga-dash-widget");
+				echo ' <a href="'.$adminurl.'">'.__("Click here",'ga-dash').'</a>';
+			}			
 		}?></p>
 		
 		<p><input name="ga_dash_jailadmins" type="checkbox" id="ga_dash_jailadmins" value="1"<?php if (get_option('ga_dash_jailadmins')) echo " checked='checked'"; ?>  /><?php _e(" disable dashboard's Switch Profile functionality", 'ga-dash' ); ?></p>
@@ -225,7 +236,7 @@ if ( is_rtl() ) {
 					}
 					echo '<option value="'.$items[2].'"'; 
 					if ((get_option('ga_dash_default_ua')==$items[2])) echo "selected='yes'";
-					echo '>'.$items[0].'</option>';
+					echo '>'.str_ireplace(array('http://','https://'),'',$items[3]).'</option>';
 				} else {
 				
 					$not_ready=true;
