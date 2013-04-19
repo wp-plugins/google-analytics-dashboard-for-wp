@@ -57,6 +57,19 @@ if (isset($_REQUEST['Reset'])){
 		
 		$ga_dash_cachetime = ga_dash_safe_get('ga_dash_cachetime');
 		update_option('ga_dash_cachetime', $ga_dash_cachetime);
+		
+		$ga_dash_tracking = ga_dash_safe_get('ga_dash_tracking');
+		update_option('ga_dash_tracking', $ga_dash_tracking);		
+
+		$ga_dash_tracking_type = ga_dash_safe_get('ga_dash_tracking_type');
+		update_option('ga_dash_tracking_type', $ga_dash_tracking_type);			
+		
+		$ga_dash_default_ua = ga_dash_safe_get('ga_dash_default_ua');
+		update_option('ga_dash_default_ua', $ga_dash_default_ua);
+
+		$ga_dash_anonim = ga_dash_safe_get('ga_dash_anonim');
+		update_option('ga_dash_anonim', $ga_dash_anonim);			
+		
 		if (!isset($_REQUEST['Clear']) AND !isset($_REQUEST['Reset'])){
 			?>  
 			<div class="updated"><p><strong><?php _e('Options saved.', 'ga-dash'); ?></strong></p></div>  
@@ -104,31 +117,43 @@ $ga_dash_frontend = get_option('ga_dash_frontend');
 $ga_dash_style = get_option('ga_dash_style');
 $ga_dash_cachetime = get_option('ga_dash_cachetime');
 $ga_dash_jailadmins = get_option('ga_dash_jailadmins');
+$ga_dash_tracking = get_option('ga_dash_tracking');
+$ga_dash_tracking_type = get_option('ga_dash_tracking_type');
+$ga_dash_default_ua = get_option('ga_dash_default_ua');
+$ga_dash_anonim = get_option('ga_dash_anonim');
+
+if ( is_rtl() ) {
+	$float_main="right";
+	$float_note="left";
+}else{
+	$float_main="left";
+	$float_note="right";	
+}
 
 ?>  
 <div class="wrap">
-<div style="width:70%;float:left;">  
+<div style="width:70%;float:<?php echo $float_main; ?>;">  
     <?php echo "<h2>" . __( 'Google Analytics Dashboard Settings', 'ga_dash' ) . "</h2>"; ?>  
         <form name="ga_dash_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">  
-        <hr />
-		<?php echo "<h3><u>" . __( 'Google Analytics API', 'ga_dash' ). " (". __("watch this", 'ga-dash')." <a href='http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/' target='_blank'>". __("Step by step video tutorial")."</a>)"."</u></h3>"; ?>  
+		<?php echo "<h3>" . __( 'Google Analytics API', 'ga_dash' ). " (". __("watch this", 'ga-dash')." <a href='http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/' target='_blank'>". __("Step by step video tutorial")."</a>)"."</h3>"; ?>  
         <p><?php echo "<b>".__("API Key:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_apikey" value="<?php echo $apikey; ?>" size="61"><?php echo "<i> ".__("ex: AIzaSyASK7dLaii4326AZVyZ6MCOIQOY6F30G_1", 'ga-dash')."</i>"; ?></p>  
         <p><?php echo "<b>".__("Client ID:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_clientid" value="<?php echo $clientid; ?>" size="60"><?php echo "<i> ".__("ex: 111342334706.apps.googleusercontent.com", 'ga-dash')."</i>"; ?></p>  
         <p><?php echo "<b>".__("Client Secret:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_clientsecret" value="<?php echo $clientsecret; ?>" size="55"><?php echo "<i> ".__("ex: c62POy23C_2qK5fd3fdsec2o", 'ga-dash')."</i>"; ?></p>  
 		<p><?php 
 			if (get_option('ga_dash_token')){
 				echo "<input type=\"submit\" name=\"Reset\" class=\"button button-primary\" value=\"".__("Clear Authorization", 'ga-dash')."\" />";
+				?> <input type="submit" name="Clear" class="button button-primary" value="<?php _e('Clear Cache', 'ga_dash' ) ?>" /><?php		
 				echo '<input type="hidden" name="ga_dash_hidden" value="Y">';  
 			} else{
 				echo "<input type=\"submit\" name=\"Authorize\" class=\"button button-primary\" value=\"".__("Authorize Application", 'ga-dash')."\" />";
+				?> <input type="submit" name="Clear" class="button button-primary" value="<?php _e('Clear Cache', 'ga_dash' ) ?>" /><?php
 				echo '<input type="hidden" name="ga_dash_hidden" value="A">';
 				echo "</form>";
 				_e("(the rest of the settings will show up after completing the authorization process)", 'ga-dash' );
 				return;
 			} ?>
 		</p>  
-		<hr />
-		<?php echo "<h3><u>" . __( 'Access Level', 'ga_dash' ). "</u></h3>";?>
+		<?php echo "<h3>" . __( 'Access Level', 'ga_dash' ). "</h3>";?>
 		<p><?php _e("View Access Level: ", 'ga-dash' ); ?>
 		<select id="ga_dash_access" name="ga_dash_access">
 			<option value="manage_options" <?php if (($dashaccess=="manage_options") OR (!$dashaccess)) echo "selected='yes'"; echo ">".__("Administrators", 'ga-dash');?></option>
@@ -142,26 +167,34 @@ $ga_dash_jailadmins = get_option('ga_dash_jailadmins');
 			_e("Lock selected access level to this profile: ", 'ga-dash' );
 			$profiles=get_option('ga_dash_profile_list');
 			echo '<select id="ga_dash_tableid_jail" name="ga_dash_tableid_jail">';
+			
+			$not_ready=false;
+			
 			foreach ($profiles as $items) {
-				if ($items[0]){
+				if ($items[3]){
 					if (!get_option('ga_dash_tableid_jail')) {
 						update_option('ga_dash_tableid_jail',$items[1]);
 					}
 					echo '<option value="'.$items[1].'"'; 
 					if ((get_option('ga_dash_tableid_jail')==$items[1])) echo "selected='yes'";
-					echo '>'.$items[0].'</option>';
-				}	
+					echo '>'.parse_url($items[3],PHP_URL_HOST).'</option>';
+				} else {
+					$not_ready=true;
+					ga_dash_clear_cache();
+				}
 			}
 			echo '</select>';
-		
+			if ($not_ready){
+				echo '<font color="red"> '.__("your profile list needs an update:",'ga-dash').'</font>';
+				$adminurl = admin_url("#ga-dash-widget");
+				echo ' <a href="'.$adminurl.'">'.__("Click here",'ga-dash').'</a>';
+			}			
 		}?></p>
 		
 		<p><input name="ga_dash_jailadmins" type="checkbox" id="ga_dash_jailadmins" value="1"<?php if (get_option('ga_dash_jailadmins')) echo " checked='checked'"; ?>  /><?php _e(" disable dashboard's Switch Profile functionality", 'ga-dash' ); ?></p>
-		<hr />
-		<?php echo "<h3><u>" . __( 'Frontend Settings', 'ga_dash' ). "</u></h3>";?>
+		<?php echo "<h3>" . __( 'Frontend Settings', 'ga_dash' ). "</h3>";?>
 		<p><input name="ga_dash_frontend" type="checkbox" id="ga_dash_frontend" value="1"<?php if (get_option('ga_dash_frontend')) echo " checked='checked'"; ?>  /><?php _e(" show page visits and top searches in frontend (after each article)", 'ga-dash' ); ?></p>
-		<hr />
-		<?php echo "<h3><u>" . __( 'Backend Settings', 'ga_dash' ). "</u></h3>";?>
+		<?php echo "<h3>" . __( 'Backend Settings', 'ga_dash' ). "</h3>";?>
 		<p><input name="ga_dash_map" type="checkbox" id="ga_dash_map" value="1"<?php if (get_option('ga_dash_map')) echo " checked='checked'"; ?>  /><?php _e(" show geo map for visits", 'ga-dash' ); ?></p>
 		<p><input name="ga_dash_traffic" type="checkbox" id="ga_dash_traffic" value="1"<?php if (get_option('ga_dash_traffic')) echo " checked='checked'"; ?>  /><?php _e(" show traffic overview", 'ga-dash' ); ?></p>
 		<p><input name="ga_dash_pgd" type="checkbox" id="ga_dash_pgd" value="1"<?php if (get_option('ga_dash_pgd')) echo " checked='checked'"; ?>  /><?php _e(" show top pages", 'ga-dash' ); ?></p>
@@ -172,37 +205,85 @@ $ga_dash_jailadmins = get_option('ga_dash_jailadmins');
 			<option value="blue" <?php if (($ga_dash_style=="blue") OR (!$ga_dash_style)) echo "selected='yes'"; echo ">".__("Blue Theme", 'ga-dash');?></option>
 			<option value="light" <?php if ($ga_dash_style=="light") echo "selected='yes'"; echo ">".__("Light Theme", 'ga-dash');?></option>
 		</select></p>
-		<hr />
-		<?php echo "<h3><u>" . __( 'Cache Settings', 'ga_dash' ). "</u></h3>";?>
+		<?php echo "<h3>" . __( 'Cache Settings', 'ga_dash' ). "</h3>";?>
 		<p><?php _e("Cache Time: ", 'ga-dash' ); ?>
 		<select id="ga_dash_cachetime" name="ga_dash_cachetime">
 			<option value="10" <?php if ($ga_dash_cachetime=="10") echo "selected='yes'"; echo ">".__("None", 'ga-dash');?></option>
 			<option value="900" <?php if ($ga_dash_cachetime=="900") echo "selected='yes'"; echo ">".__("15 minutes", 'ga-dash');?></option>
 			<option value="1800" <?php if (($ga_dash_cachetime=="1800") OR (!$ga_dash_cachetime)) echo "selected='yes'"; echo ">".__("30 minutes", 'ga-dash');?></option>
 			<option value="3600" <?php if ($ga_dash_cachetime=="3600") echo "selected='yes'"; echo ">".__("1 hour", 'ga-dash');?></option>
-		</select></p>		
+		</select></p>
+
+		<?php echo "<h3>" . __( 'Google Analytics Tracking', 'ga_dash' ). "</h3>";?>
+
+		<p><?php _e("Enable Tracking: ", 'ga-dash' ); ?>
+		<select id="ga_dash_tracking" name="ga_dash_tracking">
+			<option value="0" <?php if (($ga_dash_tracking=="0") OR (!$ga_dash_tracking)) echo "selected='yes'"; echo ">".__("Disabled", 'ga-dash');?></option>
+			<option value="1" <?php if ($ga_dash_tracking=="1") echo "selected='yes'"; echo ">".__("Single Domain", 'ga-dash');?></option>
+			<option value="2" <?php if ($ga_dash_tracking=="2") echo "selected='yes'"; echo ">".__("Domain and Subdomains", 'ga-dash');?></option>
+			<option value="3" <?php if ($ga_dash_tracking=="3") echo "selected='yes'"; echo ">".__("Multiple TLD Domains", 'ga-dash');?></option>			
+		</select></p>
+
+		<p><?php _e("Tracking Type: ", 'ga-dash' ); ?>
+		<select id="ga_dash_tracking_type" name="ga_dash_tracking_type">
+			<option value="classic" <?php if (($ga_dash_tracking_type=="classic") OR (!$ga_dash_tracking_type)) echo "selected='yes'"; echo ">".__("Classic Analytics", 'ga-dash');?></option>
+			<option value="universal" <?php if ($ga_dash_tracking_type=="universal") echo "selected='yes'"; echo ">".__("Universal Analytics", 'ga-dash');?></option>
+		</select></p>
+		
+		<p><?php
+		if (get_option('ga_dash_profile_list')){
+			_e("Default Tracking Domain: ", 'ga-dash' );
+			$profiles=get_option('ga_dash_profile_list');
+			echo '<select id="ga_dash_default_ua" name="ga_dash_default_ua">';
+			
+			$not_ready=false;
+			
+			foreach ($profiles as $items) {
+				if (isset($items[2])){
+					if (!get_option('ga_dash_default_ua')) {
+						update_option('ga_dash_default_ua',$items[2]);
+						ga_dash_clear_cache();
+					}
+					echo '<option value="'.$items[2].'"'; 
+					if ((get_option('ga_dash_default_ua')==$items[2])) echo "selected='yes'";
+					echo '>'.parse_url($items[3],PHP_URL_HOST).'</option>';
+				} else {
+				
+					$not_ready=true;
+				
+				}	
+			}
+			echo '</select>';
+			if ($not_ready){
+				echo '<font color="red"> '.__("your profile list needs an update:",'ga-dash').'</font>';
+				$adminurl = admin_url("#ga-dash-widget");
+				echo ' <a href="'.$adminurl.'">'.__("Click here",'ga-dash').'</a>';
+			}	
+		}?></p>		
+		<p><input name="ga_dash_anonim" type="checkbox" id="ga_dash_anonim" value="1"<?php if (get_option('ga_dash_anonim')) echo " checked='checked'"; ?>  /><?php _e(" anonymize IPs while tracking", 'ga-dash' ); ?></p>				
 		<p class="submit">  
         <input type="submit" name="Submit" class="button button-primary" value="<?php _e('Update Options', 'ga_dash' ) ?>" />
-		<input type="submit" name="Clear" class="button button-primary" value="<?php _e('Clear Cache', 'ga_dash' ) ?>" />		
         </p>  
     </form>  
 </div>
-<div style="width:25%;float:right;margin-top:15px;"> 
-	<div class="note">
+<div class="note" style="float:<?php echo $float_note; ?>;text-align:<?php echo $float_main; ?>;"> 
 		<center>
-			<u>Setup Tutorial</u><br /><br />
+			<h3><?php _e("Setup Tutorial",'ga-dash') ?></h3>
 			<a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" target="_blank"><img src="../wp-content/plugins/google-analytics-dashboard-for-wp/img/video-tutorial.png" width="95%" /></a>
 		</center>
-	</div> 
-	<div class="note">
 		<center>
-			<u>Useful Links</u><br />
+			<br /><h3><?php _e("Support Links",'ga-dash') ?></h3>
 		</center>			
 		<ul>
-			<li><a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" target="_blank">Google Analytics Dashboard Official Page</a></li>
-			<li><a href="http://wordpress.org/support/plugin/google-analytics-dashboard-for-wp" target="_blank">Google Analytics Dashboard Wordpress Support</a></li>
-			<li><a href="http://forum.deconf.com/en/wordpress-plugins-f182/" target="_blank">Google Analytics Dashboard on Deconf Forum</a></li>			
-		</ul>	
-	</div>	
+			<li><a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" target="_blank"><?php _e("Google Analytics Dashboard Official Page",'ga-dash') ?></a></li>
+			<li><a href="http://wordpress.org/support/plugin/google-analytics-dashboard-for-wp" target="_blank"><?php _e("Google Analytics Dashboard Wordpress Support",'ga-dash') ?></a></li>
+			<li><a href="http://forum.deconf.com/en/wordpress-plugins-f182/" target="_blank"><?php _e("Google Analytics Dashboard on Deconf Forum",'ga-dash') ?></a></li>			
+		</ul>
+		<center>
+			<br /><h3><?php _e("Useful Plugins",'ga-dash') ?></h3>
+		</center>			
+		<ul>
+			<li><a href="http://wordpress.org/extend/plugins/google-adsense-dashboard-for-wp/" target="_blank"><?php _e("Google Adsense Dashboard",'ga-dash') ?></a></li>
+		</ul>			
 </div>
 </div>
