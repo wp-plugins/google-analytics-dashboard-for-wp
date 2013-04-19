@@ -1,9 +1,9 @@
 === Google Analytics Dashboard for WP ===
 Contributors: Deconf
-Tags: google analytics dashboard, analytics dashboard, google statistics, google dashboard, google analytics widget, google analytics, tracking, code
+Tags: google analytics dashboard, analytics dashboard, google statistics, google dashboard, google analytics widget, google analytics, universal analytics
 Requires at least: 2.8
 Tested up to: 3.5.1
-Stable tag: 3.4.1
+Stable tag: 3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,13 +31,14 @@ Main benefits:
 - simple Authorization process
 - has multilingual support, a POT file is available for translations. If you have a complete translation, send me the translation file or upload it to our forum and will be included in next release.
 
-This plugin also includes Google Analytics tracking. Main tracking options:
+This plugin includes Google Analytics tracking. Main tracking options and features:
 
-- enable/disable Google Analytics tracking
+- enable/disable Google Analytics tracking code
+- switch between Universal Analytics and Classic Analytics tracking methods
+- supports analytics.js tracking for comaptibility with Universal Analytics web property  
+- supports ga.js tracking for comaptibility with Classic Analytics web property
 - track single domain, domain and all subdomains, multiple TLD domains
-- anonymize IPs feature
-
-You will need a <a href="https://www.google.com/analytics/" target="_blank">Google Analytics</a> account before using this plugin!
+- IP address anonymization feature
  
 Related Links:
 
@@ -82,3 +83,79 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 == License ==
 
 This plugin it's released under the GPLv2, you can use it free of charge on your personal or commercial website.
+
+== Changelog ==
+
+=19.04.2013 - v3.5=
+* small bug fix for multiple TLD domains tracking and domain with subdomains tracking
+* added Universal Analytics support (track using analytics.js or ussing the classic ga.js)
+
+=17.04.2013 - v3.4.1=
+* switch to domain names instead of profile names on select lists
+* added is_front_page() check to avoid problems in Woocommerce
+
+=13.04.2013 - v3.4=
+* i8n improvements
+* RTL improvements
+* usability and accessibility improvements
+* added tracking features
+
+=10.04.2013 - v3.3.3=
+* a better way to determine temp dir for cache
+
+=09.04.2013 - v3.3.3=
+* added error handles 
+* added quick support buttons
+* added Sticky Notes
+* switched from Visits to Views vs UniqueViews on frontpage
+* fixed select lists issues after implementing translation, fixed frontend default profile
+* added frontpage per article statistics
+
+=25.03.2013 - v3.2=
+* added multilingual support
+* small bug fix when locking admins to a single profile
+
+=25.03.2013 - v3.1=
+* added Traffic Overview in Pie Charts
+* added lock profile feature for Admins
+* code optimization
+
+=25.03.2013 - v3.0=
+* added Geo Map, sortable tables
+* minor fixes
+
+=22.03.2013 - v2.5=
+* added cache feature
+* simplifying authorizing process
+
+=21.03.2013 - v2.0=
+* added light theme
+* added top pages tab
+* added top searches tab
+* added top referrers tab
+* added display settings
+
+=20.03.2013 - v1.6=
+* admins can jail access level to a single profile
+
+=20.03.2013 - v1.5=
+* added multi-website support
+* table ids and profile names are now automatically retrived
+
+=17.03.2013 - v1.4=
+* added View access levels (be caution, ex: if level is set to "Authors" than all editors and authors will have view access)
+* fixed menu display issue
+
+=15.03.2013 - v1.3=
+* switch to Google API PHP Client 0.6.1
+* resolved some Google Adsense Dashboard conflicts
+
+=13.03.2013 - v1.2.1=
+* minor fixes
+* added video tutorials
+
+=12.03.2013 - v1.2=
+* minor fixes
+
+=11.03.2013 - v1.0=
+* first release

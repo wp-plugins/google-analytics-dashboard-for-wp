@@ -1,5 +1,83 @@
 <?php
 	
+	function ga_dash_classic_tracking(){
+		$tracking_events="";
+		$tracking_0="<script type=\"text/javascript\">
+	var _gaq = _gaq || [];";		
+		$tracking_2="\n	(function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>\n";
+		$profiles=get_option('ga_dash_profile_list');
+		foreach ($profiles as $items) {
+				if ((get_option('ga_dash_default_ua')==$items[2])){
+					$ga_default_domain=get_main_domain($items[3]);
+				} 
+		}
+
+		switch ( get_option('ga_dash_tracking') ){
+			case 2 	: $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."'], ['_setDomainName', '".$ga_default_domain."']"; break;
+			case 3 : $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."'], ['_setDomainName', '".$ga_default_domain."'], ['_setAllowLinker', true]"; break;
+			default : $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."']"; break;				
+		}
+
+		if (get_option('ga_dash_anonim')){
+			$tracking_push.=", ['_gat._anonymizeIp']";
+		}	
+		
+		$tracking=$tracking_events.$tracking_0."\n	_gaq.push(".$tracking_push.", ['_trackPageview']);".$tracking_2;	
+		
+		return $tracking;	
+
+	}
+
+	function ga_dash_universal_tracking(){
+		$tracking_events="";
+		$tracking_0="<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');";		
+		$tracking_2="\n</script>\n";
+		$profiles=get_option('ga_dash_profile_list');
+		foreach ($profiles as $items) {
+				if ((get_option('ga_dash_default_ua')==$items[2])){
+					$ga_default_domain=get_main_domain($items[3]);
+				} 
+		}
+
+		switch ( get_option('ga_dash_tracking') ){
+			case 2 	: $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."', {'cookieDomain': '".$ga_default_domain."'})"; break;
+			case 3 : $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."')"; break;
+			default : $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."')";
+		}
+
+		if (get_option('ga_dash_anonim')){
+		
+			$tracking_push.="\n	ga('send', 'pageview', {'anonymizeIp': true});";
+		
+		} else{
+			
+			$tracking_push.="\n	ga('send', 'pageview');";
+			
+		}	
+		
+		$tracking=$tracking_events.$tracking_0.$tracking_push.$tracking_2;	
+		
+		return $tracking;	
+
+	}
+
+	
+	function get_main_domain($subdomain){
+		$parsedomain=parse_url($subdomain,PHP_URL_HOST);
+		$host_names = explode(".", $parsedomain);
+		$domain = $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
+		return $domain;
+	}
+	
 	function ga_dash_pretty_error($e){
 		return "<center><table><tr><td colspan='2' style='word-break:break-all;'>".$e->getMessage()."<br /><br /></td></tr><tr><td width='50%'><a href='http://wordpress.org/support/plugin/google-analytics-dashboard-for-wp' target='_blank'>".__("Help on Wordpress Forum",'ga-dash')."</a><td width='50%'><a href='http://forum.deconf.com/en/wordpress-plugins-f182/' target='_blank'>".__("Support on Deconf Forum",'ga-dash')."</a></td></tr></table></center>";	
 	}
