@@ -86,24 +86,29 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
-=19.04.2013 - v3.5=
+= 19.04.2013 - v3.5 =
+
 * small bug fix for multiple TLD domains tracking and domain with subdomains tracking
 * added Universal Analytics support (track using analytics.js or ussing the classic ga.js)
 
-=17.04.2013 - v3.4.1=
+= 17.04.2013 - v3.4.1 =
+
 * switch to domain names instead of profile names on select lists
 * added is_front_page() check to avoid problems in Woocommerce
 
-=13.04.2013 - v3.4=
+= 13.04.2013 - v3.4 =
+
 * i8n improvements
 * RTL improvements
 * usability and accessibility improvements
 * added tracking features
 
-=10.04.2013 - v3.3.3=
+= 10.04.2013 - v3.3.3 =
+
 * a better way to determine temp dir for cache
 
-=09.04.2013 - v3.3.3=
+= 09.04.2013 - v3.3.3 =
+
 * added error handles 
 * added quick support buttons
 * added Sticky Notes
@@ -111,51 +116,63 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 * fixed select lists issues after implementing translation, fixed frontend default profile
 * added frontpage per article statistics
 
-=25.03.2013 - v3.2=
+= 25.03.2013 - v3.2 =
+
 * added multilingual support
 * small bug fix when locking admins to a single profile
 
-=25.03.2013 - v3.1=
+= 25.03.2013 - v3.1 =
+
 * added Traffic Overview in Pie Charts
 * added lock profile feature for Admins
 * code optimization
 
-=25.03.2013 - v3.0=
+= 25.03.2013 - v3.0 =
+
 * added Geo Map, sortable tables
 * minor fixes
 
-=22.03.2013 - v2.5=
+= 22.03.2013 - v2.5 =
+
 * added cache feature
 * simplifying authorizing process
 
-=21.03.2013 - v2.0=
+= 21.03.2013 - v2.0 =
+
 * added light theme
 * added top pages tab
 * added top searches tab
 * added top referrers tab
 * added display settings
 
-=20.03.2013 - v1.6=
+= 20.03.2013 - v1.6 =
+
 * admins can jail access level to a single profile
 
-=20.03.2013 - v1.5=
+= 20.03.2013 - v1.5 =
+
 * added multi-website support
 * table ids and profile names are now automatically retrived
 
-=17.03.2013 - v1.4=
+= 17.03.2013 - v1.4 =
+
 * added View access levels (be caution, ex: if level is set to "Authors" than all editors and authors will have view access)
 * fixed menu display issue
 
-=15.03.2013 - v1.3=
+= 15.03.2013 - v1.3 =
+
 * switch to Google API PHP Client 0.6.1
 * resolved some Google Adsense Dashboard conflicts
 
-=13.03.2013 - v1.2.1=
+= 13.03.2013 - v1.2.1 =
+
 * minor fixes
 * added video tutorials
 
-=12.03.2013 - v1.2=
+= 12.03.2013 - v1.2 =
+
 * minor fixes
 
-=11.03.2013 - v1.0=
+= 11.03.2013 - v1.0 =
+
 * first release
