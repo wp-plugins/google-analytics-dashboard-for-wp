@@ -13,7 +13,7 @@
 		$profiles=get_option('ga_dash_profile_list');
 		foreach ($profiles as $items) {
 				if ((get_option('ga_dash_default_ua')==$items[2])){
-					$ga_default_domain=get_main_domain($items[3]);
+					$ga_default_domain=ga_dash_get_main_domain($items[3]);
 				} 
 		}
 
@@ -44,7 +44,7 @@
 		$profiles=get_option('ga_dash_profile_list');
 		foreach ($profiles as $items) {
 				if ((get_option('ga_dash_default_ua')==$items[2])){
-					$ga_default_domain=get_main_domain($items[3]);
+					$ga_default_domain=ga_dash_get_main_domain($items[3]);
 				} 
 		}
 
@@ -71,7 +71,7 @@
 	}
 
 	
-	function get_main_domain($subdomain){
+	function ga_dash_get_main_domain($subdomain){
 		$parsedomain=parse_url($subdomain,PHP_URL_HOST);
 		$host_names = explode(".", $parsedomain);
 		$domain = $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
