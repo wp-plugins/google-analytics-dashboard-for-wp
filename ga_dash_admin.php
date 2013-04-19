@@ -61,6 +61,9 @@ if (isset($_REQUEST['Reset'])){
 		$ga_dash_tracking = ga_dash_safe_get('ga_dash_tracking');
 		update_option('ga_dash_tracking', $ga_dash_tracking);		
 
+		$ga_dash_tracking_type = ga_dash_safe_get('ga_dash_tracking_type');
+		update_option('ga_dash_tracking_type', $ga_dash_tracking_type);			
+		
 		$ga_dash_default_ua = ga_dash_safe_get('ga_dash_default_ua');
 		update_option('ga_dash_default_ua', $ga_dash_default_ua);
 
@@ -115,6 +118,7 @@ $ga_dash_style = get_option('ga_dash_style');
 $ga_dash_cachetime = get_option('ga_dash_cachetime');
 $ga_dash_jailadmins = get_option('ga_dash_jailadmins');
 $ga_dash_tracking = get_option('ga_dash_tracking');
+$ga_dash_tracking_type = get_option('ga_dash_tracking_type');
 $ga_dash_default_ua = get_option('ga_dash_default_ua');
 $ga_dash_anonim = get_option('ga_dash_anonim');
 
@@ -173,7 +177,7 @@ if ( is_rtl() ) {
 					}
 					echo '<option value="'.$items[1].'"'; 
 					if ((get_option('ga_dash_tableid_jail')==$items[1])) echo "selected='yes'";
-					echo '>'.str_ireplace(array('http://','https://'),'',$items[3]).'</option>';
+					echo '>'.parse_url($items[3],PHP_URL_HOST).'</option>';
 				} else {
 					$not_ready=true;
 					ga_dash_clear_cache();
@@ -219,6 +223,12 @@ if ( is_rtl() ) {
 			<option value="2" <?php if ($ga_dash_tracking=="2") echo "selected='yes'"; echo ">".__("Domain and Subdomains", 'ga-dash');?></option>
 			<option value="3" <?php if ($ga_dash_tracking=="3") echo "selected='yes'"; echo ">".__("Multiple TLD Domains", 'ga-dash');?></option>			
 		</select></p>
+
+		<p><?php _e("Tracking Type: ", 'ga-dash' ); ?>
+		<select id="ga_dash_tracking_type" name="ga_dash_tracking_type">
+			<option value="classic" <?php if (($ga_dash_tracking_type=="classic") OR (!$ga_dash_tracking_type)) echo "selected='yes'"; echo ">".__("Classic Analytics", 'ga-dash');?></option>
+			<option value="universal" <?php if ($ga_dash_tracking_type=="universal") echo "selected='yes'"; echo ">".__("Universal Analytics", 'ga-dash');?></option>
+		</select></p>
 		
 		<p><?php
 		if (get_option('ga_dash_profile_list')){
@@ -236,7 +246,7 @@ if ( is_rtl() ) {
 					}
 					echo '<option value="'.$items[2].'"'; 
 					if ((get_option('ga_dash_default_ua')==$items[2])) echo "selected='yes'";
-					echo '>'.str_ireplace(array('http://','https://'),'',$items[3]).'</option>';
+					echo '>'.parse_url($items[3],PHP_URL_HOST).'</option>';
 				} else {
 				
 					$not_ready=true;

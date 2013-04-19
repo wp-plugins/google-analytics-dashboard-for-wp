@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 3.4.1
+Version: 3.5
 Author URI: http://www.deconf.com
 */  
 
@@ -27,37 +27,20 @@ add_action('plugins_loaded', 'ga_dash_init');
 add_action('wp_head', 'ga_dash_tracking');
 
 function ga_dash_tracking($head) {
+
 	$traking_mode=get_option('ga_dash_tracking');
+	$traking_type=get_option('ga_dash_tracking_type');
 	if ($traking_mode){
-		$tracking_events="";
-		$tracking_0="<script type=\"text/javascript\">
-	var _gaq = _gaq || [];";		
-		$tracking_2="\n	(function() {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-</script>\n";
-		$profiles=get_option('ga_dash_profile_list');
-		foreach ($profiles as $items) {
-				if ((get_option('ga_dash_default_ua')==$items[2])){
-					$ga_default_domain=str_ireplace(array('http://','https://'),'',$items[3]);
-				} 
+		require_once 'functions.php';
+		if ($traking_type=="universal"){
+			
+			echo ga_dash_universal_tracking();
+			
+		} else{
+			
+			echo ga_dash_classic_tracking();
+			
 		}
-
-		switch ( $traking_mode ){
-			case 2 	: $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."'], ['_setDomainName', '".$ga_default_domain."']"; break;
-			case 3 : $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."'], ['_setDomainName', '".$ga_default_domain."'], ['_setAllowLinker', true]"; break;
-			default : $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."']"; break;				
-		}
-
-		if (get_option('ga_dash_anonim')){
-			$tracking_push.=", ['_gat._anonymizeIp']";
-		}	
-		
-		$tracking=$tracking_events.$tracking_0."\n	_gaq.push(".$tracking_push.", ['_trackPageview']);".$tracking_2;	
-		
-		echo $tracking;
 	}
 }
 
@@ -363,7 +346,7 @@ function ga_dash_content() {
 					}
 					$profile_switch.= '<option value="'.$profile->getId().'"'; 
 					if ((get_option('ga_dash_tableid')==$profile->getId())) $profile_switch.= "selected='yes'";
-					$profile_switch.= '>'.str_ireplace(array('http://','https://'),'',$profile->getwebsiteUrl()).'</option>';
+					$profile_switch.= '>'.parse_url($profile->getwebsiteUrl(),PHP_URL_HOST).'</option>';
 					$ga_dash_profile_list[]=array($profile->getName(),$profile->getId(),$profile->getwebPropertyId(), $profile->getwebsiteUrl());
 				}
 				update_option('ga_dash_profile_list',$ga_dash_profile_list);
