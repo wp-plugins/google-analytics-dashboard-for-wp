@@ -1,6 +1,6 @@
 === Google Analytics Dashboard for WP ===
 Contributors: Deconf
-Tags: google analytics dashboard, analytics dashboard, google, dashboard, google analytics widget, google analytics, tracking, code
+Tags: google analytics dashboard, analytics dashboard, google, dashboard, google analytics widget, google analytics, tracking, analytics
 Requires at least: 2.8
 Tested up to: 3.5.1
 Stable tag: 3.5.1
@@ -31,7 +31,7 @@ Main benefits:
 - simple Authorization process
 - has multilingual support, a POT file is available for translations. If you have a complete translation, send me the translation file or upload it to our forum and will be included in next release.
 
-This plugin suports google analytics tracking. Main tracking options and features:
+This plugin suports Google Analytics tracking. Main tracking options and features:
 
 - enable/disable google analytics tracking code
 - switch between universal analytics and classic analytics tracking methods
@@ -92,7 +92,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 = 19.04.2013 - v3.5 =
 
 * small bug fix for multiple TLD domains tracking and domain with subdomains tracking
-* added Universal Analytics support (you can track visits using analytics.js or using ga.js)
+* added universal analytics support (you can track visits using analytics.js or using ga.js)
 
 = 17.04.2013 - v3.4.1 =
 
@@ -104,11 +104,11 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 * i8n improvements
 * RTL improvements
 * usability and accessibility improvements
-* added tracking features
+* added google analytics tracking features
 
 = 10.04.2013 - v3.3.3 =
 
-* a better way to determine temp dir for cache
+* a better way to determine temp dir for google api cache
 
 = 09.04.2013 - v3.3.3 =
 
@@ -116,18 +116,18 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 * added quick support buttons
 * added Sticky Notes
 * switched from Visits to Views vs UniqueViews on frontpage
-* fixed select lists issues after implementing translation, fixed frontend default profile
+* fixed select lists issues after implementing translation, fixed frontend default google analytics profile
 * added frontpage per article statistics
 
 = 25.03.2013 - v3.2 =
 
 * added multilingual support
-* small bug fix when locking admins to a single profile
+* small bug fix when locking admins to a single google analytics profile
 
 = 25.03.2013 - v3.1 =
 
 * added Traffic Overview in Pie Charts
-* added lock profile feature for Admins
+* added lock google analytics profile feature for Admins
 * code optimization
 
 = 25.03.2013 - v3.0 =
@@ -138,7 +138,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 = 22.03.2013 - v2.5 =
 
 * added cache feature
-* simplifying authorizing process
+* simplifying google analytics api authorizing process
 
 = 21.03.2013 - v2.0 =
 
@@ -150,12 +150,12 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 = 20.03.2013 - v1.6 =
 
-* admins can jail access level to a single profile
+* admins can jail access level to a single google analytics profile
 
 = 20.03.2013 - v1.5 =
 
 * added multi-website support
-* table ids and profile names are now automatically retrived
+* table ids and profile names are now automatically retrived from google analytics
 
 = 17.03.2013 - v1.4 =
 
@@ -169,7 +169,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 = 13.03.2013 - v1.2.1 =
 
-* minor fixes
+* minor fixes on google analytics api
 * added video tutorials
 
 = 12.03.2013 - v1.2 =
