@@ -1,6 +1,6 @@
 === Google Analytics Dashboard for WP ===
 Contributors: Deconf
-Tags: google analytics dashboard, analytics dashboard, google statistics, google dashboard, google analytics widget, google analytics, tracking, code
+Tags: google analytics dashboard, analytics dashboard, google, dashboard, google analytics widget, google analytics, tracking, code
 Requires at least: 2.8
 Tested up to: 3.5.1
 Stable tag: 3.5.1
@@ -31,10 +31,10 @@ Main benefits:
 - simple Authorization process
 - has multilingual support, a POT file is available for translations. If you have a complete translation, send me the translation file or upload it to our forum and will be included in next release.
 
-This plugin includes Google Analytics tracking. Main tracking options and features:
+This plugin suports google analytics tracking. Main tracking options and features:
 
-- enable/disable Google Analytics tracking code
-- switch between Universal Analytics and Classic Analytics tracking methods
+- enable/disable google analytics tracking code
+- switch between universal analytics and classic analytics tracking methods
 - supports analytics.js tracking for comaptibility with Universal Analytics web property  
 - supports ga.js tracking for comaptibility with Classic Analytics web property
 - track single domain, domain and all subdomains, multiple TLD domains
@@ -86,10 +86,13 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
+= 19.04.2013 - v3.5.1 =
+* renamed function get_main_domain() to ga_dash_get_main_domain
+
 = 19.04.2013 - v3.5 =
 
 * small bug fix for multiple TLD domains tracking and domain with subdomains tracking
-* added Universal Analytics support (track using analytics.js or ussing the classic ga.js)
+* added Universal Analytics support (you can track visits using analytics.js or using ga.js)
 
 = 17.04.2013 - v3.4.1 =
 
