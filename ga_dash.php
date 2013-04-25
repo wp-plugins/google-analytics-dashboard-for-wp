@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 3.3.4
+Version: 3.5.2
 Author URI: http://www.deconf.com
 */  
 
@@ -14,8 +14,7 @@ function ga_dash_admin() {
 	
 function ga_dash_admin_actions() {
 	if (current_user_can('manage_options')) {  
-		add_options_page("Google Analytics Dashboard", "GA Dashboard", "manage_options", "Google_Analytics_Dashboard", "ga_dash_admin");
-
+		add_options_page(__("Google Analytics Dashboard for WP",'ga-dash'), __("GA Dashboard",'ga-dash'), "manage_options", "Google_Analytics_Dashboard", "ga_dash_admin");
 	}
 }  
 
@@ -25,13 +24,32 @@ add_action('wp_dashboard_setup', 'ga_dash_setup');
 add_action('admin_menu', 'ga_dash_admin_actions'); 
 add_action('admin_enqueue_scripts', 'ga_dash_admin_enqueue_scripts');
 add_action('plugins_loaded', 'ga_dash_init');
+add_action('wp_head', 'ga_dash_tracking');
+
+function ga_dash_tracking($head) {
+
+	$traking_mode=get_option('ga_dash_tracking');
+	$traking_type=get_option('ga_dash_tracking_type');
+	if ($traking_mode){
+		require_once 'functions.php';
+		if ($traking_type=="universal"){
+			
+			echo ga_dash_universal_tracking();
+			
+		} else{
+			
+			echo ga_dash_classic_tracking();
+			
+		}
+	}
+}
 
 function ga_dash_front_content($content) {
 	global $post;
 	if (!current_user_can(get_option('ga_dash_access')) OR !get_option('ga_dash_frontend')) {
 		return $content;
 	}
-	if(!is_feed() && !is_home()) {
+	if(!is_feed() && !is_home() && !is_front_page()) {
 	
 		require_once 'functions.php';
 		
@@ -228,7 +246,7 @@ function ga_dash_setup() {
 	if (current_user_can(get_option('ga_dash_access'))) {
 		wp_add_dashboard_widget(
 			'ga-dash-widget',
-			'Google Analytics Dashboard',
+			__("Google Analytics Dashboard for WP",'ga-dash'),
 			'ga_dash_content',
 			$control_callback = null
 		);
@@ -316,6 +334,7 @@ function ga_dash_content() {
 			}else{
 				$profiles = $transient;		
 			}
+			//print_r($profiles);
 			$items = $profiles->getItems();
 			$profile_switch.= '<form><select id="ga_dash_profiles" name="ga_dash_profiles" onchange="this.form.submit()">';
 			
@@ -327,8 +346,8 @@ function ga_dash_content() {
 					}
 					$profile_switch.= '<option value="'.$profile->getId().'"'; 
 					if ((get_option('ga_dash_tableid')==$profile->getId())) $profile_switch.= "selected='yes'";
-					$profile_switch.= '>'.$profile->getName().'</option>';
-					$ga_dash_profile_list[]=array($profile->getName(),$profile->getId());
+					$profile_switch.= '>'.parse_url($profile->getwebsiteUrl(),PHP_URL_HOST).'</option>';
+					$ga_dash_profile_list[]=array($profile->getName(),$profile->getId(),$profile->getwebPropertyId(), $profile->getwebsiteUrl());
 				}
 				update_option('ga_dash_profile_list',$ga_dash_profile_list);
 			}
@@ -630,15 +649,17 @@ function ga_dash_content() {
 		}
 	}
     $code.="</script>";
+    $code.="</script>";
+	$ga_button_style=get_option('ga_dash_style')=='light'?'button':'gabutton';
 	$code.='<div id="ga-dash">
 	<center>
 		<div id="buttons_div">
 		
-			<input class="gabutton" type="button" value="'.__("Today",'ga-dash').'" onClick="window.location=\'?period=today&query='.$query.'\'" />
-			<input class="gabutton" type="button" value="'.__("Yesterday",'ga-dash').'" onClick="window.location=\'?period=yesterday&query='.$query.'\'" />
-			<input class="gabutton" type="button" value="'.__("Last 7 days",'ga-dash').'" onClick="window.location=\'?period=last7days&query='.$query.'\'" />
-			<input class="gabutton" type="button" value="'.__("Last 14 days",'ga-dash').'" onClick="window.location=\'?period=last14days&query='.$query.'\'" />
-			<input class="gabutton" type="button" value="'.__("Last 30 days",'ga-dash').'" onClick="window.location=\'?period=last30days&query='.$query.'\'" />
+			<input class="'.$ga_button_style.'" type="button" value="'.__("Today",'ga-dash').'" onClick="window.location=\'?period=today&query='.$query.'\'" />
+			<input class="'.$ga_button_style.'" type="button" value="'.__("Yesterday",'ga-dash').'" onClick="window.location=\'?period=yesterday&query='.$query.'\'" />
+			<input class="'.$ga_button_style.'" type="button" value="'.__("Last 7 days",'ga-dash').'" onClick="window.location=\'?period=last7days&query='.$query.'\'" />
+			<input class="'.$ga_button_style.'" type="button" value="'.__("Last 14 days",'ga-dash').'" onClick="window.location=\'?period=last14days&query='.$query.'\'" />
+			<input class="'.$ga_button_style.'" type="button" value="'.__("Last 30 days",'ga-dash').'" onClick="window.location=\'?period=last30days&query='.$query.'\'" />
 		
 		</div>
 		
