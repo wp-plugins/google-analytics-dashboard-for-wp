@@ -229,7 +229,6 @@ if ( is_rtl() ) {
 			<option value="classic" <?php if (($ga_dash_tracking_type=="classic") OR (!$ga_dash_tracking_type)) echo "selected='yes'"; echo ">".__("Classic Analytics", 'ga-dash');?></option>
 			<option value="universal" <?php if ($ga_dash_tracking_type=="universal") echo "selected='yes'"; echo ">".__("Universal Analytics", 'ga-dash');?></option>
 		</select></p>
-		
 		<p><?php
 		if (get_option('ga_dash_profile_list')){
 			_e("Default Tracking Domain: ", 'ga-dash' );
@@ -284,6 +283,7 @@ if ( is_rtl() ) {
 		</center>			
 		<ul>
 			<li><a href="http://wordpress.org/extend/plugins/google-adsense-dashboard-for-wp/" target="_blank"><?php _e("Google Adsense Dashboard",'ga-dash') ?></a></li>
+			<li><a href="http://wordpress.org/extend/plugins/follow-us-box/" target="_blank"><?php _e("Follow Us Box",'ga-dash') ?></a></li>			
 		</ul>			
 </div>
 </div>

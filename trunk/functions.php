@@ -49,9 +49,9 @@
 		}
 
 		switch ( get_option('ga_dash_tracking') ){
-			case 2 	: $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."', {'cookieDomain': '".$ga_default_domain."'})"; break;
-			case 3 : $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."')"; break;
-			default : $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."')";
+			case 2 	: $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."', {'cookieDomain': '".$ga_default_domain."'});"; break;
+			case 3 : $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."');"; break;
+			default : $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."');";
 		}
 
 		if (get_option('ga_dash_anonim')){
