@@ -133,27 +133,27 @@ if ( is_rtl() ) {
 ?>  
 <div class="wrap">
 <div style="width:70%;float:<?php echo $float_main; ?>;">  
-    <?php echo "<h2>" . __( 'Google Analytics Dashboard Settings', 'ga_dash' ) . "</h2>"; ?>  
+    <?php echo "<h2>" . __( 'Google Analytics Dashboard Settings', 'ga-dash' ) . "</h2>"; ?>  
         <form name="ga_dash_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">  
-		<?php echo "<h3>" . __( 'Google Analytics API', 'ga_dash' ). " (". __("watch this", 'ga-dash')." <a href='http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/' target='_blank'>". __("Step by step video tutorial")."</a>)"."</h3>"; ?>  
+		<?php echo "<h3>" . __( 'Google Analytics API', 'ga-dash' ). " (". __("watch this", 'ga-dash')." <a href='http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/' target='_blank'>". __("Step by step video tutorial")."</a>)"."</h3>"; ?>  
         <p><?php echo "<b>".__("API Key:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_apikey" value="<?php echo $apikey; ?>" size="61"><?php echo "<i> ".__("ex: AIzaSyASK7dLaii4326AZVyZ6MCOIQOY6F30G_1", 'ga-dash')."</i>"; ?></p>  
         <p><?php echo "<b>".__("Client ID:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_clientid" value="<?php echo $clientid; ?>" size="60"><?php echo "<i> ".__("ex: 111342334706.apps.googleusercontent.com", 'ga-dash')."</i>"; ?></p>  
         <p><?php echo "<b>".__("Client Secret:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_clientsecret" value="<?php echo $clientsecret; ?>" size="55"><?php echo "<i> ".__("ex: c62POy23C_2qK5fd3fdsec2o", 'ga-dash')."</i>"; ?></p>  
 		<p><?php 
 			if (get_option('ga_dash_token')){
 				echo "<input type=\"submit\" name=\"Reset\" class=\"button button-primary\" value=\"".__("Clear Authorization", 'ga-dash')."\" />";
-				?> <input type="submit" name="Clear" class="button button-primary" value="<?php _e('Clear Cache', 'ga_dash' ) ?>" /><?php		
+				?> <input type="submit" name="Clear" class="button button-primary" value="<?php _e('Clear Cache', 'ga-dash' ) ?>" /><?php		
 				echo '<input type="hidden" name="ga_dash_hidden" value="Y">';  
 			} else{
 				echo "<input type=\"submit\" name=\"Authorize\" class=\"button button-primary\" value=\"".__("Authorize Application", 'ga-dash')."\" />";
-				?> <input type="submit" name="Clear" class="button button-primary" value="<?php _e('Clear Cache', 'ga_dash' ) ?>" /><?php
+				?> <input type="submit" name="Clear" class="button button-primary" value="<?php _e('Clear Cache', 'ga-dash' ) ?>" /><?php
 				echo '<input type="hidden" name="ga_dash_hidden" value="A">';
 				echo "</form>";
 				_e("(the rest of the settings will show up after completing the authorization process)", 'ga-dash' );
 				return;
 			} ?>
 		</p>  
-		<?php echo "<h3>" . __( 'Access Level', 'ga_dash' ). "</h3>";?>
+		<?php echo "<h3>" . __( 'Access Level', 'ga-dash' ). "</h3>";?>
 		<p><?php _e("View Access Level: ", 'ga-dash' ); ?>
 		<select id="ga_dash_access" name="ga_dash_access">
 			<option value="manage_options" <?php if (($dashaccess=="manage_options") OR (!$dashaccess)) echo "selected='yes'"; echo ">".__("Administrators", 'ga-dash');?></option>
@@ -192,9 +192,9 @@ if ( is_rtl() ) {
 		}?></p>
 		
 		<p><input name="ga_dash_jailadmins" type="checkbox" id="ga_dash_jailadmins" value="1"<?php if (get_option('ga_dash_jailadmins')) echo " checked='checked'"; ?>  /><?php _e(" disable dashboard's Switch Profile functionality", 'ga-dash' ); ?></p>
-		<?php echo "<h3>" . __( 'Frontend Settings', 'ga_dash' ). "</h3>";?>
+		<?php echo "<h3>" . __( 'Frontend Settings', 'ga-dash' ). "</h3>";?>
 		<p><input name="ga_dash_frontend" type="checkbox" id="ga_dash_frontend" value="1"<?php if (get_option('ga_dash_frontend')) echo " checked='checked'"; ?>  /><?php _e(" show page visits and top searches in frontend (after each article)", 'ga-dash' ); ?></p>
-		<?php echo "<h3>" . __( 'Backend Settings', 'ga_dash' ). "</h3>";?>
+		<?php echo "<h3>" . __( 'Backend Settings', 'ga-dash' ). "</h3>";?>
 		<p><input name="ga_dash_map" type="checkbox" id="ga_dash_map" value="1"<?php if (get_option('ga_dash_map')) echo " checked='checked'"; ?>  /><?php _e(" show geo map for visits", 'ga-dash' ); ?></p>
 		<p><input name="ga_dash_traffic" type="checkbox" id="ga_dash_traffic" value="1"<?php if (get_option('ga_dash_traffic')) echo " checked='checked'"; ?>  /><?php _e(" show traffic overview", 'ga-dash' ); ?></p>
 		<p><input name="ga_dash_pgd" type="checkbox" id="ga_dash_pgd" value="1"<?php if (get_option('ga_dash_pgd')) echo " checked='checked'"; ?>  /><?php _e(" show top pages", 'ga-dash' ); ?></p>
@@ -205,7 +205,7 @@ if ( is_rtl() ) {
 			<option value="blue" <?php if (($ga_dash_style=="blue") OR (!$ga_dash_style)) echo "selected='yes'"; echo ">".__("Blue Theme", 'ga-dash');?></option>
 			<option value="light" <?php if ($ga_dash_style=="light") echo "selected='yes'"; echo ">".__("Light Theme", 'ga-dash');?></option>
 		</select></p>
-		<?php echo "<h3>" . __( 'Cache Settings', 'ga_dash' ). "</h3>";?>
+		<?php echo "<h3>" . __( 'Cache Settings', 'ga-dash' ). "</h3>";?>
 		<p><?php _e("Cache Time: ", 'ga-dash' ); ?>
 		<select id="ga_dash_cachetime" name="ga_dash_cachetime">
 			<option value="10" <?php if ($ga_dash_cachetime=="10") echo "selected='yes'"; echo ">".__("None", 'ga-dash');?></option>
@@ -214,7 +214,7 @@ if ( is_rtl() ) {
 			<option value="3600" <?php if ($ga_dash_cachetime=="3600") echo "selected='yes'"; echo ">".__("1 hour", 'ga-dash');?></option>
 		</select></p>
 
-		<?php echo "<h3>" . __( 'Google Analytics Tracking', 'ga_dash' ). "</h3>";?>
+		<?php echo "<h3>" . __( 'Google Analytics Tracking', 'ga-dash' ). "</h3>";?>
 
 		<p><?php _e("Enable Tracking: ", 'ga-dash' ); ?>
 		<select id="ga_dash_tracking" name="ga_dash_tracking">
@@ -261,7 +261,7 @@ if ( is_rtl() ) {
 		}?></p>		
 		<p><input name="ga_dash_anonim" type="checkbox" id="ga_dash_anonim" value="1"<?php if (get_option('ga_dash_anonim')) echo " checked='checked'"; ?>  /><?php _e(" anonymize IPs while tracking", 'ga-dash' ); ?></p>				
 		<p class="submit">  
-        <input type="submit" name="Submit" class="button button-primary" value="<?php _e('Update Options', 'ga_dash' ) ?>" />
+        <input type="submit" name="Submit" class="button button-primary" value="<?php _e('Update Options', 'ga-dash' ) ?>" />
         </p>  
     </form>  
 </div>
