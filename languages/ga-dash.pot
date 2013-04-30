@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Google Analytics Dashboard for WP\n"
-"POT-Creation-Date: 2013-04-19 11:00+0200\n"
-"PO-Revision-Date: 2013-04-19 11:00+0200\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2013-04-30 17:50+0200\n"
+"PO-Revision-Date: 2013-04-30 17:50+0200\n"
+"Last-Translator: Deconf <admin@deconf.com>\n"
 "Language-Team: Deconf <admin@deconf.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -270,11 +270,11 @@ msgstr ""
 msgid "Lock selected access level to this profile: "
 msgstr ""
 
-#: .././ga_dash_admin.php:188 .././ga_dash_admin.php:258
+#: .././ga_dash_admin.php:188 .././ga_dash_admin.php:257
 msgid "your profile list needs an update:"
 msgstr ""
 
-#: .././ga_dash_admin.php:190 .././ga_dash_admin.php:260
+#: .././ga_dash_admin.php:190 .././ga_dash_admin.php:259
 msgid "Click here"
 msgstr ""
 
@@ -386,44 +386,48 @@ msgstr ""
 msgid "Universal Analytics"
 msgstr ""
 
-#: .././ga_dash_admin.php:235
+#: .././ga_dash_admin.php:234
 msgid "Default Tracking Domain: "
 msgstr ""
 
-#: .././ga_dash_admin.php:263
+#: .././ga_dash_admin.php:262
 msgid " anonymize IPs while tracking"
 msgstr ""
 
-#: .././ga_dash_admin.php:265
+#: .././ga_dash_admin.php:264
 msgid "Update Options"
 msgstr ""
 
-#: .././ga_dash_admin.php:271
+#: .././ga_dash_admin.php:270
 msgid "Setup Tutorial"
 msgstr ""
 
-#: .././ga_dash_admin.php:275
+#: .././ga_dash_admin.php:274
 msgid "Support Links"
 msgstr ""
 
-#: .././ga_dash_admin.php:278
+#: .././ga_dash_admin.php:277
 msgid "Google Analytics Dashboard Official Page"
 msgstr ""
 
-#: .././ga_dash_admin.php:279
+#: .././ga_dash_admin.php:278
 msgid "Google Analytics Dashboard Wordpress Support"
 msgstr ""
 
-#: .././ga_dash_admin.php:280
+#: .././ga_dash_admin.php:279
 msgid "Google Analytics Dashboard on Deconf Forum"
 msgstr ""
 
-#: .././ga_dash_admin.php:283
+#: .././ga_dash_admin.php:282
 msgid "Useful Plugins"
 msgstr ""
 
-#: .././ga_dash_admin.php:286
+#: .././ga_dash_admin.php:285
 msgid "Google Adsense Dashboard"
+msgstr ""
+
+#: .././ga_dash_admin.php:286
+msgid "Follow Us Box"
 msgstr ""
 
 #~ msgid ""
