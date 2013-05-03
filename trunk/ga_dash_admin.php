@@ -17,14 +17,20 @@ if (isset($_REQUEST['Reset'])){
 }else if(ga_dash_safe_get('ga_dash_hidden') == 'Y') {  
         //Form data sent  
         $apikey = ga_dash_safe_get('ga_dash_apikey');  
-        update_option('ga_dash_apikey', sanitize_text_field($apikey));  
-          
-        $clientid = ga_dash_safe_get('ga_dash_clientid');  
-        update_option('ga_dash_clientid', sanitize_text_field($clientid));  
-          
+        if ($apikey){
+			update_option('ga_dash_apikey', sanitize_text_field($apikey));  
+        }
+		
+        $clientid = ga_dash_safe_get('ga_dash_clientid');
+        if ($clientid){		
+			update_option('ga_dash_clientid', sanitize_text_field($clientid));  
+        }
+		
         $clientsecret = ga_dash_safe_get('ga_dash_clientsecret');  
-        update_option('ga_dash_clientsecret', sanitize_text_field($clientsecret));  
-
+        if ($clientsecret){			
+			update_option('ga_dash_clientsecret', sanitize_text_field($clientsecret));  
+		}
+		
         $dashaccess = ga_dash_safe_get('ga_dash_access');  
         update_option('ga_dash_access', $dashaccess);
 		
@@ -68,7 +74,10 @@ if (isset($_REQUEST['Reset'])){
 		update_option('ga_dash_default_ua', $ga_dash_default_ua);
 
 		$ga_dash_anonim = ga_dash_safe_get('ga_dash_anonim');
-		update_option('ga_dash_anonim', $ga_dash_anonim);			
+		update_option('ga_dash_anonim', $ga_dash_anonim);
+
+		$ga_dash_userapi = ga_dash_safe_get('ga_dash_userapi');
+		update_option('ga_dash_userapi', $ga_dash_userapi);			
 		
 		if (!isset($_REQUEST['Clear']) AND !isset($_REQUEST['Reset'])){
 			?>  
@@ -77,22 +86,27 @@ if (isset($_REQUEST['Reset'])){
 		}
     }else if(ga_dash_safe_get('ga_dash_hidden') == 'A') {
         $apikey = ga_dash_safe_get('ga_dash_apikey');  
-        update_option('ga_dash_apikey', sanitize_text_field($apikey));  
-          
-        $clientid = ga_dash_safe_get('ga_dash_clientid');  
-        update_option('ga_dash_clientid', sanitize_text_field($clientid));  
-          
+        if ($apikey){
+			update_option('ga_dash_apikey', sanitize_text_field($apikey));  
+        }
+		
+        $clientid = ga_dash_safe_get('ga_dash_clientid');
+        if ($clientid){		
+			update_option('ga_dash_clientid', sanitize_text_field($clientid));  
+        }
+		
         $clientsecret = ga_dash_safe_get('ga_dash_clientsecret');  
-        update_option('ga_dash_clientsecret', sanitize_text_field($clientsecret));  
+        if ($clientsecret){			
+			update_option('ga_dash_clientsecret', sanitize_text_field($clientsecret));  
+		}
+
+		$ga_dash_userapi = ga_dash_safe_get('ga_dash_userapi');
+		update_option('ga_dash_userapi', $ga_dash_userapi);			
 	}
 	
-if (isset($_REQUEST['Authorize']) AND get_option('ga_dash_apikey') AND get_option('ga_dash_clientid') AND get_option('ga_dash_clientsecret')){
+if (isset($_REQUEST['Authorize'])){
 	$adminurl = admin_url("#ga-dash-widget");
 	echo '<script> window.location="'.$adminurl.'"; </script> ';
-}
-else if (isset($_REQUEST['Authorize'])){
-	?><div class="updated"><p><strong><?php _e('API Key, Client ID or Client Secret is missing.', 'ga-dash' ); ?></strong></p></div>  
-	<?php
 }
 	
 if(!get_option('ga_dash_access')){
@@ -121,6 +135,7 @@ $ga_dash_tracking = get_option('ga_dash_tracking');
 $ga_dash_tracking_type = get_option('ga_dash_tracking_type');
 $ga_dash_default_ua = get_option('ga_dash_default_ua');
 $ga_dash_anonim = get_option('ga_dash_anonim');
+$ga_dash_userapi = get_option('ga_dash_userapi');
 
 if ( is_rtl() ) {
 	$float_main="right";
@@ -135,10 +150,16 @@ if ( is_rtl() ) {
 <div style="width:70%;float:<?php echo $float_main; ?>;">  
     <?php echo "<h2>" . __( 'Google Analytics Dashboard Settings', 'ga-dash' ) . "</h2>"; ?>  
         <form name="ga_dash_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">  
-		<?php echo "<h3>" . __( 'Google Analytics API', 'ga-dash' ). " (". __("watch this", 'ga-dash')." <a href='http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/' target='_blank'>". __("Step by step video tutorial")."</a>)"."</h3>"; ?>  
-        <p><?php echo "<b>".__("API Key:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_apikey" value="<?php echo $apikey; ?>" size="61"><?php echo "<i> ".__("ex: AIzaSyASK7dLaii4326AZVyZ6MCOIQOY6F30G_1", 'ga-dash')."</i>"; ?></p>  
-        <p><?php echo "<b>".__("Client ID:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_clientid" value="<?php echo $clientid; ?>" size="60"><?php echo "<i> ".__("ex: 111342334706.apps.googleusercontent.com", 'ga-dash')."</i>"; ?></p>  
-        <p><?php echo "<b>".__("Client Secret:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_clientsecret" value="<?php echo $clientsecret; ?>" size="55"><?php echo "<i> ".__("ex: c62POy23C_2qK5fd3fdsec2o", 'ga-dash')."</i>"; ?></p>  
+		<?php echo "<h3>". __( 'Google Analytics API', 'ga-dash' )."</h3>"; ?>  
+        <?php echo "<i>".__("You should watch this", 'ga-dash')." <a href='http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/' target='_blank'>". __("Step by step video tutorial")."</a> ".__("before proceeding to authorization", 'ga-dash').". ".__("To authorize this application using our API Project, press the", 'ga_dash')." <b>".__("Authorize Application", 'ga-dash')."</b> ".__(" button. If you want to authorize it using your own API Project, check the option bellow and enter your project credentials before pressing the", 'ga-dash')." <b>".__("Authorize Application", 'ga-dash')."</b> ".__("button.", 'ga-dash')."</i>";?>
+		<p><input name="ga_dash_userapi" type="checkbox" id="ga_dash_userapi" onchange="this.form.submit()" value="1"<?php if (get_option('ga_dash_userapi')) echo " checked='checked'"; ?>  /><?php echo "<b>".__(" use your own API Project credentials", 'ga-dash' )."</b>"; ?></p>
+		<?php
+		if (get_option('ga_dash_userapi')){?>
+			<p><?php echo "<b>".__("API Key:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_apikey" value="<?php echo $apikey; ?>" size="61"></p>  
+			<p><?php echo "<b>".__("Client ID:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_clientid" value="<?php echo $clientid; ?>" size="60"></p>  
+			<p><?php echo "<b>".__("Client Secret:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_clientsecret" value="<?php echo $clientsecret; ?>" size="55"></p>  
+			<?php echo "<i>".__("Old users should also follow this", 'ga-dash')." <a href='http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/' target='_blank'>". __("step by step video tutorial")."</a> ".__(", there are some major changes in this version, if you want to use your own API Project, you should delete your old API Project and create a new one!", 'ga-dash')."</i>";?>
+		<?php }?>
 		<p><?php 
 			if (get_option('ga_dash_token')){
 				echo "<input type=\"submit\" name=\"Reset\" class=\"button button-primary\" value=\"".__("Clear Authorization", 'ga-dash')."\" />";
@@ -150,6 +171,29 @@ if ( is_rtl() ) {
 				echo '<input type="hidden" name="ga_dash_hidden" value="A">';
 				echo "</form>";
 				_e("(the rest of the settings will show up after completing the authorization process)", 'ga-dash' );
+				echo "</div>";
+				?>
+				<div class="note" style="float:<?php echo $float_note; ?>;text-align:<?php echo $float_main; ?>;"> 
+						<center>
+							<h3><?php _e("Setup Tutorial",'ga-dash') ?></h3>
+							<a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" target="_blank"><img src="../wp-content/plugins/google-analytics-dashboard-for-wp/img/video-tutorial.png" width="95%" /></a>
+						</center>
+						<center>
+							<br /><h3><?php _e("Support Links",'ga-dash') ?></h3>
+						</center>			
+						<ul>
+							<li><a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" target="_blank"><?php _e("Google Analytics Dashboard Official Page",'ga-dash') ?></a></li>
+							<li><a href="http://wordpress.org/support/plugin/google-analytics-dashboard-for-wp" target="_blank"><?php _e("Google Analytics Dashboard Wordpress Support",'ga-dash') ?></a></li>
+							<li><a href="http://forum.deconf.com/en/wordpress-plugins-f182/" target="_blank"><?php _e("Google Analytics Dashboard on Deconf Forum",'ga-dash') ?></a></li>			
+						</ul>
+						<center>
+							<br /><h3><?php _e("Useful Plugins",'ga-dash') ?></h3>
+						</center>			
+						<ul>
+							<li><a href="http://wordpress.org/extend/plugins/google-adsense-dashboard-for-wp/" target="_blank"><?php _e("Google Adsense Dashboard",'ga-dash') ?></a></li>
+							<li><a href="http://wordpress.org/extend/plugins/follow-us-box/" target="_blank"><?php _e("Follow Us Box",'ga-dash') ?></a></li>			
+						</ul>			
+				</div></div><?php				
 				return;
 			} ?>
 		</p>  
