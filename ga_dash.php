@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 3.5.3
+Version: 4.0
 Author URI: http://www.deconf.com
 */  
 
@@ -49,8 +49,9 @@ function ga_dash_front_content($content) {
 	if (!current_user_can(get_option('ga_dash_access')) OR !get_option('ga_dash_frontend')) {
 		return $content;
 	}
+
 	if(!is_feed() && !is_home() && !is_front_page()) {
-	
+
 		require_once 'functions.php';
 		
 		if(!get_option('ga_dash_cachetime')){
@@ -62,21 +63,18 @@ function ga_dash_front_content($content) {
 		}
 			
 		require_once 'src/contrib/Google_AnalyticsService.php';
-		
-		$scriptUri = "http://".$_SERVER["HTTP_HOST"].$_SERVER['PHP_SELF'];
 
 		$client = new Google_Client();
-		$client->setAccessType('offline'); 
-		$client->setApplicationName('GA Dashboard');
-		$client->setClientId(get_option('ga_dash_clientid'));
-		$client->setClientSecret(get_option('ga_dash_clientsecret'));
-		$client->setRedirectUri($scriptUri);
-		$client->setDeveloperKey(get_option('ga_dash_APIKEY'));
+		$client->setAccessType('offline');
+		$client->setApplicationName('Google Analytics Dashboard for WP');
+		$client->setRedirectUri('urn:ietf:wg:oauth:2.0:oob');
 		
-		if ((!get_option('ga_dash_clientid')) OR (!get_option('ga_dash_clientsecret')) OR (!get_option('ga_dash_apikey'))){
-			return $content;
-		}	
-		
+		if (get_option('ga_dash_userapi')){	
+			$client->setClientId(get_option('ga_dash_clientid'));
+			$client->setClientSecret(get_option('ga_dash_clientsecret'));
+			$client->setDeveloperKey(get_option('ga_dash_apikey'));
+		}
+	
 		$service = new Google_AnalyticsService($client);
 
 		if (ga_dash_get_token()) { 
@@ -91,7 +89,6 @@ function ga_dash_front_content($content) {
 		$metrics = 'ga:pageviews,ga:uniquePageviews';
 		$dimensions = 'ga:year,ga:month,ga:day';
 		$page_url = $_SERVER["REQUEST_URI"];
-		//echo $page_url;
 		$post_id = $post->ID;
 		$title = __("Views vs UniqueViews", 'ga-dash');
 		if (get_option('ga_dash_style')=="light"){ 
@@ -267,29 +264,20 @@ function ga_dash_content() {
 		
 	require_once 'src/contrib/Google_AnalyticsService.php';
 	
-	$scriptUri = "http://".$_SERVER["HTTP_HOST"].$_SERVER['PHP_SELF'];
+	//$scriptUri = "http://".$_SERVER["HTTP_HOST"].$_SERVER['PHP_SELF'];
 
 	$client = new Google_Client();
 	$client->setAccessType('offline');
-	$client->setApplicationName('GA Dashboard');
-	$client->setClientId(get_option('ga_dash_clientid'));
-	$client->setClientSecret(get_option('ga_dash_clientsecret'));
-	$client->setRedirectUri($scriptUri);
-	$client->setDeveloperKey(get_option('ga_dash_APIKEY'));
-
-	if ((!get_option('ga_dash_clientid')) OR (!get_option('ga_dash_clientsecret')) OR (!get_option('ga_dash_apikey'))){
-		
-		echo "<div style='padding:20px;'>".__("Client ID, Client Secret or API Key is missing", 'ga-dash')."</div>";
-		return;
-		
-	}	
-	$service = new Google_AnalyticsService($client);
-
-	if (isset($_GET['code']) AND !(ga_dash_get_token())) {
-		$client->authenticate();
-		ga_dash_store_token($client->getAccessToken());
-
+	$client->setApplicationName('Google Analytics Dashboard for WP');
+	$client->setRedirectUri('urn:ietf:wg:oauth:2.0:oob');
+	
+	if (get_option('ga_dash_userapi')){		
+			$client->setClientId(get_option('ga_dash_clientid'));
+			$client->setClientSecret(get_option('ga_dash_clientsecret'));
+			$client->setDeveloperKey(get_option('ga_dash_apikey'));
 	}
+	
+	$service = new Google_AnalyticsService($client);
 
 	if (ga_dash_get_token()) { 
 		$token = ga_dash_get_token();
@@ -300,19 +288,29 @@ function ga_dash_content() {
 		
 		$authUrl = $client->createAuthUrl();
 		
-		if (!isset($_REQUEST['authorize'])){
+		if (!isset($_REQUEST['ga_dash_authorize'])){
 			if (!current_user_can('manage_options')){
 				_e("Ask an admin to authorize this Application", 'ga-dash');
 				return;
 			}
-			echo '<div style="padding:20px;"><form name="input" action="#" method="get">
-			<input type="submit" class="button button-primary" name="authorize" value="'.__("Authorize Google Analytics Dashboard", 'ga-dash').'"/>
-		</form></div>';
+			echo '<div style="padding:20px;">'.__("Use this link to get your access code:", 'ga-dash').' <a href="'.$authUrl.'" target="_blank">'.__("Get Access Code", 'ga-dash').'</a>';
+			echo '<form name="input" action="#" method="get">
+						<p><b>'.__("Access Code:", 'ga-dash').' </b><input type="text" name="ga_dash_code" value="" size="61"></p>
+						<input type="submit" class="button button-primary" name="ga_dash_authorize" value="'.__("Save Access Code", 'ga-dash').'"/>
+					</form>
+				</div>';
 			return;
 		}		
 		else{
-			echo '<script> window.location="'.$authUrl.'"; </script> ';
-			return;
+			if ($_REQUEST['ga_dash_code']){
+				$client->authenticate($_REQUEST['ga_dash_code']);
+				ga_dash_store_token($client->getAccessToken());
+			} else{
+			
+				$adminurl = admin_url("#ga-dash-widget");
+				echo '<script> window.location="'.$adminurl.'"; </script> ';
+			
+			}	
 		}
 
 	}
