@@ -3,7 +3,7 @@ Contributors: deconf
 Tags: google analytics dashboard, analytics dashboard, google, dashboard, google analytics widget, google analytics, tracking, analytics
 Requires at least: 2.8
 Tested up to: 3.5.1
-Stable tag: 4.0.1
+Stable tag: 4.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,7 +88,13 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
-= 29.05.2013 - v4.1 =
+= 29.05.2013 - v4.0.2 =
+- minimize Google Analytics API requests
+- new warnings available on Admin Option Page
+- avoid any unnecessary profile list update
+- avoid errors output for regular users while adding the tracking code
+
+= 29.05.2013 - v4.0.1 =
 - fixed some 'Undefined index' notices
 - cache fix to decrease number of API requests
 

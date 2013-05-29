@@ -207,12 +207,16 @@ if ( is_rtl() ) {
 		</select></p>
 
 		<p><?php
-		if (get_option('ga_dash_profile_list')){
+
 			_e("Lock selected access level to this profile: ", 'ga-dash' );
 			$profiles=get_option('ga_dash_profile_list');
-			echo '<select id="ga_dash_tableid_jail" name="ga_dash_tableid_jail">';
-			
 			$not_ready=false;
+			
+			if (!is_array($profiles)){
+				$not_ready=true;
+			}			
+			
+			echo '<select id="ga_dash_tableid_jail" name="ga_dash_tableid_jail">';
 			
 			foreach ($profiles as $items) {
 				if ($items[3]){
@@ -229,11 +233,11 @@ if ( is_rtl() ) {
 			}
 			echo '</select>';
 			if ($not_ready){
-				echo '<font color="red"> '.__("your profile list needs an update:",'ga-dash').'</font>';
+				echo '<font color="red"> &#9668;-- '.__("your profile list needs an update:",'ga-dash').'</font>';
 				$adminurl = admin_url("#ga-dash-widget");
 				echo ' <a href="'.$adminurl.'">'.__("Click here",'ga-dash').'</a>';
 			}			
-		}?></p>
+		?></p>
 		
 		<p><input name="ga_dash_jailadmins" type="checkbox" id="ga_dash_jailadmins" value="1"<?php if (get_option('ga_dash_jailadmins')) echo " checked='checked'"; ?>  /><?php _e(" disable dashboard's Switch Profile functionality", 'ga-dash' ); ?></p>
 		<?php echo "<h3>" . __( 'Frontend Settings', 'ga-dash' ). "</h3>";?>
@@ -266,7 +270,12 @@ if ( is_rtl() ) {
 			<option value="1" <?php if ($ga_dash_tracking=="1") echo "selected='yes'"; echo ">".__("Single Domain", 'ga-dash');?></option>
 			<option value="2" <?php if ($ga_dash_tracking=="2") echo "selected='yes'"; echo ">".__("Domain and Subdomains", 'ga-dash');?></option>
 			<option value="3" <?php if ($ga_dash_tracking=="3") echo "selected='yes'"; echo ">".__("Multiple TLD Domains", 'ga-dash');?></option>			
-		</select></p>
+		</select>
+		<?php	if (!$ga_dash_tracking){
+				echo ' <font color="red"> &#9668;-- '.__("the tracking feature is currently disabled!",'ga-dash').'</font>';
+			}			
+		?>
+		</p>
 
 		<p><?php _e("Tracking Type: ", 'ga-dash' ); ?>
 		<select id="ga_dash_tracking_type" name="ga_dash_tracking_type">
@@ -274,12 +283,15 @@ if ( is_rtl() ) {
 			<option value="universal" <?php if ($ga_dash_tracking_type=="universal") echo "selected='yes'"; echo ">".__("Universal Analytics", 'ga-dash');?></option>
 		</select></p>
 		<p><?php
-		if (get_option('ga_dash_profile_list')){
 			_e("Default Tracking Domain: ", 'ga-dash' );
 			$profiles=get_option('ga_dash_profile_list');
-			echo '<select id="ga_dash_default_ua" name="ga_dash_default_ua">';
-			
 			$not_ready=false;
+			
+			if (!is_array($profiles)){
+				$not_ready=true;
+			}	
+			
+			echo '<select id="ga_dash_default_ua" name="ga_dash_default_ua">';
 			
 			foreach ($profiles as $items) {
 				if (isset($items[2])){
@@ -298,11 +310,11 @@ if ( is_rtl() ) {
 			}
 			echo '</select>';
 			if ($not_ready){
-				echo '<font color="red"> '.__("your profile list needs an update:",'ga-dash').'</font>';
+				echo '<font color="red"> &#9668;-- '.__("your profile list needs an update:",'ga-dash').'</font>';
 				$adminurl = admin_url("#ga-dash-widget");
 				echo ' <a href="'.$adminurl.'">'.__("Click here",'ga-dash').'</a>';
 			}	
-		}?></p>		
+		?></p>		
 		<p><input name="ga_dash_anonim" type="checkbox" id="ga_dash_anonim" value="1"<?php if (get_option('ga_dash_anonim')) echo " checked='checked'"; ?>  /><?php _e(" anonymize IPs while tracking", 'ga-dash' ); ?></p>				
 		<p class="submit">  
         <input type="submit" name="Submit" class="button button-primary" value="<?php _e('Update Options', 'ga-dash' ) ?>" />

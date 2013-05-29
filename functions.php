@@ -11,12 +11,13 @@
 	})();
 </script>\n";
 		$profiles=get_option('ga_dash_profile_list');
-		foreach ($profiles as $items) {
+		if (is_array($profiles)){		
+			foreach ($profiles as $items) {
 				if ((get_option('ga_dash_default_ua')==$items[2])){
 					$ga_default_domain=ga_dash_get_main_domain($items[3]);
 				} 
+			}
 		}
-
 		switch ( get_option('ga_dash_tracking') ){
 			case 2 	: $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."'], ['_setDomainName', '".$ga_default_domain."']"; break;
 			case 3 : $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."'], ['_setDomainName', '".$ga_default_domain."'], ['_setAllowLinker', true]"; break;
@@ -42,12 +43,13 @@
 	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');";		
 		$tracking_2="\n</script>\n";
 		$profiles=get_option('ga_dash_profile_list');
-		foreach ($profiles as $items) {
-				if ((get_option('ga_dash_default_ua')==$items[2])){
-					$ga_default_domain=ga_dash_get_main_domain($items[3]);
-				} 
+		if (is_array($profiles)){
+			foreach ($profiles as $items) {
+					if ((get_option('ga_dash_default_ua')==$items[2])){
+						$ga_default_domain=ga_dash_get_main_domain($items[3]);
+					} 
+			}
 		}
-
 		switch ( get_option('ga_dash_tracking') ){
 			case 2 	: $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."', {'cookieDomain': '".$ga_default_domain."'});"; break;
 			case 3 : $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."');"; break;
