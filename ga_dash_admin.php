@@ -252,10 +252,10 @@ if ( is_rtl() ) {
 		<?php echo "<h3>" . __( 'Cache Settings', 'ga-dash' ). "</h3>";?>
 		<p><?php _e("Cache Time: ", 'ga-dash' ); ?>
 		<select id="ga_dash_cachetime" name="ga_dash_cachetime">
-			<option value="10" <?php if ($ga_dash_cachetime=="10") echo "selected='yes'"; echo ">".__("None", 'ga-dash');?></option>
 			<option value="900" <?php if ($ga_dash_cachetime=="900") echo "selected='yes'"; echo ">".__("15 minutes", 'ga-dash');?></option>
-			<option value="1800" <?php if (($ga_dash_cachetime=="1800") OR (!$ga_dash_cachetime)) echo "selected='yes'"; echo ">".__("30 minutes", 'ga-dash');?></option>
-			<option value="3600" <?php if ($ga_dash_cachetime=="3600") echo "selected='yes'"; echo ">".__("1 hour", 'ga-dash');?></option>
+			<option value="1800" <?php if ($ga_dash_cachetime=="1800") echo "selected='yes'"; echo ">".__("30 minutes", 'ga-dash');?></option>
+			<option value="3600" <?php if (($ga_dash_cachetime=="3600") OR (!$ga_dash_cachetime)) echo "selected='yes'"; echo ">".__("1 hour", 'ga-dash');?></option>
+			<option value="7200" <?php if ($ga_dash_cachetime=="7200") echo "selected='yes'"; echo ">".__("2 hours", 'ga-dash');?></option>
 		</select></p>
 
 		<?php echo "<h3>" . __( 'Google Analytics Tracking', 'ga-dash' ). "</h3>";?>

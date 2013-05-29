@@ -3,7 +3,7 @@ Contributors: deconf
 Tags: google analytics dashboard, analytics dashboard, google, dashboard, google analytics widget, google analytics, tracking, analytics
 Requires at least: 2.8
 Tested up to: 3.5.1
-Stable tag: 4.0
+Stable tag: 4.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,17 +88,25 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
+= 29.05.2013 - v4.1 =
+- fixed some 'Undefined index' notices
+- cache fix to decrease number of API requests
+
 = 03.05.2013 - v4.0 =
+
 * simplified authorization process for beginners
 * advanced users can use their own API Project
 
 = 30.04.2013 - v3.5.3 =
+
 * translation fix, textdomain ga-dash everywhere
 
 = 25.04.2013 - v3.5.2 =
+
 * some small javascript fixes for google tracking code
 
 = 19.04.2013 - v3.5.1 =
+
 * renamed function get_main_domain() to ga_dash_get_main_domain
 
 = 19.04.2013 - v3.5 =

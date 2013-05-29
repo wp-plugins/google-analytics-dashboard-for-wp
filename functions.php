@@ -136,7 +136,7 @@
 			echo ga_dash_pretty_error($e);
 			return;
 		}	
-		if (!$data['rows']){
+		if (!isset($data['rows'])){
 			return 0;
 		}
 		
@@ -168,7 +168,7 @@
 			echo ga_dash_pretty_error($e);
 			return;
 		}
-		if (!$data['rows']){
+		if (!isset($data['rows'])){
 			return 0;
 		}
 		
@@ -200,7 +200,7 @@
 			echo ga_dash_pretty_error($e);
 			return;
 		}	
-		if (!$data['rows']){
+		if (!isset($data['rows'])){
 			return 0;
 		}
 		
@@ -231,7 +231,7 @@
 			echo ga_dash_pretty_error($e);
 			return;
 		}
-		if (!$data['rows']){
+		if (!isset($data['rows'])){
 			return 0;
 		}
 		
@@ -261,7 +261,7 @@
 			echo ga_dash_pretty_error($e);
 			return;
 		}	
-		if (!$data['rows']){
+		if (!isset($data['rows'])){
 			return 0;
 		}
 		
@@ -292,7 +292,7 @@
 			echo ga_dash_pretty_error($e);
 			return;
 		}	
-		if (!$data['rows']){
+		if (!isset($data['rows'])){
 			return 0;
 		}
 		
