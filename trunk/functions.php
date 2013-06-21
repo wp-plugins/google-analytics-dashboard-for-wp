@@ -2,6 +2,7 @@
 	
 	function ga_dash_classic_tracking(){
 		$tracking_events="";
+		$ga_default_domain=get_option('ga_default_domain');
 		$tracking_0="<script type=\"text/javascript\">
 	var _gaq = _gaq || [];";		
 		$tracking_2="\n	(function() {
@@ -15,6 +16,7 @@
 			foreach ($profiles as $items) {
 				if ((get_option('ga_dash_default_ua')==$items[2])){
 					$ga_default_domain=ga_dash_get_main_domain($items[3]);
+					update_option('ga_default_domain',$ga_default_domain);
 				} 
 			}
 		}
@@ -36,6 +38,7 @@
 
 	function ga_dash_universal_tracking(){
 		$tracking_events="";
+		$ga_default_domain=get_option('ga_default_domain');
 		$tracking_0="<script>
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -47,6 +50,7 @@
 			foreach ($profiles as $items) {
 					if ((get_option('ga_dash_default_ua')==$items[2])){
 						$ga_default_domain=ga_dash_get_main_domain($items[3]);
+						update_option('ga_default_domain',$ga_default_domain);
 					} 
 			}
 		}
