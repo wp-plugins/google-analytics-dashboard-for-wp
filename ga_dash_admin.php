@@ -217,20 +217,21 @@ if ( is_rtl() ) {
 			}			
 			
 			echo '<select id="ga_dash_tableid_jail" name="ga_dash_tableid_jail">';
-			
-			foreach ($profiles as $items) {
-				if ($items[3]){
-					if (!get_option('ga_dash_tableid_jail')) {
-						update_option('ga_dash_tableid_jail',$items[1]);
+			if (!$not_ready) {			
+				foreach ($profiles as $items) {
+					if ($items[3]){
+						if (!get_option('ga_dash_tableid_jail')) {
+							update_option('ga_dash_tableid_jail',$items[1]);
+						}
+						echo '<option value="'.$items[1].'"'; 
+						if ((get_option('ga_dash_tableid_jail')==$items[1])) echo "selected='yes'";
+						echo '>'.parse_url($items[3],PHP_URL_HOST).'</option>';
+					} else {
+						$not_ready=true;
+						ga_dash_clear_cache();
 					}
-					echo '<option value="'.$items[1].'"'; 
-					if ((get_option('ga_dash_tableid_jail')==$items[1])) echo "selected='yes'";
-					echo '>'.parse_url($items[3],PHP_URL_HOST).'</option>';
-				} else {
-					$not_ready=true;
-					ga_dash_clear_cache();
 				}
-			}
+			}	
 			echo '</select>';
 			if ($not_ready){
 				echo '<font color="red"> &#9668;-- '.__("your profile list needs an update:",'ga-dash').'</font>';
@@ -292,22 +293,23 @@ if ( is_rtl() ) {
 			}	
 			
 			echo '<select id="ga_dash_default_ua" name="ga_dash_default_ua">';
-			
-			foreach ($profiles as $items) {
-				if (isset($items[2])){
-					if (!get_option('ga_dash_default_ua')) {
-						update_option('ga_dash_default_ua',$items[2]);
-						ga_dash_clear_cache();
-					}
-					echo '<option value="'.$items[2].'"'; 
-					if ((get_option('ga_dash_default_ua')==$items[2])) echo "selected='yes'";
-					echo '>'.parse_url($items[3],PHP_URL_HOST).'</option>';
-				} else {
-				
-					$not_ready=true;
-				
-				}	
-			}
+			if (!$not_ready) {
+				foreach ($profiles as $items) {
+					if (isset($items[2])){
+						if (!get_option('ga_dash_default_ua')) {
+							update_option('ga_dash_default_ua',$items[2]);
+							ga_dash_clear_cache();
+						}
+						echo '<option value="'.$items[2].'"'; 
+						if ((get_option('ga_dash_default_ua')==$items[2])) echo "selected='yes'";
+						echo '>'.parse_url($items[3],PHP_URL_HOST).'</option>';
+					} else {
+					
+						$not_ready=true;
+					
+					}	
+				}
+			}	
 			echo '</select>';
 			if ($not_ready){
 				echo '<font color="red"> &#9668;-- '.__("your profile list needs an update:",'ga-dash').'</font>';
@@ -340,6 +342,7 @@ if ( is_rtl() ) {
 		<ul>
 			<li><a href="http://wordpress.org/extend/plugins/google-adsense-dashboard-for-wp/" target="_blank"><?php _e("Google Adsense Dashboard",'ga-dash') ?></a></li>
 			<li><a href="http://wordpress.org/extend/plugins/follow-us-box/" target="_blank"><?php _e("Follow Us Box",'ga-dash') ?></a></li>			
+			<li><a href="http://wordpress.org/extend/plugins/clicky-analytics/" target="_blank"><?php _e("Clicky Analytics",'ga-dash') ?></a></li>						
 		</ul>			
 </div>
 </div>

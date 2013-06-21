@@ -3,7 +3,7 @@ Contributors: deconf
 Tags: google analytics dashboard, analytics dashboard, google, dashboard, google analytics widget, google analytics, tracking, analytics
 Requires at least: 2.8
 Tested up to: 3.5.1
-Stable tag: 4.0.2
+Stable tag: 4.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,13 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 This plugin it's released under the GPLv2, you can use it free of charge on your personal or commercial website.
 
 == Changelog ==
+
+= 21.06.2013 - v4.0.3 =
+- improvements on tracking code
+- redundant variable for default domain name
+- fix for "cannot redeclare class URI_Template_Parser" error
+- added Settings to plugins page
+- modified Google Profiles timeouts
 
 = 29.05.2013 - v4.0.2 =
 - minimize Google Analytics API requests
