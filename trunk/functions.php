@@ -84,6 +84,12 @@
 		return $domain;
 	}
 	
+	function ga_dash_get_profile_domain($domain){
+	
+		return str_replace(array("https://","http://"," "),"",$domain);
+	
+	}
+	
 	function ga_dash_pretty_error($e){
 		return "<center><table><tr><td colspan='2' style='word-break:break-all;'>".$e->getMessage()."<br /><br /></td></tr><tr><td width='50%'><a href='http://wordpress.org/support/plugin/google-analytics-dashboard-for-wp' target='_blank'>".__("Help on Wordpress Forum",'ga-dash')."</a><td width='50%'><a href='http://forum.deconf.com/en/wordpress-plugins-f182/' target='_blank'>".__("Support on Deconf Forum",'ga-dash')."</a></td></tr></table></center>";	
 	}
@@ -149,7 +155,7 @@
 		$ga_dash_data="";
 		$i=0;
 		while (isset($data['rows'][$i][0])){
-			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
+			$ga_dash_data.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 			$i++;
 		}
 
@@ -181,7 +187,7 @@
 		$ga_dash_data="";
 		$i=0;
 		while (isset($data['rows'][$i][0])){
-			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][2]."],";
+			$ga_dash_data.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][2]."],";
 			$i++;
 		}
 
@@ -213,7 +219,7 @@
 		$ga_dash_data="";
 		$i=0;
 		while (isset($data['rows'][$i][0])){
-			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
+			$ga_dash_data.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 			$i++;
 		}
 
@@ -243,7 +249,7 @@
 		
 		$ga_dash_data="";
 		for ($i=0;$i<$data['totalResults'];$i++){
-			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
+			$ga_dash_data.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 		}
 
 		return $ga_dash_data;
@@ -304,7 +310,7 @@
 		
 		$ga_dash_data="";
 		for ($i=0;$i<$data['totalResults'];$i++){
-			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
+			$ga_dash_data.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 		}
 
 		return $ga_dash_data;

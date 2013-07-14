@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 4.0.3
+Version: 4.0.4
 Author URI: http://www.deconf.com
 */  
 
@@ -81,6 +81,10 @@ function ga_dash_front_content($content) {
 			$client->setClientId(get_option('ga_dash_clientid'));
 			$client->setClientSecret(get_option('ga_dash_clientsecret'));
 			$client->setDeveloperKey(get_option('ga_dash_apikey'));
+		}else{
+			$client->setClientId('65556128781.apps.googleusercontent.com');
+			$client->setClientSecret('Kc7888wgbc_JbeCpbFjnYpwE');
+			$client->setDeveloperKey('AIzaSyBG7LlUoHc29ZeC_dsShVaBEX15SfRl_WY');
 		}
 	
 		$service = new Google_AnalyticsService($client);
@@ -155,7 +159,7 @@ function ga_dash_front_content($content) {
 		if (isset($data['rows'])){
 			$i=0;
 			while (isset($data['rows'][$i][0])){
-				$ga_dash_organicdata.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
+				$ga_dash_organicdata.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 				$i++;
 			}		
 		
@@ -283,7 +287,11 @@ function ga_dash_content() {
 			$client->setClientId(get_option('ga_dash_clientid'));
 			$client->setClientSecret(get_option('ga_dash_clientsecret'));
 			$client->setDeveloperKey(get_option('ga_dash_apikey'));
-	}
+	}else{
+			$client->setClientId('65556128781.apps.googleusercontent.com');
+			$client->setClientSecret('Kc7888wgbc_JbeCpbFjnYpwE');
+			$client->setDeveloperKey('AIzaSyBG7LlUoHc29ZeC_dsShVaBEX15SfRl_WY');
+		}
 	
 	$service = new Google_AnalyticsService($client);
 
@@ -340,7 +348,9 @@ function ga_dash_content() {
 			}else{
 				$profiles = $transient;		
 			}
+			
 			//print_r($profiles);
+			
 			$items = $profiles->getItems();
 			$profile_switch.= '<form><select id="ga_dash_profiles" name="ga_dash_profiles" onchange="this.form.submit()">';
 			
@@ -352,7 +362,7 @@ function ga_dash_content() {
 					}
 					$profile_switch.= '<option value="'.$profile->getId().'"'; 
 					if ((get_option('ga_dash_tableid')==$profile->getId())) $profile_switch.= "selected='yes'";
-					$profile_switch.= '>'.parse_url($profile->getwebsiteUrl(),PHP_URL_HOST).'</option>';
+					$profile_switch.= '>'.ga_dash_get_profile_domain($profile->getwebsiteUrl()).'</option>';
 					$ga_dash_profile_list[]=array($profile->getName(),$profile->getId(),$profile->getwebPropertyId(), $profile->getwebsiteUrl());
 				}
 				update_option('ga_dash_profile_list',$ga_dash_profile_list);
