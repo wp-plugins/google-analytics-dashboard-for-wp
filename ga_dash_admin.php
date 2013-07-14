@@ -190,7 +190,9 @@ if ( is_rtl() ) {
 							<br /><h3><?php _e("Useful Plugins",'ga-dash') ?></h3>
 						</center>			
 						<ul>
-							<li><a href="http://wordpress.org/extend/plugins/google-adsense-dashboard-for-wp/" target="_blank"><?php _e("Google Adsense Dashboard",'ga-dash') ?></a></li>
+							<li><a href="http://www.deconf.com/en/projects/youtube-analytics-dashboard-for-wordpress/" target="_blank"><?php _e("YouTube Analytics Dashboard",'ga-dash') ?></a></li>
+							<li><a href="http://www.deconf.com/en/projects/google-adsense-dashboard-for-wordpress/" target="_blank"><?php _e("Google Adsense Dashboard",'ga-dash') ?></a></li>
+							<li><a href="http://www.deconf.com/en/projects/clicky-analytics-plugin-for-wordpress/" target="_blank"><?php _e("Clicky Analytics",'ga-dash') ?></a></li>						
 							<li><a href="http://wordpress.org/extend/plugins/follow-us-box/" target="_blank"><?php _e("Follow Us Box",'ga-dash') ?></a></li>			
 						</ul>			
 				</div></div><?php				
@@ -225,7 +227,7 @@ if ( is_rtl() ) {
 						}
 						echo '<option value="'.$items[1].'"'; 
 						if ((get_option('ga_dash_tableid_jail')==$items[1])) echo "selected='yes'";
-						echo '>'.parse_url($items[3],PHP_URL_HOST).'</option>';
+						echo '>'.ga_dash_get_profile_domain($items[3]).'</option>';
 					} else {
 						$not_ready=true;
 						ga_dash_clear_cache();
@@ -302,7 +304,7 @@ if ( is_rtl() ) {
 						}
 						echo '<option value="'.$items[2].'"'; 
 						if ((get_option('ga_dash_default_ua')==$items[2])) echo "selected='yes'";
-						echo '>'.parse_url($items[3],PHP_URL_HOST).'</option>';
+						echo '>'.ga_dash_get_profile_domain($items[3]).'</option>';
 					} else {
 					
 						$not_ready=true;
@@ -340,9 +342,10 @@ if ( is_rtl() ) {
 			<br /><h3><?php _e("Useful Plugins",'ga-dash') ?></h3>
 		</center>			
 		<ul>
-			<li><a href="http://wordpress.org/extend/plugins/google-adsense-dashboard-for-wp/" target="_blank"><?php _e("Google Adsense Dashboard",'ga-dash') ?></a></li>
+			<li><a href="http://www.deconf.com/en/projects/youtube-analytics-dashboard-for-wordpress/" target="_blank"><?php _e("YouTube Analytics Dashboard",'ga-dash') ?></a></li>
+			<li><a href="http://www.deconf.com/en/projects/google-adsense-dashboard-for-wordpress/" target="_blank"><?php _e("Google Adsense Dashboard",'ga-dash') ?></a></li>
+			<li><a href="http://www.deconf.com/en/projects/clicky-analytics-plugin-for-wordpress/" target="_blank"><?php _e("Clicky Analytics",'ga-dash') ?></a></li>						
 			<li><a href="http://wordpress.org/extend/plugins/follow-us-box/" target="_blank"><?php _e("Follow Us Box",'ga-dash') ?></a></li>			
-			<li><a href="http://wordpress.org/extend/plugins/clicky-analytics/" target="_blank"><?php _e("Clicky Analytics",'ga-dash') ?></a></li>						
 		</ul>			
 </div>
 </div>
