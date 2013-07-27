@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 4.0.4
+Version: 4.1
 Author URI: http://www.deconf.com
 */  
 
@@ -27,6 +27,13 @@ add_action('admin_enqueue_scripts', 'ga_dash_admin_enqueue_scripts');
 add_action('plugins_loaded', 'ga_dash_init');
 add_action('wp_head', 'ga_dash_tracking');
 add_filter("plugin_action_links_$plugin", 'ga_dash_settings_link' );
+add_action('wp_enqueue_scripts', 'ga_dash_enqueue_scripts');
+
+function ga_dash_enqueue_scripts() {
+	if (get_option('ga_event_tracking') AND !wp_script_is('jquery')) {
+		wp_enqueue_script('jquery');
+	}	
+}
 
 function ga_dash_settings_link($links) { 
   $settings_link = '<a href="options-general.php?page=Google_Analytics_Dashboard">'.__("Settings",'ga-dash').'</a>'; 
@@ -42,9 +49,17 @@ function ga_dash_tracking($head) {
 		require_once 'functions.php';
 		if ($traking_type=="universal"){
 			
+			if (get_option('ga_event_tracking')){
+				require_once 'events/events-universal.php';
+			}
+			
 			echo ga_dash_universal_tracking();
 			
 		} else{
+			
+			if (get_option('ga_event_tracking')){
+				require_once 'events/events-classic.php';
+			}
 			
 			echo ga_dash_classic_tracking();
 			
@@ -138,7 +153,7 @@ function ga_dash_front_content($content) {
 		for ($i=0;$i<$data['totalResults'];$i++){
 			$ga_dash_statsdata.="['".$data['rows'][$i][0]."-".$data['rows'][$i][1]."-".$data['rows'][$i][2]."',".round($data['rows'][$i][3],2).",".round($data['rows'][$i][4],2)."],";
 		}
-		
+		$ga_dash_statsdata=rtrim($ga_dash_statsdata,',');
 		$metrics = 'ga:visits'; 
 		$dimensions = 'ga:keyword';
 		try{
@@ -161,8 +176,8 @@ function ga_dash_front_content($content) {
 			while (isset($data['rows'][$i][0])){
 				$ga_dash_organicdata.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 				$i++;
-			}		
-		
+			}
+			$ga_dash_organicdata=rtrim($ga_dash_organicdata,',');			
 		}	
 
 		$content.='<style>
@@ -463,7 +478,7 @@ function ga_dash_content() {
 	for ($i=0;$i<$data['totalResults'];$i++){
 		$ga_dash_statsdata.="['".$data['rows'][$i][0]."-".$data['rows'][$i][1]."-".$data['rows'][$i][2]."',".round($data['rows'][$i][3],2)."],";
 	}
-
+	$ga_dash_statsdata=rtrim($ga_dash_statsdata,',');
 	$metrics = 'ga:visits,ga:visitors,ga:pageviews,ga:visitBounceRate,ga:organicSearches,ga:timeOnSite';
 	$dimensions = 'ga:year';
 	try{
