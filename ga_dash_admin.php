@@ -78,6 +78,12 @@ if (isset($_REQUEST['Reset'])){
 
 		$ga_dash_userapi = ga_dash_safe_get('ga_dash_userapi');
 		update_option('ga_dash_userapi', $ga_dash_userapi);			
+
+		$ga_event_tracking = ga_dash_safe_get('ga_event_tracking');
+		update_option('ga_event_tracking', $ga_event_tracking);	
+
+		$ga_event_downloads = ga_dash_safe_get('ga_event_downloads');
+		update_option('ga_event_downloads', $ga_event_downloads);	
 		
 		if (!isset($_REQUEST['Clear']) AND !isset($_REQUEST['Reset'])){
 			?>  
@@ -136,6 +142,12 @@ $ga_dash_tracking_type = get_option('ga_dash_tracking_type');
 $ga_dash_default_ua = get_option('ga_dash_default_ua');
 $ga_dash_anonim = get_option('ga_dash_anonim');
 $ga_dash_userapi = get_option('ga_dash_userapi');
+$ga_event_tracking = get_option('ga_event_tracking');
+$ga_event_downloads = get_option('ga_event_downloads');
+
+if (!$ga_event_downloads){
+	$ga_event_downloads="zip|mp3|mpeg|pdf|doc*|ppt*|xls*|jpeg|png|gif|tiff";
+}
 
 if ( is_rtl() ) {
 	$float_main="right";
@@ -320,6 +332,8 @@ if ( is_rtl() ) {
 			}	
 		?></p>		
 		<p><input name="ga_dash_anonim" type="checkbox" id="ga_dash_anonim" value="1"<?php if (get_option('ga_dash_anonim')) echo " checked='checked'"; ?>  /><?php _e(" anonymize IPs while tracking", 'ga-dash' ); ?></p>				
+		<p><input name="ga_event_tracking" type="checkbox" id="ga_event_tracking" value="1"<?php if (get_option('ga_event_tracking')) echo " checked='checked'"; ?>  /><?php _e(" track downloads, mailto and outbound links", 'ga-dash' ); ?></p>
+		<p><?php echo __("Download Filters:", 'ga-dash'); ?><input type="text" name="ga_event_downloads" value="<?php echo $ga_event_downloads; ?>" size="60"></p>		
 		<p class="submit">  
         <input type="submit" name="Submit" class="button button-primary" value="<?php _e('Update Options', 'ga-dash' ) ?>" />
         </p>  

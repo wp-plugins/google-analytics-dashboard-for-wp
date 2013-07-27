@@ -2,7 +2,7 @@
 	
 	function ga_dash_classic_tracking(){
 		$tracking_events="";
-		$ga_default_domain=get_option('ga_default_domain');
+		$ga_root_domain=get_option('ga_root_domain');
 		$tracking_0="<script type=\"text/javascript\">
 	var _gaq = _gaq || [];";		
 		$tracking_2="\n	(function() {
@@ -15,14 +15,15 @@
 		if (is_array($profiles)){		
 			foreach ($profiles as $items) {
 				if ((get_option('ga_dash_default_ua')==$items[2])){
-					$ga_default_domain=ga_dash_get_main_domain($items[3]);
-					update_option('ga_default_domain',$ga_default_domain);
+					$ga_root_domain=ga_dash_get_main_domain($items[3]);
+					update_option('ga_root_domain',$ga_root_domain);
+					update_option('ga_default_domain',$items[3]);					
 				} 
 			}
 		}
 		switch ( get_option('ga_dash_tracking') ){
-			case 2 	: $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."'], ['_setDomainName', '".$ga_default_domain."']"; break;
-			case 3 : $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."'], ['_setDomainName', '".$ga_default_domain."'], ['_setAllowLinker', true]"; break;
+			case 2 	: $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."'], ['_setDomainName', '".$ga_root_domain."']"; break;
+			case 3 : $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."'], ['_setDomainName', '".$ga_root_domain."'], ['_setAllowLinker', true]"; break;
 			default : $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."']"; break;				
 		}
 
@@ -38,7 +39,7 @@
 
 	function ga_dash_universal_tracking(){
 		$tracking_events="";
-		$ga_default_domain=get_option('ga_default_domain');
+		$ga_root_domain=get_option('ga_root_domain');
 		$tracking_0="<script>
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -49,13 +50,14 @@
 		if (is_array($profiles)){
 			foreach ($profiles as $items) {
 					if ((get_option('ga_dash_default_ua')==$items[2])){
-						$ga_default_domain=ga_dash_get_main_domain($items[3]);
-						update_option('ga_default_domain',$ga_default_domain);
+						$ga_root_domain=ga_dash_get_main_domain($items[3]);
+						update_option('ga_root_domain',$ga_root_domain);
+						update_option('ga_default_domain',$items[3]);
 					} 
 			}
 		}
 		switch ( get_option('ga_dash_tracking') ){
-			case 2 	: $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."', {'cookieDomain': '".$ga_default_domain."'});"; break;
+			case 2 	: $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."', {'cookieDomain': '".$ga_root_domain."'});"; break;
 			case 3 : $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."');"; break;
 			default : $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."');";
 		}
@@ -159,7 +161,7 @@
 			$i++;
 		}
 
-		return $ga_dash_data;
+		return rtrim($ga_dash_data,',');
 	}
 	
 // Get Top referrers
@@ -191,7 +193,7 @@
 			$i++;
 		}
 
-		return $ga_dash_data;
+		return rtrim($ga_dash_data,',');
 	}
 
 // Get Top searches
@@ -223,7 +225,7 @@
 			$i++;
 		}
 
-		return $ga_dash_data;
+		return rtrim($ga_dash_data,',');
 	}
 // Get Visits by Country
 	function ga_dash_visits_country($service, $projectId, $from, $to){
@@ -252,7 +254,7 @@
 			$ga_dash_data.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 		}
 
-		return $ga_dash_data;
+		return rtrim($ga_dash_data,',');
 
 	}	
 // Get Traffic Sources
@@ -282,7 +284,7 @@
 			$ga_dash_data.="['".str_replace("(none)","direct",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 		}
 
-		return $ga_dash_data;
+		return rtrim($ga_dash_data,',');
 
 	}
 
@@ -313,7 +315,7 @@
 			$ga_dash_data.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 		}
 
-		return $ga_dash_data;
+		return rtrim($ga_dash_data,',');
 
 	}	
 ?>

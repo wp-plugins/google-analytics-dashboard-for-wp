@@ -2,8 +2,8 @@
 Contributors: deconf
 Tags: google analytics dashboard, analytics dashboard, google, dashboard, google analytics widget, google analytics, tracking, analytics
 Requires at least: 2.8
-Tested up to: 3.5.1
-Stable tag: 4.0.4
+Tested up to: 3.5.2
+Stable tag: 4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,7 @@ This plugin suports Google Analytics tracking. Main tracking options and feature
 - supports ga.js tracking for comaptibility with Classic Analytics web property
 - track single domain, domain and all subdomains, multiple TLD domains
 - IP address anonymization feature
+- track events feature: track downloads, emails and outbound links (supported for both tracking methods: classic tracking and universal tracking)
  
 Related Links:
 
@@ -87,6 +88,14 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 This plugin it's released under the GPLv2, you can use it free of charge on your personal or commercial website.
 
 == Changelog ==
+
+= 27.07.2013 - v4.1 =
+- added event tracking feature: track downloads, track emails, track outbound links
+- remove trailing comma for IE8 compatibility
+
+= 14.07.2013 - v4.0.4 =
+- a better way to retrieve domains and subdomains from profiles
+- remove escaping slashes generating errors on table display
 
 = 21.06.2013 - v4.0.3 =
 - improvements on tracking code
