@@ -14,7 +14,7 @@ function ga_dash_admin() {
 	
 function ga_dash_admin_actions() {
 	if (current_user_can('manage_options')) {  
-		add_options_page(__("Google Analytics Dashboard for WP",'ga-dash'), __("GA Dashboard",'ga-dash'), "manage_options", "Google_Analytics_Dashboard", "ga_dash_admin");
+		add_options_page(__("Google Analytics Dashboard",'ga-dash'), __("GA Dashboard",'ga-dash'), "manage_options", "Google_Analytics_Dashboard", "ga_dash_admin");
 	}
 }  
 
@@ -89,7 +89,7 @@ function ga_dash_front_content($content) {
 
 		$client = new Google_Client();
 		$client->setAccessType('offline');
-		$client->setApplicationName('Google Analytics Dashboard for WP');
+		$client->setApplicationName('Google Analytics Dashboard for WordPress');
 		$client->setRedirectUri('urn:ietf:wg:oauth:2.0:oob');
 		
 		if (get_option('ga_dash_userapi')){	
@@ -270,7 +270,7 @@ function ga_dash_setup() {
 	if (current_user_can(get_option('ga_dash_access'))) {
 		wp_add_dashboard_widget(
 			'ga-dash-widget',
-			__("Google Analytics Dashboard for WP",'ga-dash'),
+			__("Google Analytics Dashboard",'ga-dash'),
 			'ga_dash_content',
 			$control_callback = null
 		);
@@ -295,7 +295,7 @@ function ga_dash_content() {
 
 	$client = new Google_Client();
 	$client->setAccessType('offline');
-	$client->setApplicationName('Google Analytics Dashboard for WP');
+	$client->setApplicationName('Google Analytics Dashboard');
 	$client->setRedirectUri('urn:ietf:wg:oauth:2.0:oob');
 	
 	if (get_option('ga_dash_userapi')){		
