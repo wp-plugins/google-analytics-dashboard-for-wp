@@ -22,7 +22,7 @@ $apiConfig = array(
     'use_objects' => false,
   
     // The application_name is included in the User-Agent HTTP header.
-    'application_name' => 'Google Analytics Dashboard for WP',
+    'application_name' => 'Google Analytics Dashboard for WordPress',
 
     // OAuth2 Settings, you can get these keys at https://code.google.com/apis/console
     'oauth2_client_id' => '65556128781.apps.googleusercontent.com',

@@ -10,11 +10,11 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 This plugin will display Google Analytics data and statistics inside your WordPress Blog.
 
 == Description ==
-Using a widget, Google Analytics Dashboard for WP displays detailed info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Admin Dashboard.
+Using a widget, Google Analytics Dashboard displays detailed info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Admin Dashboard.
 
 Authorized users can also view statistics like Views, UniqueViews and top searches, on frontend, at the end of each article.
 
-Using this plugin, your data is collected in a fast and secure manner because Google Analytics Dashboard for WP uses OAuth2 protocol and Google Analytics API.
+Using this plugin, your data is collected in a fast and secure manner because Google Analytics Dashboard uses OAuth2 protocol and Google Analytics API.
 
 Main benefits:
 
@@ -43,23 +43,23 @@ Related Links:
 
 * <a href="http://forum.deconf.com/en/wordpress-plugins-f182/google-analytics-dashboard-for-wp-translations-t532.html" target="_blank">Support and Google Analytics Dashboard translations</a>
 
-* <a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" title="Google Analytics Dashboard for WP Plugin"  target="_blank">Google Analytics Dashboard Plugin Homepage</a>
+* <a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" title="Google Analytics Dashboard Plugin"  target="_blank">Google Analytics Dashboard Plugin Homepage</a>
 
 == Installation ==
 
 1. Upload the full directory into your wp-content/plugins directory
 2. Activate the plugin at the plugin administration page
-3. Open the plugin configuration page, which is located under Settings -> GA Dashboard and enter your API Key, Client Secret and Client ID.
+3. Open the plugin configuration page, which is located under Settings -> GA Dashboard (optionally enter your API Key, Client Secret and Client ID).
 4. Authorize the application using the 'Authorize Application' button
 5. Go back to the plugin configuration page, which is located under Settings -> GA Dashboard to update the final settings.
 
-A step by step tutorial is available here: [Google Analytics Dashboard for WP video tutorial](http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/)
+A step by step tutorial is available here: [Google Analytics Dashboard video tutorial](http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/)
 
 == Frequently Asked Questions == 
 
 = Where can I find my Google API Key, Client Secret, Client ID? =
 
-Follow this step by step video tutorial: [Google Analytics Dashboard for WP](http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/)
+Follow this step by step video tutorial: [Google Analytics Dashboard ](http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/)
 
 = I have several wordpress websites do I need an API Project for each one? =
 

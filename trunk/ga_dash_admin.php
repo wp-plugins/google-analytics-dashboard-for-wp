@@ -170,7 +170,6 @@ if ( is_rtl() ) {
 			<p><?php echo "<b>".__("API Key:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_apikey" value="<?php echo $apikey; ?>" size="61"></p>  
 			<p><?php echo "<b>".__("Client ID:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_clientid" value="<?php echo $clientid; ?>" size="60"></p>  
 			<p><?php echo "<b>".__("Client Secret:", 'ga-dash')." </b>"; ?><input type="text" name="ga_dash_clientsecret" value="<?php echo $clientsecret; ?>" size="55"></p>  
-			<?php echo "<i>".__("Old users should also follow this", 'ga-dash')." <a href='http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/' target='_blank'>". __("step by step video tutorial")."</a> ".__(", there are some major changes in this version, if you want to use your own API Project, you should delete your old API Project and create a new one!", 'ga-dash')."</i>";?>
 		<?php }?>
 		<p><?php 
 			if (get_option('ga_dash_token')){
