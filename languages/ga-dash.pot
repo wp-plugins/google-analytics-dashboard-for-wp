@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Google Analytics Dashboard for WP\n"
-"POT-Creation-Date: 2013-07-27 17:58+0200\n"
-"PO-Revision-Date: 2013-07-27 17:59+0200\n"
+"POT-Creation-Date: 2013-07-29 09:34+0200\n"
+"PO-Revision-Date: 2013-07-29 09:35+0200\n"
 "Last-Translator: Deconf <admin@deconf.com>\n"
 "Language-Team: Deconf <admin@deconf.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.5.7\n"
 "X-Poedit-KeywordsList: _e;__\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -23,7 +23,7 @@ msgid "Support on Deconf Forum"
 msgstr ""
 
 #: .././ga_dash.php:17 .././ga_dash.php:273
-msgid "Google Analytics Dashboard for WP"
+msgid "Google Analytics Dashboard"
 msgstr ""
 
 #: .././ga_dash.php:17
@@ -216,7 +216,7 @@ msgstr ""
 msgid "To authorize this application using our API Project, press the"
 msgstr ""
 
-#: .././ga_dash_admin.php:166 .././ga_dash_admin.php:181
+#: .././ga_dash_admin.php:166 .././ga_dash_admin.php:180
 msgid "Authorize Application"
 msgstr ""
 
@@ -246,239 +246,225 @@ msgstr ""
 msgid "Client Secret:"
 msgstr ""
 
-#: .././ga_dash_admin.php:173
-msgid "Old users should also follow this"
-msgstr ""
-
-#: .././ga_dash_admin.php:173
-msgid "step by step video tutorial"
-msgstr ""
-
-#: .././ga_dash_admin.php:173
-msgid ""
-", there are some major changes in this version, if you want to use your own "
-"API Project, you should delete your old API Project and create a new one!"
-msgstr ""
-
-#: .././ga_dash_admin.php:177
+#: .././ga_dash_admin.php:176
 msgid "Clear Authorization"
 msgstr ""
 
-#: .././ga_dash_admin.php:178 .././ga_dash_admin.php:182
+#: .././ga_dash_admin.php:177 .././ga_dash_admin.php:181
 msgid "Clear Cache"
 msgstr ""
 
-#: .././ga_dash_admin.php:185
+#: .././ga_dash_admin.php:184
 msgid ""
 "(the rest of the settings will show up after completing the authorization "
 "process)"
 msgstr ""
 
-#: .././ga_dash_admin.php:190 .././ga_dash_admin.php:344
+#: .././ga_dash_admin.php:189 .././ga_dash_admin.php:343
 msgid "Setup Tutorial"
 msgstr ""
 
-#: .././ga_dash_admin.php:194 .././ga_dash_admin.php:348
+#: .././ga_dash_admin.php:193 .././ga_dash_admin.php:347
 msgid "Support Links"
 msgstr ""
 
-#: .././ga_dash_admin.php:197 .././ga_dash_admin.php:351
+#: .././ga_dash_admin.php:196 .././ga_dash_admin.php:350
 msgid "Google Analytics Dashboard Official Page"
 msgstr ""
 
-#: .././ga_dash_admin.php:198 .././ga_dash_admin.php:352
+#: .././ga_dash_admin.php:197 .././ga_dash_admin.php:351
 msgid "Google Analytics Dashboard Wordpress Support"
 msgstr ""
 
-#: .././ga_dash_admin.php:199 .././ga_dash_admin.php:353
+#: .././ga_dash_admin.php:198 .././ga_dash_admin.php:352
 msgid "Google Analytics Dashboard on Deconf Forum"
 msgstr ""
 
-#: .././ga_dash_admin.php:202 .././ga_dash_admin.php:356
+#: .././ga_dash_admin.php:201 .././ga_dash_admin.php:355
 msgid "Useful Plugins"
 msgstr ""
 
-#: .././ga_dash_admin.php:205 .././ga_dash_admin.php:359
+#: .././ga_dash_admin.php:204 .././ga_dash_admin.php:358
 msgid "YouTube Analytics Dashboard"
 msgstr ""
 
-#: .././ga_dash_admin.php:206 .././ga_dash_admin.php:360
+#: .././ga_dash_admin.php:205 .././ga_dash_admin.php:359
 msgid "Google Adsense Dashboard"
 msgstr ""
 
-#: .././ga_dash_admin.php:207 .././ga_dash_admin.php:361
+#: .././ga_dash_admin.php:206 .././ga_dash_admin.php:360
 msgid "Clicky Analytics"
 msgstr ""
 
-#: .././ga_dash_admin.php:208 .././ga_dash_admin.php:362
+#: .././ga_dash_admin.php:207 .././ga_dash_admin.php:361
 msgid "Follow Us Box"
 msgstr ""
 
-#: .././ga_dash_admin.php:214
+#: .././ga_dash_admin.php:213
 msgid "Access Level"
 msgstr ""
 
-#: .././ga_dash_admin.php:215
+#: .././ga_dash_admin.php:214
 msgid "View Access Level: "
 msgstr ""
 
-#: .././ga_dash_admin.php:217
+#: .././ga_dash_admin.php:216
 msgid "Administrators"
 msgstr ""
 
-#: .././ga_dash_admin.php:218
+#: .././ga_dash_admin.php:217
 msgid "Editors"
 msgstr ""
 
-#: .././ga_dash_admin.php:219
+#: .././ga_dash_admin.php:218
 msgid "Authors"
 msgstr ""
 
-#: .././ga_dash_admin.php:220
+#: .././ga_dash_admin.php:219
 msgid "Contributors"
 msgstr ""
 
-#: .././ga_dash_admin.php:225
+#: .././ga_dash_admin.php:224
 msgid "Lock selected access level to this profile: "
 msgstr ""
 
-#: .././ga_dash_admin.php:251 .././ga_dash_admin.php:329
+#: .././ga_dash_admin.php:250 .././ga_dash_admin.php:328
 msgid "your profile list needs an update:"
 msgstr ""
 
-#: .././ga_dash_admin.php:253 .././ga_dash_admin.php:331
+#: .././ga_dash_admin.php:252 .././ga_dash_admin.php:330
 msgid "Click here"
 msgstr ""
 
-#: .././ga_dash_admin.php:257
+#: .././ga_dash_admin.php:256
 msgid " disable dashboard's Switch Profile functionality"
 msgstr ""
 
-#: .././ga_dash_admin.php:258
+#: .././ga_dash_admin.php:257
 msgid "Frontend Settings"
 msgstr ""
 
-#: .././ga_dash_admin.php:259
+#: .././ga_dash_admin.php:258
 msgid " show page visits and top searches in frontend (after each article)"
 msgstr ""
 
-#: .././ga_dash_admin.php:260
+#: .././ga_dash_admin.php:259
 msgid "Backend Settings"
 msgstr ""
 
-#: .././ga_dash_admin.php:261
+#: .././ga_dash_admin.php:260
 msgid " show geo map for visits"
 msgstr ""
 
-#: .././ga_dash_admin.php:262
+#: .././ga_dash_admin.php:261
 msgid " show traffic overview"
 msgstr ""
 
-#: .././ga_dash_admin.php:263
+#: .././ga_dash_admin.php:262
 msgid " show top pages"
 msgstr ""
 
-#: .././ga_dash_admin.php:264
+#: .././ga_dash_admin.php:263
 msgid " show top referrers"
 msgstr ""
 
-#: .././ga_dash_admin.php:265
+#: .././ga_dash_admin.php:264
 msgid " show top searches"
 msgstr ""
 
-#: .././ga_dash_admin.php:266
+#: .././ga_dash_admin.php:265
 msgid "CSS Settings: "
 msgstr ""
 
-#: .././ga_dash_admin.php:268
+#: .././ga_dash_admin.php:267
 msgid "Blue Theme"
 msgstr ""
 
-#: .././ga_dash_admin.php:269
+#: .././ga_dash_admin.php:268
 msgid "Light Theme"
 msgstr ""
 
-#: .././ga_dash_admin.php:271
+#: .././ga_dash_admin.php:270
 msgid "Cache Settings"
 msgstr ""
 
-#: .././ga_dash_admin.php:272
+#: .././ga_dash_admin.php:271
 msgid "Cache Time: "
 msgstr ""
 
-#: .././ga_dash_admin.php:274
+#: .././ga_dash_admin.php:273
 msgid "15 minutes"
 msgstr ""
 
-#: .././ga_dash_admin.php:275
+#: .././ga_dash_admin.php:274
 msgid "30 minutes"
 msgstr ""
 
-#: .././ga_dash_admin.php:276
+#: .././ga_dash_admin.php:275
 msgid "1 hour"
 msgstr ""
 
-#: .././ga_dash_admin.php:277
+#: .././ga_dash_admin.php:276
 msgid "2 hours"
 msgstr ""
 
-#: .././ga_dash_admin.php:280
+#: .././ga_dash_admin.php:279
 msgid "Google Analytics Tracking"
 msgstr ""
 
-#: .././ga_dash_admin.php:282
+#: .././ga_dash_admin.php:281
 msgid "Enable Tracking: "
 msgstr ""
 
-#: .././ga_dash_admin.php:284
+#: .././ga_dash_admin.php:283
 msgid "Disabled"
 msgstr ""
 
-#: .././ga_dash_admin.php:285
+#: .././ga_dash_admin.php:284
 msgid "Single Domain"
 msgstr ""
 
-#: .././ga_dash_admin.php:286
+#: .././ga_dash_admin.php:285
 msgid "Domain and Subdomains"
 msgstr ""
 
-#: .././ga_dash_admin.php:287
+#: .././ga_dash_admin.php:286
 msgid "Multiple TLD Domains"
 msgstr ""
 
-#: .././ga_dash_admin.php:290
+#: .././ga_dash_admin.php:289
 msgid "the tracking feature is currently disabled!"
 msgstr ""
 
-#: .././ga_dash_admin.php:295
+#: .././ga_dash_admin.php:294
 msgid "Tracking Type: "
 msgstr ""
 
-#: .././ga_dash_admin.php:297
+#: .././ga_dash_admin.php:296
 msgid "Classic Analytics"
 msgstr ""
 
-#: .././ga_dash_admin.php:298
+#: .././ga_dash_admin.php:297
 msgid "Universal Analytics"
 msgstr ""
 
-#: .././ga_dash_admin.php:301
+#: .././ga_dash_admin.php:300
 msgid "Default Tracking Domain: "
 msgstr ""
 
-#: .././ga_dash_admin.php:334
+#: .././ga_dash_admin.php:333
 msgid " anonymize IPs while tracking"
 msgstr ""
 
-#: .././ga_dash_admin.php:335
+#: .././ga_dash_admin.php:334
 msgid " track downloads, mailto and outbound links"
 msgstr ""
 
-#: .././ga_dash_admin.php:336
+#: .././ga_dash_admin.php:335
 msgid "Download Filters:"
 msgstr ""
 
-#: .././ga_dash_admin.php:338
+#: .././ga_dash_admin.php:337
 msgid "Update Options"
 msgstr ""
 
