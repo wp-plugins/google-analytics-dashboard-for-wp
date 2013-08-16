@@ -1,4 +1,4 @@
-=== Earnings Dashboard ===
+=== Google Analytics Dashboard for WP ===
 Contributors: deconf
 Tags: google analytics dashboard, analytics dashboard, google, dashboard, google analytics widget, google analytics, tracking, analytics
 Requires at least: 2.8
@@ -216,7 +216,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 = 15.03.2013 - v1.3 =
 
 * switch to Google API PHP Client 0.6.1
-* resolved some Earnings Dashboard for Google Adsense™ conflicts
+* resolved some Google Analytics Dashboard conflicts
 
 = 13.03.2013 - v1.2.1 =
 
