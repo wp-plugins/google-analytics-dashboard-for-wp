@@ -76,7 +76,7 @@ table.gatable {
 	text-shadow:1px 1px 0px #1570cd;
 }
 
-.note{
+.ga-note{
 	border:2px solid #a1a1a1;
 	padding:10px 20px; 
 	background:white;
@@ -84,6 +84,6 @@ table.gatable {
 	width:25%;
 }
 
-.note li{
+.ga-note li{
 	line-height:1.5em;
 }

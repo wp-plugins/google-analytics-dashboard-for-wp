@@ -48,7 +48,11 @@ function ga_dash_tracking($head) {
 	if ($traking_mode){
 		require_once 'functions.php';
 		if ($traking_type=="universal"){
-			
+
+			if (current_user_can(get_option('ga_track_exclude'))) {
+				return;
+			}
+		
 			if (get_option('ga_event_tracking')){
 				require_once 'events/events-universal.php';
 			}
@@ -56,7 +60,11 @@ function ga_dash_tracking($head) {
 			echo ga_dash_universal_tracking();
 			
 		} else{
-			
+
+			if (current_user_can(get_option('ga_track_exclude'))) {
+				return;
+			}		
+		
 			if (get_option('ga_event_tracking')){
 				require_once 'events/events-classic.php';
 			}

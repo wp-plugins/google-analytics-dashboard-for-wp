@@ -1,4 +1,4 @@
-.note{
+.ga-note{
 	border:2px solid #a1a1a1;
 	padding:10px 20px; 
 	background:white;
@@ -6,6 +6,6 @@
 	width:25%;
 }
 
-.note li{
+.ga-note li{
 	line-height:1.5em;
 }

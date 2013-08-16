@@ -84,6 +84,10 @@ if (isset($_REQUEST['Reset'])){
 
 		$ga_event_downloads = ga_dash_safe_get('ga_event_downloads');
 		update_option('ga_event_downloads', $ga_event_downloads);	
+
+		$ga_track_exclude = ga_dash_safe_get('ga_track_exclude');
+		update_option('ga_track_exclude', $ga_track_exclude);		
+
 		
 		if (!isset($_REQUEST['Clear']) AND !isset($_REQUEST['Reset'])){
 			?>  
@@ -144,6 +148,7 @@ $ga_dash_anonim = get_option('ga_dash_anonim');
 $ga_dash_userapi = get_option('ga_dash_userapi');
 $ga_event_tracking = get_option('ga_event_tracking');
 $ga_event_downloads = get_option('ga_event_downloads');
+$ga_track_exclude = get_option('ga_track_exclude');
 
 if (!$ga_event_downloads){
 	$ga_event_downloads="zip|mp3|mpeg|pdf|doc*|ppt*|xls*|jpeg|png|gif|tiff";
@@ -184,7 +189,7 @@ if ( is_rtl() ) {
 				_e("(the rest of the settings will show up after completing the authorization process)", 'ga-dash' );
 				echo "</div>";
 				?>
-				<div class="note" style="float:<?php echo $float_note; ?>;text-align:<?php echo $float_main; ?>;"> 
+				<div class="ga-note" style="float:<?php echo $float_note; ?>;text-align:<?php echo $float_main; ?>;"> 
 						<center>
 							<h3><?php _e("Setup Tutorial",'ga-dash') ?></h3>
 							<a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" target="_blank"><img src="../wp-content/plugins/google-analytics-dashboard-for-wp/img/video-tutorial.png" width="95%" /></a>
@@ -202,7 +207,7 @@ if ( is_rtl() ) {
 						</center>			
 						<ul>
 							<li><a href="http://www.deconf.com/en/projects/youtube-analytics-dashboard-for-wordpress/" target="_blank"><?php _e("YouTube Analytics Dashboard",'ga-dash') ?></a></li>
-							<li><a href="http://www.deconf.com/en/projects/google-adsense-dashboard-for-wordpress/" target="_blank"><?php _e("Google Adsense Dashboard",'ga-dash') ?></a></li>
+							<li><a href="http://www.deconf.com/en/projects/google-adsense-dashboard-for-wordpress/" target="_blank"><?php _e("Earnings Dashboard for Google Adsense™",'ga-dash') ?></a></li>
 							<li><a href="http://www.deconf.com/en/projects/clicky-analytics-plugin-for-wordpress/" target="_blank"><?php _e("Clicky Analytics",'ga-dash') ?></a></li>						
 							<li><a href="http://wordpress.org/extend/plugins/follow-us-box/" target="_blank"><?php _e("Follow Us Box",'ga-dash') ?></a></li>			
 						</ul>			
@@ -333,12 +338,20 @@ if ( is_rtl() ) {
 		<p><input name="ga_dash_anonim" type="checkbox" id="ga_dash_anonim" value="1"<?php if (get_option('ga_dash_anonim')) echo " checked='checked'"; ?>  /><?php _e(" anonymize IPs while tracking", 'ga-dash' ); ?></p>				
 		<p><input name="ga_event_tracking" type="checkbox" id="ga_event_tracking" value="1"<?php if (get_option('ga_event_tracking')) echo " checked='checked'"; ?>  /><?php _e(" track downloads, mailto and outbound links", 'ga-dash' ); ?></p>
 		<p><?php echo __("Download Filters:", 'ga-dash'); ?><input type="text" name="ga_event_downloads" value="<?php echo $ga_event_downloads; ?>" size="60"></p>		
+		<p><?php _e("Exclude tracking for: ", 'ga-dash' ); ?>
+		<select id="ga_track_exclude" name="ga_track_exclude">
+			<option value="disabled" <?php if (($ga_track_exclude=="disabled") OR (!$ga_track_exclude)) echo "selected='yes'"; echo ">".__("Disabled", 'ga-dash');?></option>
+			<option value="manage_options" <?php if ($ga_track_exclude=="manage_options") echo "selected='yes'"; echo ">".__("Administrators", 'ga-dash');?></option>
+			<option value="edit_pages" <?php if ($ga_track_exclude=="edit_pages") echo "selected='yes'"; echo ">".__("Editors", 'ga-dash');?></option>
+			<option value="publish_posts" <?php if ($ga_track_exclude=="publish_posts") echo "selected='yes'"; echo ">".__("Authors", 'ga-dash');?></option>
+			<option value="edit_posts" <?php if ($ga_track_exclude=="edit_posts") echo "selected='yes'"; echo ">".__("Contributors", 'ga-dash');?></option>
+		</select></p>
 		<p class="submit">  
         <input type="submit" name="Submit" class="button button-primary" value="<?php _e('Update Options', 'ga-dash' ) ?>" />
-        </p>  
+        </p>
     </form>  
 </div>
-<div class="note" style="float:<?php echo $float_note; ?>;text-align:<?php echo $float_main; ?>;"> 
+<div class="ga-note" style="float:<?php echo $float_note; ?>;text-align:<?php echo $float_main; ?>;"> 
 		<center>
 			<h3><?php _e("Setup Tutorial",'ga-dash') ?></h3>
 			<a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" target="_blank"><img src="../wp-content/plugins/google-analytics-dashboard-for-wp/img/video-tutorial.png" width="95%" /></a>
@@ -356,7 +369,7 @@ if ( is_rtl() ) {
 		</center>			
 		<ul>
 			<li><a href="http://www.deconf.com/en/projects/youtube-analytics-dashboard-for-wordpress/" target="_blank"><?php _e("YouTube Analytics Dashboard",'ga-dash') ?></a></li>
-			<li><a href="http://www.deconf.com/en/projects/google-adsense-dashboard-for-wordpress/" target="_blank"><?php _e("Google Adsense Dashboard",'ga-dash') ?></a></li>
+			<li><a href="http://www.deconf.com/en/projects/google-adsense-dashboard-for-wordpress/" target="_blank"><?php _e("Earnings Dashboard for Google Adsense™",'ga-dash') ?></a></li>
 			<li><a href="http://www.deconf.com/en/projects/clicky-analytics-plugin-for-wordpress/" target="_blank"><?php _e("Clicky Analytics",'ga-dash') ?></a></li>						
 			<li><a href="http://wordpress.org/extend/plugins/follow-us-box/" target="_blank"><?php _e("Follow Us Box",'ga-dash') ?></a></li>			
 		</ul>			
