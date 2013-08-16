@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 3.3.4
+Version: 4.1.3
 Author URI: http://www.deconf.com
 */  
 
@@ -14,28 +14,78 @@ function ga_dash_admin() {
 	
 function ga_dash_admin_actions() {
 	if (current_user_can('manage_options')) {  
-		add_options_page("Google Analytics Dashboard", "GA Dashboard", "manage_options", "Google_Analytics_Dashboard", "ga_dash_admin");
-
+		add_options_page(__("Google Analytics Dashboard",'ga-dash'), __("GA Dashboard",'ga-dash'), "manage_options", "Google_Analytics_Dashboard", "ga_dash_admin");
 	}
 }  
 
+$plugin = plugin_basename(__FILE__);
 
 add_filter('the_content', 'ga_dash_front_content');  
 add_action('wp_dashboard_setup', 'ga_dash_setup');
 add_action('admin_menu', 'ga_dash_admin_actions'); 
 add_action('admin_enqueue_scripts', 'ga_dash_admin_enqueue_scripts');
 add_action('plugins_loaded', 'ga_dash_init');
+add_action('wp_head', 'ga_dash_tracking');
+add_filter("plugin_action_links_$plugin", 'ga_dash_settings_link' );
+add_action('wp_enqueue_scripts', 'ga_dash_enqueue_scripts');
+
+function ga_dash_enqueue_scripts() {
+	if (get_option('ga_event_tracking') AND !wp_script_is('jquery')) {
+		wp_enqueue_script('jquery');
+	}	
+}
+
+function ga_dash_settings_link($links) { 
+  $settings_link = '<a href="options-general.php?page=Google_Analytics_Dashboard">'.__("Settings",'ga-dash').'</a>'; 
+  array_unshift($links, $settings_link); 
+  return $links; 
+}
+
+function ga_dash_tracking($head) {
+
+	$traking_mode=get_option('ga_dash_tracking');
+	$traking_type=get_option('ga_dash_tracking_type');
+	if ($traking_mode){
+		require_once 'functions.php';
+		if ($traking_type=="universal"){
+
+			if (current_user_can(get_option('ga_track_exclude'))) {
+				return;
+			}
+		
+			if (get_option('ga_event_tracking')){
+				require_once 'events/events-universal.php';
+			}
+			
+			echo ga_dash_universal_tracking();
+			
+		} else{
+
+			if (current_user_can(get_option('ga_track_exclude'))) {
+				return;
+			}		
+		
+			if (get_option('ga_event_tracking')){
+				require_once 'events/events-classic.php';
+			}
+			
+			echo ga_dash_classic_tracking();
+			
+		}
+	}
+}
 
 function ga_dash_front_content($content) {
 	global $post;
 	if (!current_user_can(get_option('ga_dash_access')) OR !get_option('ga_dash_frontend')) {
 		return $content;
 	}
-	if(!is_feed() && !is_home()) {
-	
+
+	if(!is_feed() && !is_home() && !is_front_page()) {
+
 		require_once 'functions.php';
 		
-		if(!get_option('ga_dash_cachetime')){
+		if(!get_option('ga_dash_cachetime') OR get_option('ga_dash_cachetime')==10){
 			update_option('ga_dash_cachetime', "900");	
 		}
 
@@ -44,21 +94,22 @@ function ga_dash_front_content($content) {
 		}
 			
 		require_once 'src/contrib/Google_AnalyticsService.php';
-		
-		$scriptUri = "http://".$_SERVER["HTTP_HOST"].$_SERVER['PHP_SELF'];
 
 		$client = new Google_Client();
-		$client->setAccessType('offline'); 
-		$client->setApplicationName('GA Dashboard');
-		$client->setClientId(get_option('ga_dash_clientid'));
-		$client->setClientSecret(get_option('ga_dash_clientsecret'));
-		$client->setRedirectUri($scriptUri);
-		$client->setDeveloperKey(get_option('ga_dash_APIKEY'));
+		$client->setAccessType('offline');
+		$client->setApplicationName('Google Analytics Dashboard for WordPress');
+		$client->setRedirectUri('urn:ietf:wg:oauth:2.0:oob');
 		
-		if ((!get_option('ga_dash_clientid')) OR (!get_option('ga_dash_clientsecret')) OR (!get_option('ga_dash_apikey'))){
-			return $content;
-		}	
-		
+		if (get_option('ga_dash_userapi')){	
+			$client->setClientId(get_option('ga_dash_clientid'));
+			$client->setClientSecret(get_option('ga_dash_clientsecret'));
+			$client->setDeveloperKey(get_option('ga_dash_apikey'));
+		}else{
+			$client->setClientId('65556128781.apps.googleusercontent.com');
+			$client->setClientSecret('Kc7888wgbc_JbeCpbFjnYpwE');
+			$client->setDeveloperKey('AIzaSyBG7LlUoHc29ZeC_dsShVaBEX15SfRl_WY');
+		}
+	
 		$service = new Google_AnalyticsService($client);
 
 		if (ga_dash_get_token()) { 
@@ -73,7 +124,6 @@ function ga_dash_front_content($content) {
 		$metrics = 'ga:pageviews,ga:uniquePageviews';
 		$dimensions = 'ga:year,ga:month,ga:day';
 		$page_url = $_SERVER["REQUEST_URI"];
-		//echo $page_url;
 		$post_id = $post->ID;
 		$title = __("Views vs UniqueViews", 'ga-dash');
 		if (get_option('ga_dash_style')=="light"){ 
@@ -111,7 +161,7 @@ function ga_dash_front_content($content) {
 		for ($i=0;$i<$data['totalResults'];$i++){
 			$ga_dash_statsdata.="['".$data['rows'][$i][0]."-".$data['rows'][$i][1]."-".$data['rows'][$i][2]."',".round($data['rows'][$i][3],2).",".round($data['rows'][$i][4],2)."],";
 		}
-		
+		$ga_dash_statsdata=rtrim($ga_dash_statsdata,',');
 		$metrics = 'ga:visits'; 
 		$dimensions = 'ga:keyword';
 		try{
@@ -132,10 +182,10 @@ function ga_dash_front_content($content) {
 		if (isset($data['rows'])){
 			$i=0;
 			while (isset($data['rows'][$i][0])){
-				$ga_dash_organicdata.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
+				$ga_dash_organicdata.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 				$i++;
-			}		
-		
+			}
+			$ga_dash_organicdata=rtrim($ga_dash_organicdata,',');			
 		}	
 
 		$content.='<style>
@@ -228,7 +278,7 @@ function ga_dash_setup() {
 	if (current_user_can(get_option('ga_dash_access'))) {
 		wp_add_dashboard_widget(
 			'ga-dash-widget',
-			'Google Analytics Dashboard',
+			__("Google Analytics Dashboard",'ga-dash'),
 			'ga_dash_content',
 			$control_callback = null
 		);
@@ -239,7 +289,7 @@ function ga_dash_content() {
 	
 	require_once 'functions.php';
 	
-	if(!get_option('ga_dash_cachetime')){
+	if(!get_option('ga_dash_cachetime') OR get_option('ga_dash_cachetime')==10){
 		update_option('ga_dash_cachetime', "900");	
 	}
 
@@ -249,29 +299,24 @@ function ga_dash_content() {
 		
 	require_once 'src/contrib/Google_AnalyticsService.php';
 	
-	$scriptUri = "http://".$_SERVER["HTTP_HOST"].$_SERVER['PHP_SELF'];
+	//$scriptUri = "http://".$_SERVER["HTTP_HOST"].$_SERVER['PHP_SELF'];
 
 	$client = new Google_Client();
 	$client->setAccessType('offline');
-	$client->setApplicationName('GA Dashboard');
-	$client->setClientId(get_option('ga_dash_clientid'));
-	$client->setClientSecret(get_option('ga_dash_clientsecret'));
-	$client->setRedirectUri($scriptUri);
-	$client->setDeveloperKey(get_option('ga_dash_APIKEY'));
-
-	if ((!get_option('ga_dash_clientid')) OR (!get_option('ga_dash_clientsecret')) OR (!get_option('ga_dash_apikey'))){
-		
-		echo "<div style='padding:20px;'>".__("Client ID, Client Secret or API Key is missing", 'ga-dash')."</div>";
-		return;
-		
-	}	
+	$client->setApplicationName('Google Analytics Dashboard');
+	$client->setRedirectUri('urn:ietf:wg:oauth:2.0:oob');
+	
+	if (get_option('ga_dash_userapi')){		
+			$client->setClientId(get_option('ga_dash_clientid'));
+			$client->setClientSecret(get_option('ga_dash_clientsecret'));
+			$client->setDeveloperKey(get_option('ga_dash_apikey'));
+	}else{
+			$client->setClientId('65556128781.apps.googleusercontent.com');
+			$client->setClientSecret('Kc7888wgbc_JbeCpbFjnYpwE');
+			$client->setDeveloperKey('AIzaSyBG7LlUoHc29ZeC_dsShVaBEX15SfRl_WY');
+		}
+	
 	$service = new Google_AnalyticsService($client);
-
-	if (isset($_GET['code']) AND !(ga_dash_get_token())) {
-		$client->authenticate();
-		ga_dash_store_token($client->getAccessToken());
-
-	}
 
 	if (ga_dash_get_token()) { 
 		$token = ga_dash_get_token();
@@ -282,19 +327,29 @@ function ga_dash_content() {
 		
 		$authUrl = $client->createAuthUrl();
 		
-		if (!isset($_REQUEST['authorize'])){
+		if (!isset($_REQUEST['ga_dash_authorize'])){
 			if (!current_user_can('manage_options')){
 				_e("Ask an admin to authorize this Application", 'ga-dash');
 				return;
 			}
-			echo '<div style="padding:20px;"><form name="input" action="#" method="get">
-			<input type="submit" class="button button-primary" name="authorize" value="'.__("Authorize Google Analytics Dashboard", 'ga-dash').'"/>
-		</form></div>';
+			echo '<div style="padding:20px;">'.__("Use this link to get your access code:", 'ga-dash').' <a href="'.$authUrl.'" target="_blank">'.__("Get Access Code", 'ga-dash').'</a>';
+			echo '<form name="input" action="#" method="get">
+						<p><b>'.__("Access Code:", 'ga-dash').' </b><input type="text" name="ga_dash_code" value="" size="61"></p>
+						<input type="submit" class="button button-primary" name="ga_dash_authorize" value="'.__("Save Access Code", 'ga-dash').'"/>
+					</form>
+				</div>';
 			return;
 		}		
 		else{
-			echo '<script> window.location="'.$authUrl.'"; </script> ';
-			return;
+			if ($_REQUEST['ga_dash_code']){
+				$client->authenticate($_REQUEST['ga_dash_code']);
+				ga_dash_store_token($client->getAccessToken());
+			} else{
+			
+				$adminurl = admin_url("#ga-dash-widget");
+				echo '<script> window.location="'.$adminurl.'"; </script> ';
+			
+			}	
 		}
 
 	}
@@ -312,10 +367,13 @@ function ga_dash_content() {
 			$transient = get_transient($serial);
 			if ( empty( $transient ) ){
 				$profiles = $service->management_profiles->listManagementProfiles('~all','~all');
-				set_transient( $serial, $profiles, get_option('ga_dash_cachetime') );
+				set_transient( $serial, $profiles, 60*60*24);
 			}else{
 				$profiles = $transient;		
 			}
+			
+			//print_r($profiles);
+			
 			$items = $profiles->getItems();
 			$profile_switch.= '<form><select id="ga_dash_profiles" name="ga_dash_profiles" onchange="this.form.submit()">';
 			
@@ -327,8 +385,8 @@ function ga_dash_content() {
 					}
 					$profile_switch.= '<option value="'.$profile->getId().'"'; 
 					if ((get_option('ga_dash_tableid')==$profile->getId())) $profile_switch.= "selected='yes'";
-					$profile_switch.= '>'.$profile->getName().'</option>';
-					$ga_dash_profile_list[]=array($profile->getName(),$profile->getId());
+					$profile_switch.= '>'.ga_dash_get_profile_domain($profile->getwebsiteUrl()).'</option>';
+					$ga_dash_profile_list[]=array($profile->getName(),$profile->getId(),$profile->getwebPropertyId(), $profile->getwebsiteUrl());
 				}
 				update_option('ga_dash_profile_list',$ga_dash_profile_list);
 			}
@@ -428,7 +486,7 @@ function ga_dash_content() {
 	for ($i=0;$i<$data['totalResults'];$i++){
 		$ga_dash_statsdata.="['".$data['rows'][$i][0]."-".$data['rows'][$i][1]."-".$data['rows'][$i][2]."',".round($data['rows'][$i][3],2)."],";
 	}
-
+	$ga_dash_statsdata=rtrim($ga_dash_statsdata,',');
 	$metrics = 'ga:visits,ga:visitors,ga:pageviews,ga:visitBounceRate,ga:organicSearches,ga:timeOnSite';
 	$dimensions = 'ga:year';
 	try{
@@ -630,15 +688,17 @@ function ga_dash_content() {
 		}
 	}
     $code.="</script>";
+    $code.="</script>";
+	$ga_button_style=get_option('ga_dash_style')=='light'?'button':'gabutton';
 	$code.='<div id="ga-dash">
 	<center>
 		<div id="buttons_div">
 		
-			<input class="gabutton" type="button" value="'.__("Today",'ga-dash').'" onClick="window.location=\'?period=today&query='.$query.'\'" />
-			<input class="gabutton" type="button" value="'.__("Yesterday",'ga-dash').'" onClick="window.location=\'?period=yesterday&query='.$query.'\'" />
-			<input class="gabutton" type="button" value="'.__("Last 7 days",'ga-dash').'" onClick="window.location=\'?period=last7days&query='.$query.'\'" />
-			<input class="gabutton" type="button" value="'.__("Last 14 days",'ga-dash').'" onClick="window.location=\'?period=last14days&query='.$query.'\'" />
-			<input class="gabutton" type="button" value="'.__("Last 30 days",'ga-dash').'" onClick="window.location=\'?period=last30days&query='.$query.'\'" />
+			<input class="'.$ga_button_style.'" type="button" value="'.__("Today",'ga-dash').'" onClick="window.location=\'?period=today&query='.$query.'\'" />
+			<input class="'.$ga_button_style.'" type="button" value="'.__("Yesterday",'ga-dash').'" onClick="window.location=\'?period=yesterday&query='.$query.'\'" />
+			<input class="'.$ga_button_style.'" type="button" value="'.__("Last 7 days",'ga-dash').'" onClick="window.location=\'?period=last7days&query='.$query.'\'" />
+			<input class="'.$ga_button_style.'" type="button" value="'.__("Last 14 days",'ga-dash').'" onClick="window.location=\'?period=last14days&query='.$query.'\'" />
+			<input class="'.$ga_button_style.'" type="button" value="'.__("Last 30 days",'ga-dash').'" onClick="window.location=\'?period=last30days&query='.$query.'\'" />
 		
 		</div>
 		
