@@ -3,7 +3,7 @@ Contributors: deconf
 Tags: google analytics dashboard, analytics dashboard, google, dashboard, google analytics widget, google analytics, tracking, analytics
 Requires at least: 2.8
 Tested up to: 3.6
-Stable tag: 4.1.2
+Stable tag: 4.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -90,7 +90,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
-= xx.07.2013 - v4.1.2 =
+= 16.08.2013 - v4.1.3 =
 - solved WooCommerce conflict using .note class
 - added traffic exclusion based on user level access
 

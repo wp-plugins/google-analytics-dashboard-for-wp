@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Deconf.com
-Version: 4.1.2
+Version: 4.1.3
 Author URI: http://www.deconf.com
 */  
 
