@@ -1,5 +1,97 @@
 <?php
 	
+	function ga_dash_classic_tracking(){
+		$tracking_events="";
+		$ga_root_domain=get_option('ga_root_domain');
+		$tracking_0="<script type=\"text/javascript\">
+	var _gaq = _gaq || [];";		
+		$tracking_2="\n	(function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>\n";
+		$profiles=get_option('ga_dash_profile_list');
+		if (is_array($profiles)){		
+			foreach ($profiles as $items) {
+				if ((get_option('ga_dash_default_ua')==$items[2])){
+					$ga_root_domain=ga_dash_get_main_domain($items[3]);
+					update_option('ga_root_domain',$ga_root_domain);
+					update_option('ga_default_domain',$items[3]);					
+				} 
+			}
+		}
+		switch ( get_option('ga_dash_tracking') ){
+			case 2 	: $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."'], ['_setDomainName', '".$ga_root_domain."']"; break;
+			case 3 : $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."'], ['_setDomainName', '".$ga_root_domain."'], ['_setAllowLinker', true]"; break;
+			default : $tracking_push="['_setAccount', '".get_option('ga_dash_default_ua')."']"; break;				
+		}
+
+		if (get_option('ga_dash_anonim')){
+			$tracking_push.=", ['_gat._anonymizeIp']";
+		}	
+		
+		$tracking=$tracking_events.$tracking_0."\n	_gaq.push(".$tracking_push.", ['_trackPageview']);".$tracking_2;	
+		
+		return $tracking;	
+
+	}
+
+	function ga_dash_universal_tracking(){
+		$tracking_events="";
+		$ga_root_domain=get_option('ga_root_domain');
+		$tracking_0="<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');";		
+		$tracking_2="\n</script>\n";
+		$profiles=get_option('ga_dash_profile_list');
+		if (is_array($profiles)){
+			foreach ($profiles as $items) {
+					if ((get_option('ga_dash_default_ua')==$items[2])){
+						$ga_root_domain=ga_dash_get_main_domain($items[3]);
+						update_option('ga_root_domain',$ga_root_domain);
+						update_option('ga_default_domain',$items[3]);
+					} 
+			}
+		}
+		switch ( get_option('ga_dash_tracking') ){
+			case 2 	: $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."', {'cookieDomain': '".$ga_root_domain."'});"; break;
+			case 3 : $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."');"; break;
+			default : $tracking_push="\n	ga('create', '".get_option('ga_dash_default_ua')."');";
+		}
+
+		if (get_option('ga_dash_anonim')){
+		
+			$tracking_push.="\n	ga('send', 'pageview', {'anonymizeIp': true});";
+		
+		} else{
+			
+			$tracking_push.="\n	ga('send', 'pageview');";
+			
+		}	
+		
+		$tracking=$tracking_events.$tracking_0.$tracking_push.$tracking_2;	
+		
+		return $tracking;	
+
+	}
+
+	
+	function ga_dash_get_main_domain($subdomain){
+		$parsedomain=parse_url($subdomain,PHP_URL_HOST);
+		$host_names = explode(".", $parsedomain);
+		$domain = $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
+		return $domain;
+	}
+	
+	function ga_dash_get_profile_domain($domain){
+	
+		return str_replace(array("https://","http://"," "),"",$domain);
+	
+	}
+	
 	function ga_dash_pretty_error($e){
 		return "<center><table><tr><td colspan='2' style='word-break:break-all;'>".$e->getMessage()."<br /><br /></td></tr><tr><td width='50%'><a href='http://wordpress.org/support/plugin/google-analytics-dashboard-for-wp' target='_blank'>".__("Help on Wordpress Forum",'ga-dash')."</a><td width='50%'><a href='http://forum.deconf.com/en/wordpress-plugins-f182/' target='_blank'>".__("Support on Deconf Forum",'ga-dash')."</a></td></tr></table></center>";	
 	}
@@ -58,18 +150,18 @@
 			echo ga_dash_pretty_error($e);
 			return;
 		}	
-		if (!$data['rows']){
+		if (!isset($data['rows'])){
 			return 0;
 		}
 		
 		$ga_dash_data="";
 		$i=0;
 		while (isset($data['rows'][$i][0])){
-			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
+			$ga_dash_data.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 			$i++;
 		}
 
-		return $ga_dash_data;
+		return rtrim($ga_dash_data,',');
 	}
 	
 // Get Top referrers
@@ -90,18 +182,18 @@
 			echo ga_dash_pretty_error($e);
 			return;
 		}
-		if (!$data['rows']){
+		if (!isset($data['rows'])){
 			return 0;
 		}
 		
 		$ga_dash_data="";
 		$i=0;
 		while (isset($data['rows'][$i][0])){
-			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][2]."],";
+			$ga_dash_data.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][2]."],";
 			$i++;
 		}
 
-		return $ga_dash_data;
+		return rtrim($ga_dash_data,',');
 	}
 
 // Get Top searches
@@ -122,29 +214,40 @@
 			echo ga_dash_pretty_error($e);
 			return;
 		}	
-		if (!$data['rows']){
+		if (!isset($data['rows'])){
 			return 0;
 		}
 		
 		$ga_dash_data="";
 		$i=0;
 		while (isset($data['rows'][$i][0])){
-			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
+			$ga_dash_data.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 			$i++;
 		}
 
-		return $ga_dash_data;
+		return rtrim($ga_dash_data,',');
 	}
 // Get Visits by Country
 	function ga_dash_visits_country($service, $projectId, $from, $to){
 
-		$metrics = 'ga:visits'; 
-		$dimensions = 'ga:country';
+		$metrics = 'ga:visits';
+		$options="";
+		if (get_option('ga_target_geomap')){
+			$dimensions = 'ga:city';
+			require 'constants.php';
+			$filters = 'ga:country=='.($country_codes[get_option('ga_target_geomap')]);
+		}else{	
+			$dimensions = 'ga:country';
+			$filters = "";
+		}	
 		try{
 			$serial='gadash_qr7'.str_replace(array('ga:',',','-',date('Y')),"",$projectId.$from.$to);
 			$transient = get_transient($serial);
 			if ( empty( $transient ) ){
-				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));
+				if ($filters)
+					$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions, 'filters' => $filters, 'sort' => '-ga:visits', 'max-results' => get_option('ga_target_number')));
+				else	
+					$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));
 				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
 			}else{
 				$data = $transient;		
@@ -153,16 +256,18 @@
 			echo ga_dash_pretty_error($e);
 			return;
 		}
-		if (!$data['rows']){
+		if (!isset($data['rows'])){
 			return 0;
 		}
-		
-		$ga_dash_data="";
-		for ($i=0;$i<$data['totalResults'];$i++){
-			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
-		}
 
-		return $ga_dash_data;
+		$ga_dash_data="";
+		$i=0;
+		while (isset($data['rows'][$i][1])){
+			$ga_dash_data.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
+			$i++;	
+		}
+				
+		return rtrim($ga_dash_data,',');
 
 	}	
 // Get Traffic Sources
@@ -183,7 +288,7 @@
 			echo ga_dash_pretty_error($e);
 			return;
 		}	
-		if (!$data['rows']){
+		if (!isset($data['rows'])){
 			return 0;
 		}
 		
@@ -192,7 +297,7 @@
 			$ga_dash_data.="['".str_replace("(none)","direct",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 		}
 
-		return $ga_dash_data;
+		return rtrim($ga_dash_data,',');
 
 	}
 
@@ -214,16 +319,41 @@
 			echo ga_dash_pretty_error($e);
 			return;
 		}	
-		if (!$data['rows']){
+		if (!isset($data['rows'])){
 			return 0;
 		}
 		
 		$ga_dash_data="";
 		for ($i=0;$i<$data['totalResults'];$i++){
-			$ga_dash_data.="['".str_replace("'"," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
+			$ga_dash_data.="['".str_replace(array("'","\\")," ",$data['rows'][$i][0])."',".$data['rows'][$i][1]."],";
 		}
 
-		return $ga_dash_data;
+		return rtrim($ga_dash_data,',');
 
-	}	
+	}
+
+	function ga_maintain_compatibility(){
+		if(!get_option('ga_dash_cachetime') OR get_option('ga_dash_cachetime')==10){
+			update_option('ga_dash_cachetime', "3600");	
+		}
+		if(!get_option('ga_dash_access')){
+			update_option('ga_dash_access', "manage_options");	
+		}
+
+		if(!get_option('ga_dash_style')){
+			update_option('ga_dash_style', "blue");	
+		}
+		if (!get_option('ga_event_downloads')){
+			update_option('ga_event_downloads', "zip|mp3|mpeg|pdf|doc*|ppt*|xls*|jpeg|png|gif|tiff");
+		}
+		if (!get_option('ga_dash_access_front')){
+			update_option('ga_dash_access_front', get_option('ga_dash_access'));
+		}
+		if (!get_option('ga_dash_access_back')){
+			update_option('ga_dash_access_back', get_option('ga_dash_access'));
+		}
+		if (!get_option('ga_target_number') AND get_option('ga_target_geomap')){
+			update_option('ga_target_number', "10");
+		}		
+	}
 ?>
