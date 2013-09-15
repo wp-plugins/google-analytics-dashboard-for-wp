@@ -30,7 +30,9 @@
 	background:-moz-linear-gradient( center top, #1e62d0 5%, #3d94f6 100% );
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=\'#1e62d0\', endColorstr=\'#3d94f6\');
 	background-color:#1e62d0;
+	cursor: pointer;
 }
+
 .gabutton:active {
 	position:relative;
 	top:1px;

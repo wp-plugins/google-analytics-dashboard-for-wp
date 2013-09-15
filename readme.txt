@@ -2,8 +2,8 @@
 Contributors: deconf
 Tags: google, analytics, google analytics, dashboard, analytics dashboard, google analytics dashboard, google analytics widget, tracking
 Requires at least: 2.8
-Tested up to: 3.6
-Stable tag: 4.1.4
+Tested up to: 3.6.1
+Stable tag: 4.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,10 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 This plugin it's released under the GPLv2, you can use it free of charge on your personal or commercial website.
 
 == Changelog ==
+
+= 15.09.2013 - v4.1.5 =
+- fixed "lightblack" color issue, on geomap, on light theme
+- added cursor:pointer property to class .gabutton
 
 = 09.09.2013 - v4.1.4 =
 - added access level option to Additional Backend Settings section 
