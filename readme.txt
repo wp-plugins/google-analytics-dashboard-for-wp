@@ -3,7 +3,7 @@ Contributors: deconf
 Tags: google, analytics, google analytics, dashboard, analytics dashboard, google analytics dashboard, google analytics widget, tracking
 Requires at least: 2.8
 Tested up to: 3.6.1
-Stable tag: 4.1.5
+Stable tag: 4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,7 @@ Using this plugin, your data is collected in a fast and secure manner because Go
 Main benefits:
 
 - you can access all websites statistics in a single widget (websites within same Google Account)
+- real-time feature, displays real-time visitors, real-time sources and per page real-time traffic details
 - cache feature, this improves loading speed up to 7 times and avoids dailyLimitExceeded, usageLimits.userRateLimitExceededUnreg, userRateLimitExceeded errors from Google Analytics API
 - two themes: Blue Theme and Light Theme
 - main dash access level settings and lock profile feature
@@ -80,7 +81,7 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 == Screenshots ==
 
 1. Google Analytics Dashboard Blue Theme
-2. Google Analytics Dashboard Light Theme
+2. Google Analytics Dashboard Real-Time
 3. Google Analytics Dashboard Settings
 4. Google Analytics Dashboard Geo Map
 5. Google Analytics Dashboard Top Pages, Top Referrers and Top Searches
@@ -93,6 +94,10 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 This plugin it's released under the GPLv2, you can use it free of charge on your personal or commercial website.
 
 == Changelog ==
+
+= 21.09.2013 - v4.2 =
+- added google analytics real-time support
+- new date ranges: Today, Yesterday, Last 30 Days and Last 90 Days 
 
 = 15.09.2013 - v4.1.5 =
 - fixed "lightblack" color issue, on geomap, on light theme

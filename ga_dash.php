@@ -3,10 +3,20 @@
 Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://www.deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
-Author: Deconf.com
-Version: 4.1.5
+Author: Alin Marcu
+Version: 4.2
 Author URI: http://www.deconf.com
 */  
+
+$plugin = plugin_basename(__FILE__);
+add_filter('the_content', 'ga_dash_front_content');  
+add_action('wp_dashboard_setup', 'ga_dash_setup');
+add_action('admin_menu', 'ga_dash_admin_actions'); 
+add_action('admin_enqueue_scripts', 'ga_dash_admin_enqueue_scripts');
+add_action('plugins_loaded', 'ga_dash_init');
+add_action('wp_head', 'ga_dash_tracking');
+add_filter("plugin_action_links_$plugin", 'ga_dash_settings_link' );
+add_action('wp_enqueue_scripts', 'ga_dash_enqueue_scripts');
 
 function ga_dash_admin() {  
     include('ga_dash_admin.php');  
@@ -18,16 +28,31 @@ function ga_dash_admin_actions() {
 	}
 }  
 
-$plugin = plugin_basename(__FILE__);
+function ga_dash_init() {
+  	load_plugin_textdomain( 'ga-dash', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+}
 
-add_filter('the_content', 'ga_dash_front_content');  
-add_action('wp_dashboard_setup', 'ga_dash_setup');
-add_action('admin_menu', 'ga_dash_admin_actions'); 
-add_action('admin_enqueue_scripts', 'ga_dash_admin_enqueue_scripts');
-add_action('plugins_loaded', 'ga_dash_init');
-add_action('wp_head', 'ga_dash_tracking');
-add_filter("plugin_action_links_$plugin", 'ga_dash_settings_link' );
-add_action('wp_enqueue_scripts', 'ga_dash_enqueue_scripts');
+function ga_dash_admin_enqueue_scripts() {
+	if (get_option('ga_dash_style')=="blue"){
+		wp_register_style( 'ga_dash', plugins_url('ga_dash.css', __FILE__) );
+	} else{
+		wp_register_style( 'ga_dash', plugins_url('ga_dash_light.css', __FILE__) );
+	}
+	wp_enqueue_style( 'ga_dash' );	
+	wp_register_style( 'jquery-ui-tooltip-1.9.2', plugins_url('jquery/jquery.ui.tooltip.min.1.9.2.css', __FILE__) );
+	wp_register_script("jquery-ui-tooltip-1.9.2",plugins_url('jquery/jquery.ui.tooltip.min.1.9.2.js', __FILE__));
+}
+
+function ga_dash_setup() {
+	if (current_user_can(get_option('ga_dash_access'))) {
+		wp_add_dashboard_widget(
+			'ga-dash-widget',
+			__("Google Analytics Dashboard",'ga-dash'),
+			'ga_dash_content',
+			$control_callback = null
+		);
+	}
+}
 
 function ga_dash_enqueue_scripts() {
 	if (get_option('ga_event_tracking') AND !wp_script_is('jquery')) {
@@ -45,7 +70,7 @@ function ga_dash_tracking($head) {
 
 	$traking_mode=get_option('ga_dash_tracking');
 	$traking_type=get_option('ga_dash_tracking_type');
-	if ($traking_mode){
+	if ($traking_mode<>4){
 		require_once 'functions.php';
 		if ($traking_type=="universal"){
 
@@ -258,37 +283,12 @@ function ga_dash_front_content($content) {
 	return $content;
 }
 
-function ga_dash_init() {
-  	load_plugin_textdomain( 'ga-dash', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
-}
-
-function ga_dash_admin_enqueue_scripts() {
-	if (get_option('ga_dash_style')=="blue"){
-		wp_register_style( 'ga_dash', plugins_url('ga_dash.css', __FILE__) );
-		wp_enqueue_style( 'ga_dash' );
-	} else{
-		wp_register_style( 'ga_dash', plugins_url('ga_dash_light.css', __FILE__) );
-		wp_enqueue_style( 'ga_dash' );
-	}	
-}
-
-function ga_dash_setup() {
-	if (current_user_can(get_option('ga_dash_access'))) {
-		wp_add_dashboard_widget(
-			'ga-dash-widget',
-			__("Google Analytics Dashboard",'ga-dash'),
-			'ga_dash_content',
-			$control_callback = null
-		);
-	}
-}
-
 function ga_dash_content() {
 	
 	require_once 'functions.php';
 	
 	ga_maintain_compatibility();
-
+	
 	if (!class_exists('Google_Exception')) {
 		require_once 'src/Google_Client.php';
 	}
@@ -314,6 +314,7 @@ function ga_dash_content() {
 
 	if (ga_dash_get_token()) { 
 		$token = ga_dash_get_token();
+		$token= ga_dash_refresh_token($client);
 		$client->setAccessToken($token);
 	}
 
@@ -338,6 +339,8 @@ function ga_dash_content() {
 			if ($_REQUEST['ga_dash_code']){
 				$client->authenticate($_REQUEST['ga_dash_code']);
 				ga_dash_store_token($client->getAccessToken());
+				$google_token= json_decode($client->getAccessToken());
+				ga_dash_store_refreshtoken($google_token->refresh_token);
 			} else{
 			
 				$adminurl = admin_url("#ga-dash-widget");
@@ -410,16 +413,23 @@ function ga_dash_content() {
 		}	
 	}
 	
+	ga_dash_store_token($client->getAccessToken());	
+	
 	if(isset($_REQUEST['query']))
 		$query = $_REQUEST['query'];
 	else	
 		$query = "visits";
-		
+
 	if(isset($_REQUEST['period']))	
 		$period = $_REQUEST['period'];
 	else
 		$period = "last30days"; 	
 
+	if(isset($_REQUEST['realtime']))
+		$realtime = $_REQUEST['realtime'];
+	else	
+		$realtime = "";
+		
 	switch ($period){
 
 		case 'today'	:	$from = date('Y-m-d'); 
@@ -430,20 +440,35 @@ function ga_dash_content() {
 								$to = date('Y-m-d', time()-24*60*60);
 								break;
 		
-		case 'last7days'	:	$from = date('Y-m-d', time()-7*24*60*60);
-							$to = date('Y-m-d');
-							break;	
-
-		case 'last14days'	:	$from = date('Y-m-d', time()-14*24*60*60);
+		case 'last30days'	:	$from = date('Y-m-d', time()-30*24*60*60);
 							$to = date('Y-m-d');
 							break;	
 							
-		default	:	$from = date('Y-m-d', time()-30*24*60*60);
+		default	:	$from = date('Y-m-d', time()-90*24*60*60);
 					$to = date('Y-m-d');
 					break;
 
 	}
 
+	if ($realtime=="realtime") {
+		wp_enqueue_style( 'jquery-ui-tooltip-1.9.2');
+		wp_enqueue_script("jquery-ui-tooltip-1.9.2");
+
+		if (!wp_script_is('jquery')) {
+			wp_enqueue_script('jquery');
+		}
+		if (!wp_script_is('jquery-ui-core')) {		
+			wp_enqueue_script("jquery-ui-core");
+		}
+		if (!wp_script_is('jquery-ui-position')) {		
+			wp_enqueue_script("jquery-ui-position");
+		}
+		if (!wp_script_is('jquery-ui-position')) {			
+			wp_enqueue_script("jquery-ui-position");
+		}
+		goto jump1;
+	}	
+	
 	switch ($query){
 
 		case 'visitors'	:	$title=__("Visitors",'ga-dash'); break;
@@ -495,6 +520,8 @@ function ga_dash_content() {
 		return;
 	}
 	
+jump1:	
+
 	if (get_option('ga_dash_style')=="light"){ 
 		$css="colors:['gray','darkgray'],";
 		$colors="gray";
@@ -509,7 +536,9 @@ function ga_dash_content() {
       google.setOnLoadCallback(ga_dash_callback);
 
 	  function ga_dash_callback(){
-			ga_dash_drawstats();
+			if(typeof ga_dash_drawstats == "function"){
+				ga_dash_drawstats();
+			}	
 			if(typeof ga_dash_drawmap == "function"){
 				ga_dash_drawmap();
 			}
@@ -525,9 +554,11 @@ function ga_dash_content() {
 			if(typeof ga_dash_drawtraffic == "function"){
 				ga_dash_drawtraffic();
 			}			
-	  }	
+	  }';
 
-      function ga_dash_drawstats() {
+	if ($realtime!="realtime"){	  
+
+      $code.='function ga_dash_drawstats() {
         var data = google.visualization.arrayToDataTable(['."
           ['".__("Date", 'ga-dash')."', '".$title."'],"
 		  .$ga_dash_statsdata.
@@ -546,6 +577,7 @@ function ga_dash_content() {
 		chart.draw(data, options);
 		
       }";
+	}  
 
 	if (get_option('ga_dash_map') AND current_user_can(get_option('ga_dash_access_back'))){
 		$ga_dash_visits_country=ga_dash_visits_country($service, $projectId, $from, $to);
@@ -693,16 +725,15 @@ function ga_dash_content() {
 	$code.='<div id="ga-dash">
 	<center>
 		<div id="buttons_div">
-		
+			<input class="'.$ga_button_style.'" type="button" value="'.__("Real-Time",'ga-dash').'" onClick="window.location=\'?realtime=realtime&query='.$query.'\'" />		
 			<input class="'.$ga_button_style.'" type="button" value="'.__("Today",'ga-dash').'" onClick="window.location=\'?period=today&query='.$query.'\'" />
 			<input class="'.$ga_button_style.'" type="button" value="'.__("Yesterday",'ga-dash').'" onClick="window.location=\'?period=yesterday&query='.$query.'\'" />
-			<input class="'.$ga_button_style.'" type="button" value="'.__("Last 7 days",'ga-dash').'" onClick="window.location=\'?period=last7days&query='.$query.'\'" />
-			<input class="'.$ga_button_style.'" type="button" value="'.__("Last 14 days",'ga-dash').'" onClick="window.location=\'?period=last14days&query='.$query.'\'" />
 			<input class="'.$ga_button_style.'" type="button" value="'.__("Last 30 days",'ga-dash').'" onClick="window.location=\'?period=last30days&query='.$query.'\'" />
+			<input class="'.$ga_button_style.'" type="button" value="'.__("Last 90 days",'ga-dash').'" onClick="window.location=\'?period=last90days&query='.$query.'\'" />
 		
-		</div>
-		
-		<div id="ga_dash_statsdata"></div>
+		</div>';
+	if ($realtime!="realtime"){		
+		$code.='<div id="ga_dash_statsdata"></div>
 		<div id="details_div">
 			
 			<table class="gatable" cellpadding="4">
@@ -725,7 +756,35 @@ function ga_dash_content() {
 			</table>
 					
 		</div>';
+	}else{
+	
+		if (get_option('ga_dash_userapi')){	
+			$code.="<p style='padding:100px;line-height:2em;'>".__("This is a beta feature and is only available when using my Developer Key! (",'ga-dash').'<a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wp-real-time-reports/" target="_blank">'.__("more about this feature", 'ga-dash').'</a>'.__(")", 'ga-dash')."</p>";
+		}else{
 		
+			$code.="<table width='90%' class='realtime'>
+						<tr>
+							<td class='gadash-tdo-left'>
+								<span class='gadash-online' id='gadash-online'>&nbsp;</span>
+							</td>
+							<td class='gadash-tdo-right' id='gadash-tdo-right'>
+								<span class=\"gadash-bigtext\">".__("REFERRAL",'ga-dash').": 0</span><br /><br />
+								<span class=\"gadash-bigtext\">".__("ORGANIC",'ga-dash').": 0</span><br /><br />
+								<span class=\"gadash-bigtext\">".__("SOCIAL",'ga-dash').": 0</span><br /><br />
+							</td>
+							<td class='gadash-tdo-rights' id='gadash-tdo-rights'>
+								<span class=\"gadash-bigtext\">".__("DIRECT",'ga-dash').": 0</span><br /><br />
+								<span class=\"gadash-bigtext\">".__("NEW",'ga-dash').": 0</span><br /><br />
+								<span class=\"gadash-bigtext\">".__("RETURNING",'ga-dash').": 0</span><br /><br />							
+							</td>
+						</tr>
+						<tr>
+						<td id='gadash-pages' class='gadash-pages' colspan='3'>&nbsp;</td>
+						</tr>
+					</table>";
+			$code.=ga_realtime('AIzaSyBG7LlUoHc29ZeC_dsShVaBEX15SfRl_WY',plugins_url('/realtime/superproxy.php', __FILE__));		
+		}			
+	}	
 	if (get_option('ga_dash_map') AND current_user_can(get_option('ga_dash_access_back'))){
 		$code.='<br /><h3>';
 		if (get_option('ga_target_geomap')){

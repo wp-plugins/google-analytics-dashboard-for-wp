@@ -99,7 +99,10 @@ if (isset($_REQUEST['Reset'])){
 
 		$ga_target_number = ga_dash_safe_get('ga_target_number');
 		update_option('ga_target_number', $ga_target_number);
-		
+
+		$ga_realtime_pages = ga_dash_safe_get('ga_realtime_pages');
+		update_option('ga_realtime_pages', $ga_realtime_pages);		
+				
 		if (!isset($_REQUEST['Clear']) AND !isset($_REQUEST['Reset'])){
 			?>  
 			<div class="updated"><p><strong><?php _e('Options saved.', 'ga-dash'); ?></strong></p></div>  
@@ -155,6 +158,7 @@ $ga_dash_access_front = get_option('ga_dash_access_front');
 $ga_dash_access_back = get_option('ga_dash_access_back');
 $ga_target_geomap = get_option('ga_target_geomap');
 $ga_target_number = get_option('ga_target_number');
+$ga_realtime_pages = get_option('ga_realtime_pages');
 
 if ( is_rtl() ) {
 	$float_main="right";
@@ -261,6 +265,8 @@ if ( is_rtl() ) {
 		?></p>
 		
 		<p><input name="ga_dash_jailadmins" type="checkbox" id="ga_dash_jailadmins" value="1"<?php if (get_option('ga_dash_jailadmins')) echo " checked='checked'"; ?>  /><?php _e(" disable dashboard's Switch Profile functionality", 'ga-dash' ); ?></p>
+		<?php echo "<h3><div style='float:left;'>" . __( 'Real-Time Settings', 'ga-dash' ). "</div><div style='font-style:italic;color:red;font-size:0.7em;vertical-align:top;margin-top:-3px;float:left;clear:right;'>&nbsp;Beta Feature</div></h3><br />";?>
+		<p><?php echo __("Maximum number of pages to display on real-time tab:", 'ga-dash'); ?> <input type="text" style="text-align:center;" name="ga_realtime_pages" value="<?php echo $ga_realtime_pages; ?>" size="3"> <?php _e("(find out more", 'ga-dash') ?> <a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wp-real-time-reports/" target="_blank"><?php _e("about this feature", 'ga-dash') ?></a><?php _e(")", 'ga-dash') ?></p>
 		<?php echo "<h3>" . __( 'Additional Frontend Settings', 'ga-dash' ). "</h3>";?>
 		<p><input name="ga_dash_frontend" type="checkbox" id="ga_dash_frontend" value="1"<?php if (get_option('ga_dash_frontend')) echo " checked='checked'"; ?>  /><?php _e(" show page visits and top searches in frontend (after each article)", 'ga-dash' ); ?></p>
 		<p><?php _e("Access Level: ", 'ga-dash' ); ?>
@@ -272,7 +278,7 @@ if ( is_rtl() ) {
 		</select></p>		
 		<?php echo "<h3>" . __( 'Additional Backend Settings', 'ga-dash' ). "</h3>";?>
 		<p><input name="ga_dash_map" type="checkbox" id="ga_dash_map" value="1"<?php if (get_option('ga_dash_map')) echo " checked='checked'"; ?>  /><?php _e(" show Geo Map for visits", 'ga-dash' ); ?></p>
-		<p><?php echo __("Target Geo Map to region:", 'ga-dash'); ?> <input type="text" style="text-align:center;" name="ga_target_geomap" value="<?php echo $ga_target_geomap; ?>" size="3"> <?php _e("and render top",'ga-dash'); ?> <input type="text" style="text-align:center;" name="ga_target_number" value="<?php echo $ga_target_number; ?>" size="3"> <?php _e("cities (find out more", 'ga-dash') ?> <a href="http://www.deconf.com/en/projects/country-codes-for-google-analytics-dashboard/"><?php _e("about this feature", 'ga-dash') ?></a><?php _e(")", 'ga-dash') ?></p>
+		<p><?php echo __("Target Geo Map to region:", 'ga-dash'); ?> <input type="text" style="text-align:center;" name="ga_target_geomap" value="<?php echo $ga_target_geomap; ?>" size="3"> <?php _e("and render top",'ga-dash'); ?> <input type="text" style="text-align:center;" name="ga_target_number" value="<?php echo $ga_target_number; ?>" size="3"> <?php _e("cities (find out more", 'ga-dash') ?> <a href="http://www.deconf.com/en/projects/country-codes-for-google-analytics-dashboard/" target="_blank"><?php _e("about this feature", 'ga-dash') ?></a><?php _e(")", 'ga-dash') ?></p>
 		<p><input name="ga_dash_traffic" type="checkbox" id="ga_dash_traffic" value="1"<?php if (get_option('ga_dash_traffic')) echo " checked='checked'"; ?>  /><?php _e(" show traffic overview", 'ga-dash' ); ?></p>
 		<p><input name="ga_dash_pgd" type="checkbox" id="ga_dash_pgd" value="1"<?php if (get_option('ga_dash_pgd')) echo " checked='checked'"; ?>  /><?php _e(" show top pages", 'ga-dash' ); ?></p>
 		<p><input name="ga_dash_rd" type="checkbox" id="ga_dash_rd" value="1"<?php if (get_option('ga_dash_rd')) echo " checked='checked'"; ?>  /><?php _e(" show top referrers", 'ga-dash' ); ?></p>		
@@ -303,12 +309,12 @@ if ( is_rtl() ) {
 
 		<p><?php _e("Enable Tracking: ", 'ga-dash' ); ?>
 		<select id="ga_dash_tracking" name="ga_dash_tracking">
-			<option value="0" <?php if ($ga_dash_tracking=="0") echo "selected='yes'"; echo ">".__("Disabled", 'ga-dash');?></option>
+			<option value="4" <?php if ($ga_dash_tracking=="4") echo "selected='yes'"; echo ">".__("Disabled", 'ga-dash');?></option>
 			<option value="1" <?php if (($ga_dash_tracking=="1") OR (!$ga_dash_tracking)) echo "selected='yes'"; echo ">".__("Single Domain", 'ga-dash');?></option>
 			<option value="2" <?php if ($ga_dash_tracking=="2") echo "selected='yes'"; echo ">".__("Domain and Subdomains", 'ga-dash');?></option>
 			<option value="3" <?php if ($ga_dash_tracking=="3") echo "selected='yes'"; echo ">".__("Multiple TLD Domains", 'ga-dash');?></option>			
 		</select>
-		<?php	if (!$ga_dash_tracking){
+		<?php	if ($ga_dash_tracking==4){
 				echo ' <font color="red"> &#9668;-- '.__("the tracking feature is currently disabled!",'ga-dash').'</font>';
 			}			
 		?>

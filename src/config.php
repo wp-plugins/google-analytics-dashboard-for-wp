@@ -52,7 +52,7 @@ $apiConfig = array(
 
     // Definition of service specific values like scopes, oauth token URLs, etc
     'services' => array(
-      'analytics' => array('scope' => 'https://www.googleapis.com/auth/analytics.readonly'),
+      'analytics' => array('scope' => array('https://www.googleapis.com/auth/analytics.readonly','scope' => 'https://www.googleapis.com/auth/analytics')),
       'calendar' => array(
           'scope' => array(
               "https://www.googleapis.com/auth/calendar",
