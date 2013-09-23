@@ -466,8 +466,8 @@ function ga_dash_content() {
 		if (!wp_script_is('jquery-ui-position')) {			
 			wp_enqueue_script("jquery-ui-position");
 		}
-		goto jump1;
-	}	
+
+	} else{	
 	
 	switch ($query){
 
@@ -520,7 +520,7 @@ function ga_dash_content() {
 		return;
 	}
 	
-jump1:	
+}	
 
 	if (get_option('ga_dash_style')=="light"){ 
 		$css="colors:['gray','darkgray'],";
