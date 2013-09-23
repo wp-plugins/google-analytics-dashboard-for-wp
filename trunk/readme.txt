@@ -1,6 +1,6 @@
 === Google Analytics Dashboard for WP ===
 Contributors: deconf
-Tags: google, analytics, google analytics, dashboard, analytics dashboard, google analytics dashboard, google analytics widget, tracking
+Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking
 Requires at least: 2.8
 Tested up to: 3.6.1
 Stable tag: 4.2
