@@ -1,3 +1,63 @@
+.gadash-pg{
+	width:100%;
+	border-collapse:collapse;
+}
+.gadash-pline td{
+	border-bottom: gray solid 1px;
+	padding-top:10px;
+	vertical-align:bottom;
+}
+.gadash-pleft{
+	width:90%;
+	text-align:left;
+}
+.gadash-pright{
+	width:10%;
+	text-align:right;
+	padding-right:2%;
+}
+.realtime{
+	margin-top:20px;
+}
+
+.gadash-online{
+	font-size:100px;
+	font-weight:normal;
+	line-height:1em;
+}
+
+.gadash-tdo-left{
+	width:45%;
+	text-align:center;
+}
+
+.gadash-tdo-right{
+	width:30%;
+	text-align:left;
+	font-weight:bold;	
+	vertical-align:middle;
+}
+
+.gadash-tdo-rights{
+	width:25%;
+	text-align:left;
+	font-weight:bold;	
+	vertical-align:middle;
+}
+
+span.gadash-bigtext{
+	font-size:14px;
+}
+
+.gadash-pgdetailsr {
+	padding-left:20px;
+	text-align:right;
+} 
+
+.gadash-pgdetailsl {
+	min-width:250px;
+} 
+
 .gatable{
 	font-family:Arial, Verdana; 
 	font-weight:bold; 
@@ -30,7 +90,9 @@
 	background:-moz-linear-gradient( center top, #1e62d0 5%, #3d94f6 100% );
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=\'#1e62d0\', endColorstr=\'#3d94f6\');
 	background-color:#1e62d0;
+	cursor: pointer;
 }
+
 .gabutton:active {
 	position:relative;
 	top:1px;
@@ -76,32 +138,14 @@ table.gatable {
 	text-shadow:1px 1px 0px #1570cd;
 }
 
-.note{
-	display: block;
-	padding:20px;
-	margin:20px;
-	width:80%;
-	height:150px; 
-	font:17px 'Gloria Hallelujah', cursive;
-	line-height:1em;
-	border:0;
-	border-radius:3px;
-	background: -webkit-linear-gradient(#FFF6E5, #FFECC9);
-	background: -moz-linear-gradient(#FFF6E5, #FFECC9);
-	background: -o-linear-gradient(#FFF6E5, #FFECC9);
-	background: -ms-linear-gradient(#FFF6E5, #FFECC9);
-	background: linear-gradient(#FFF6E5, #FFECC9);
-	box-shadow:0 4px 6px rgba(0,0,0,0.1);
-	overflow:hidden;
-	transition:box-shadow 0.5s ease;
-	font-smoothing:subpixel-antialiased;
+.ga-note{
+	border:2px solid #a1a1a1;
+	padding:10px 20px; 
+	background:white;
+	border-radius:25px;
+	width:25%;
 }
 
-.note ul{
-	font:13px 'Gloria Hallelujah', cursive;
-	list-style-type: square;
-	margin-left:10px;
+.ga-note li{
+	line-height:1.5em;
 }
-
-div.note:hover{ box-shadow:0 6px 9px rgba(0,0,0,0.15); }
-div.note:focus{ box-shadow:0 6px 12px rgba(0,0,0,0.2); outline:none; }

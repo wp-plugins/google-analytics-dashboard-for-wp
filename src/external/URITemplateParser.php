@@ -27,6 +27,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * Blogpost: http://lab.kevburnsjr.com/php-uri-template-parser
  * Source: http://github.com/KevBurnsJr/php-uri-template-parser
  */
+if(class_exists('URI_Template_Parser') != true){
 class URI_Template_Parser {
 
   public static $operators = array('+', ';', '?', '/', '.');
@@ -206,4 +207,5 @@ class URI_Template_Parser {
   public function __toString() {
     return $this->template;
   }
+}
 }
