@@ -3,7 +3,7 @@ Contributors: deconf
 Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking,realtime,wpmu,multisite
 Requires at least: 2.8
 Tested up to: 3.6.1
-Stable tag: 4.2
+Stable tag: 4.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -94,6 +94,9 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 This plugin it's released under the GPLv2, you can use it free of charge on your personal or commercial website.
 
 == Changelog ==
+
+= 12.10.2013 - v4.2.1 =
+- fixed Domain and Subdomains tracking code for Universal Analytics 
 
 = 21.09.2013 - v4.2 =
 - added google analytics real-time support

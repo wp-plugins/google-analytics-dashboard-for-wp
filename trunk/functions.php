@@ -80,9 +80,7 @@
 
 	
 	function ga_dash_get_main_domain($subdomain){
-		$parsedomain=parse_url($subdomain,PHP_URL_HOST);
-		$host_names = explode(".", $parsedomain);
-		$domain = $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
+		$domain=parse_url($subdomain,PHP_URL_HOST);
 		return $domain;
 	}
 	
