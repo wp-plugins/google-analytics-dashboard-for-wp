@@ -22,18 +22,18 @@ $apiConfig = array(
     'use_objects' => false,
   
     // The application_name is included in the User-Agent HTTP header.
-    'application_name' => '',
+    'application_name' => 'Google Analytics Dashboard for WordPress',
 
     // OAuth2 Settings, you can get these keys at https://code.google.com/apis/console
-    'oauth2_client_id' => '',
-    'oauth2_client_secret' => '',
-    'oauth2_redirect_uri' => '',
+    'oauth2_client_id' => '65556128781.apps.googleusercontent.com',
+    'oauth2_client_secret' => 'Kc7888wgbc_JbeCpbFjnYpwE',
+    'oauth2_redirect_uri' => 'urn:ietf:wg:oauth:2.0:oob',
 
     // The developer key, you get this at https://code.google.com/apis/console
-    'developer_key' => '',
+    'developer_key' => 'AIzaSyBG7LlUoHc29ZeC_dsShVaBEX15SfRl_WY',
   
     // Site name to show in the Google's OAuth 1 authentication screen.
-    'site_name' => 'www.example.org',
+    'site_name' => 'www.deconf.com',
 
     // Which Authentication, Storage and HTTP IO classes to use.
     'authClass'    => 'Google_OAuth2',
@@ -52,7 +52,7 @@ $apiConfig = array(
 
     // Definition of service specific values like scopes, oauth token URLs, etc
     'services' => array(
-      'analytics' => array('scope' => 'https://www.googleapis.com/auth/analytics.readonly'),
+      'analytics' => array('scope' => array('https://www.googleapis.com/auth/analytics.readonly','scope' => 'https://www.googleapis.com/auth/analytics')),
       'calendar' => array(
           'scope' => array(
               "https://www.googleapis.com/auth/calendar",
