@@ -174,7 +174,7 @@ if ( is_rtl() ) {
     <?php echo "<h2>" . __( 'Google Analytics Dashboard Settings', 'ga-dash' ) . "</h2>"; ?>  
         <form name="ga_dash_form" method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">  
 		<?php echo "<h3>". __( 'Google Analytics API', 'ga-dash' )."</h3>"; ?>  
-        <?php echo "<i>".__("You should watch this", 'ga-dash')." <a href='http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/' target='_blank'>". __("Step by step video tutorial")."</a> ".__("before proceeding to authorization", 'ga-dash').". ".__("To authorize this application using our API Project, press the", 'ga_dash')." <b>".__("Authorize Application", 'ga-dash')."</b> ".__(" button. If you want to authorize it using your own API Project, check the option bellow and enter your project credentials before pressing the", 'ga-dash')." <b>".__("Authorize Application", 'ga-dash')."</b> ".__("button.", 'ga-dash')."</i>";?>
+        <?php echo "<i>".__("You should watch this", 'ga-dash')." <a href='http://deconf.com/google-analytics-dashboard-wordpress/' target='_blank'>". __("Step by step video tutorial")."</a> ".__("before proceeding to authorization", 'ga-dash').". ".__("To authorize this application using our API Project, press the", 'ga_dash')." <b>".__("Authorize Application", 'ga-dash')."</b> ".__(" button. If you want to authorize it using your own API Project, check the option bellow and enter your project credentials before pressing the", 'ga-dash')." <b>".__("Authorize Application", 'ga-dash')."</b> ".__("button.", 'ga-dash')."</i>";?>
 		<p><input name="ga_dash_userapi" type="checkbox" id="ga_dash_userapi" onchange="this.form.submit()" value="1"<?php if (get_option('ga_dash_userapi')) echo " checked='checked'"; ?>  /><?php echo "<b>".__(" use your own API Project credentials", 'ga-dash' )."</b>"; ?></p>
 		<?php
 		if (get_option('ga_dash_userapi')){?>
@@ -198,23 +198,23 @@ if ( is_rtl() ) {
 				<div class="ga-note" style="float:<?php echo $float_note; ?>;text-align:<?php echo $float_main; ?>;"> 
 						<center>
 							<h3><?php _e("Setup Tutorial",'ga-dash') ?></h3>
-							<a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" target="_blank"><img src="../wp-content/plugins/google-analytics-dashboard-for-wp/img/video-tutorial.png" width="95%" /></a>
+							<a href="http://deconf.com/google-analytics-dashboard-wordpress/" target="_blank"><img src="../wp-content/plugins/google-analytics-dashboard-for-wp/img/video-tutorial.png" width="95%" /></a>
 						</center>
 						<center>
 							<br /><h3><?php _e("Support Links",'ga-dash') ?></h3>
 						</center>			
 						<ul>
-							<li><a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" target="_blank"><?php _e("Google Analytics Dashboard Official Page",'ga-dash') ?></a></li>
+							<li><a href="http://deconf.com/google-analytics-dashboard-wordpress/" target="_blank"><?php _e("Google Analytics Dashboard Official Page",'ga-dash') ?></a></li>
 							<li><a href="http://wordpress.org/support/plugin/google-analytics-dashboard-for-wp" target="_blank"><?php _e("Google Analytics Dashboard Wordpress Support",'ga-dash') ?></a></li>
-							<li><a href="http://forum.deconf.com/en/wordpress-plugins-f182/" target="_blank"><?php _e("Google Analytics Dashboard on Deconf Forum",'ga-dash') ?></a></li>			
+							<li><a href="http://forum.deconf.com/wordpress-plugins-f182/" target="_blank"><?php _e("Google Analytics Dashboard on Deconf Forum",'ga-dash') ?></a></li>			
 						</ul>
 						<center>
 							<br /><h3><?php _e("Useful Plugins",'ga-dash') ?></h3>
 						</center>			
 						<ul>
-							<li><a href="http://www.deconf.com/en/projects/youtube-analytics-dashboard-for-wordpress/" target="_blank"><?php _e("YouTube Analytics Dashboard",'ga-dash') ?></a></li>
-							<li><a href="http://www.deconf.com/en/projects/google-adsense-dashboard-for-wordpress/" target="_blank"><?php _e("Earnings Dashboard for Google Adsense™",'ga-dash') ?></a></li>
-							<li><a href="http://www.deconf.com/en/projects/clicky-analytics-plugin-for-wordpress/" target="_blank"><?php _e("Clicky Analytics",'ga-dash') ?></a></li>						
+							<li><a href="http://deconf.com/youtube-analytics-dashboard-wordpress/" target="_blank"><?php _e("YouTube Analytics Dashboard",'ga-dash') ?></a></li>
+							<li><a href="http://deconf.com/earnings-dashboard-google-adsense-wordpress/" target="_blank"><?php _e("Earnings Dashboard for Google Adsense™",'ga-dash') ?></a></li>
+							<li><a href="http://deconf.com/clicky-analytics-dashboard-wordpress/" target="_blank"><?php _e("Clicky Analytics",'ga-dash') ?></a></li>						
 							<li><a href="http://wordpress.org/extend/plugins/follow-us-box/" target="_blank"><?php _e("Follow Us Box",'ga-dash') ?></a></li>			
 						</ul>			
 				</div></div><?php				
@@ -266,7 +266,7 @@ if ( is_rtl() ) {
 		
 		<p><input name="ga_dash_jailadmins" type="checkbox" id="ga_dash_jailadmins" value="1"<?php if (get_option('ga_dash_jailadmins')) echo " checked='checked'"; ?>  /><?php _e(" disable dashboard's Switch Profile functionality", 'ga-dash' ); ?></p>
 		<?php echo "<h3><div style='float:left;'>" . __( 'Real-Time Settings', 'ga-dash' ). "</div><div style='font-style:italic;color:red;font-size:0.7em;vertical-align:top;margin-top:-3px;float:left;clear:right;'>&nbsp;Beta Feature</div></h3><br />";?>
-		<p><?php echo __("Maximum number of pages to display on real-time tab:", 'ga-dash'); ?> <input type="text" style="text-align:center;" name="ga_realtime_pages" value="<?php echo $ga_realtime_pages; ?>" size="3"> <?php _e("(find out more", 'ga-dash') ?> <a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wp-real-time-reports/" target="_blank"><?php _e("about this feature", 'ga-dash') ?></a><?php _e(")", 'ga-dash') ?></p>
+		<p><?php echo __("Maximum number of pages to display on real-time tab:", 'ga-dash'); ?> <input type="text" style="text-align:center;" name="ga_realtime_pages" value="<?php echo $ga_realtime_pages; ?>" size="3"> <?php _e("(find out more", 'ga-dash') ?> <a href="http://deconf.com/google-analytics-dashboard-real-time-reports/" target="_blank"><?php _e("about this feature", 'ga-dash') ?></a><?php _e(")", 'ga-dash') ?></p>
 		<?php echo "<h3>" . __( 'Additional Frontend Settings', 'ga-dash' ). "</h3>";?>
 		<p><input name="ga_dash_frontend" type="checkbox" id="ga_dash_frontend" value="1"<?php if (get_option('ga_dash_frontend')) echo " checked='checked'"; ?>  /><?php _e(" show page visits and top searches in frontend (after each article)", 'ga-dash' ); ?></p>
 		<p><?php _e("Access Level: ", 'ga-dash' ); ?>
@@ -278,7 +278,7 @@ if ( is_rtl() ) {
 		</select></p>		
 		<?php echo "<h3>" . __( 'Additional Backend Settings', 'ga-dash' ). "</h3>";?>
 		<p><input name="ga_dash_map" type="checkbox" id="ga_dash_map" value="1"<?php if (get_option('ga_dash_map')) echo " checked='checked'"; ?>  /><?php _e(" show Geo Map for visits", 'ga-dash' ); ?></p>
-		<p><?php echo __("Target Geo Map to region:", 'ga-dash'); ?> <input type="text" style="text-align:center;" name="ga_target_geomap" value="<?php echo $ga_target_geomap; ?>" size="3"> <?php _e("and render top",'ga-dash'); ?> <input type="text" style="text-align:center;" name="ga_target_number" value="<?php echo $ga_target_number; ?>" size="3"> <?php _e("cities (find out more", 'ga-dash') ?> <a href="http://www.deconf.com/en/projects/country-codes-for-google-analytics-dashboard/" target="_blank"><?php _e("about this feature", 'ga-dash') ?></a><?php _e(")", 'ga-dash') ?></p>
+		<p><?php echo __("Target Geo Map to region:", 'ga-dash'); ?> <input type="text" style="text-align:center;" name="ga_target_geomap" value="<?php echo $ga_target_geomap; ?>" size="3"> <?php _e("and render top",'ga-dash'); ?> <input type="text" style="text-align:center;" name="ga_target_number" value="<?php echo $ga_target_number; ?>" size="3"> <?php _e("cities (find out more", 'ga-dash') ?> <a href="http://deconf.com/country-codes-for-google-analytics-dashboard/" target="_blank"><?php _e("about this feature", 'ga-dash') ?></a><?php _e(")", 'ga-dash') ?></p>
 		<p><input name="ga_dash_traffic" type="checkbox" id="ga_dash_traffic" value="1"<?php if (get_option('ga_dash_traffic')) echo " checked='checked'"; ?>  /><?php _e(" show traffic overview", 'ga-dash' ); ?></p>
 		<p><input name="ga_dash_pgd" type="checkbox" id="ga_dash_pgd" value="1"<?php if (get_option('ga_dash_pgd')) echo " checked='checked'"; ?>  /><?php _e(" show top pages", 'ga-dash' ); ?></p>
 		<p><input name="ga_dash_rd" type="checkbox" id="ga_dash_rd" value="1"<?php if (get_option('ga_dash_rd')) echo " checked='checked'"; ?>  /><?php _e(" show top referrers", 'ga-dash' ); ?></p>		
@@ -378,23 +378,23 @@ if ( is_rtl() ) {
 <div class="ga-note" style="float:<?php echo $float_note; ?>;text-align:<?php echo $float_main; ?>;"> 
 		<center>
 			<h3><?php _e("Setup Tutorial",'ga-dash') ?></h3>
-			<a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" target="_blank"><img src="../wp-content/plugins/google-analytics-dashboard-for-wp/img/video-tutorial.png" width="95%" /></a>
+			<a href="http://deconf.com/google-analytics-dashboard-wordpress/" target="_blank"><img src="../wp-content/plugins/google-analytics-dashboard-for-wp/img/video-tutorial.png" width="95%" /></a>
 		</center>
 		<center>
 			<br /><h3><?php _e("Support Links",'ga-dash') ?></h3>
 		</center>			
 		<ul>
-			<li><a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" target="_blank"><?php _e("Google Analytics Dashboard Official Page",'ga-dash') ?></a></li>
+			<li><a href="http://deconf.com/google-analytics-dashboard-wordpress/" target="_blank"><?php _e("Google Analytics Dashboard Official Page",'ga-dash') ?></a></li>
 			<li><a href="http://wordpress.org/support/plugin/google-analytics-dashboard-for-wp" target="_blank"><?php _e("Google Analytics Dashboard Wordpress Support",'ga-dash') ?></a></li>
-			<li><a href="http://forum.deconf.com/en/wordpress-plugins-f182/" target="_blank"><?php _e("Google Analytics Dashboard on Deconf Forum",'ga-dash') ?></a></li>			
+			<li><a href="http://forum.deconf.com/wordpress-plugins-f182/" target="_blank"><?php _e("Google Analytics Dashboard on Deconf Forum",'ga-dash') ?></a></li>			
 		</ul>
 		<center>
 			<br /><h3><?php _e("Useful Plugins",'ga-dash') ?></h3>
 		</center>			
 		<ul>
-			<li><a href="http://www.deconf.com/en/projects/youtube-analytics-dashboard-for-wordpress/" target="_blank"><?php _e("YouTube Analytics Dashboard",'ga-dash') ?></a></li>
-			<li><a href="http://www.deconf.com/en/projects/google-adsense-dashboard-for-wordpress/" target="_blank"><?php _e("Earnings Dashboard for Google Adsense™",'ga-dash') ?></a></li>
-			<li><a href="http://www.deconf.com/en/projects/clicky-analytics-plugin-for-wordpress/" target="_blank"><?php _e("Clicky Analytics",'ga-dash') ?></a></li>						
+			<li><a href="http://deconf.com/youtube-analytics-dashboard-wordpress/" target="_blank"><?php _e("YouTube Analytics Dashboard",'ga-dash') ?></a></li>
+			<li><a href="http://deconf.com/earnings-dashboard-google-adsense-wordpress/" target="_blank"><?php _e("Earnings Dashboard for Google Adsense™",'ga-dash') ?></a></li>
+			<li><a href="http://deconf.com/clicky-analytics-dashboard-wordpress/" target="_blank"><?php _e("Clicky Analytics",'ga-dash') ?></a></li>						
 			<li><a href="http://wordpress.org/extend/plugins/follow-us-box/" target="_blank"><?php _e("Follow Us Box",'ga-dash') ?></a></li>			
 		</ul>			
 </div>

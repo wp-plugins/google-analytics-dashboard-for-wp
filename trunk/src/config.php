@@ -33,7 +33,7 @@ $apiConfig = array(
     'developer_key' => 'AIzaSyBG7LlUoHc29ZeC_dsShVaBEX15SfRl_WY',
   
     // Site name to show in the Google's OAuth 1 authentication screen.
-    'site_name' => 'www.deconf.com',
+    'site_name' => 'deconf.com',
 
     // Which Authentication, Storage and HTTP IO classes to use.
     'authClass'    => 'Google_OAuth2',
