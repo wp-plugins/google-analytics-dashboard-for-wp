@@ -1,56 +1,56 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Google Analytics Dashboard for WP\n"
-"POT-Creation-Date: 2013-09-22 09:58+0200\n"
-"PO-Revision-Date: 2013-09-22 09:58+0200\n"
-"Last-Translator: Deconf <admin@deconf.com>\n"
+"POT-Creation-Date: 2013-11-06 16:15+0200\n"
+"PO-Revision-Date: 2013-11-06 16:15+0200\n"
+"Last-Translator: \n"
 "Language-Team: Deconf <admin@deconf.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.5.5\n"
 "X-Poedit-KeywordsList: _e;__\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ../.\n"
 
-#: .././functions.php:96
+#: .././functions.php:94
 msgid "Help on Wordpress Forum"
 msgstr ""
 
-#: .././functions.php:96
+#: .././functions.php:94
 msgid "Support on Deconf Forum"
 msgstr ""
 
-#: .././functions.php:488
+#: .././functions.php:486
 msgid "REFERRALS"
 msgstr ""
 
-#: .././functions.php:491
+#: .././functions.php:489
 msgid "KEYWORDS"
 msgstr ""
 
-#: .././functions.php:494 .././functions.php:581 .././ga_dash.php:763
+#: .././functions.php:492 .././functions.php:579 .././ga_dash.php:773
 msgid "SOCIAL"
 msgstr ""
 
-#: .././functions.php:497 .././functions.php:584 .././ga_dash.php:766
+#: .././functions.php:495 .././functions.php:582 .././ga_dash.php:776
 msgid "DIRECT"
 msgstr ""
 
-#: .././functions.php:579 .././ga_dash.php:761
+#: .././functions.php:577 .././ga_dash.php:771
 msgid "REFERRAL"
 msgstr ""
 
-#: .././functions.php:580 .././ga_dash.php:762
+#: .././functions.php:578 .././ga_dash.php:772
 msgid "ORGANIC"
 msgstr ""
 
-#: .././functions.php:585 .././ga_dash.php:767
+#: .././functions.php:583 .././ga_dash.php:777
 msgid "NEW"
 msgstr ""
 
-#: .././functions.php:586 .././ga_dash.php:768
+#: .././functions.php:584 .././ga_dash.php:778
 msgid "RETURNING"
 msgstr ""
 
@@ -70,7 +70,7 @@ msgstr ""
 msgid "Views vs UniqueViews"
 msgstr ""
 
-#: .././ga_dash.php:239 .././ga_dash.php:553 .././ga_dash.php:563
+#: .././ga_dash.php:239 .././ga_dash.php:563 .././ga_dash.php:573
 msgid "Date"
 msgstr ""
 
@@ -82,13 +82,13 @@ msgstr ""
 msgid "UniqueViews"
 msgstr ""
 
-#: .././ga_dash.php:262 .././ga_dash.php:695
+#: .././ga_dash.php:262 .././ga_dash.php:705
 msgid "Top Searches"
 msgstr ""
 
-#: .././ga_dash.php:262 .././ga_dash.php:472 .././ga_dash.php:580
-#: .././ga_dash.php:609 .././ga_dash.php:615 .././ga_dash.php:646
-#: .././ga_dash.php:670 .././ga_dash.php:695
+#: .././ga_dash.php:262 .././ga_dash.php:482 .././ga_dash.php:590
+#: .././ga_dash.php:619 .././ga_dash.php:625 .././ga_dash.php:656
+#: .././ga_dash.php:680 .././ga_dash.php:705
 msgid "Visits"
 msgstr ""
 
@@ -116,116 +116,116 @@ msgstr ""
 msgid "Ask an admin to asign a Google Analytics Profile"
 msgstr ""
 
-#: .././ga_dash.php:464
+#: .././ga_dash.php:474
 msgid "Visitors"
 msgstr ""
 
-#: .././ga_dash.php:466
+#: .././ga_dash.php:476
 msgid "Page Views"
 msgstr ""
 
-#: .././ga_dash.php:468
+#: .././ga_dash.php:478
 msgid "Bounce Rate"
 msgstr ""
 
-#: .././ga_dash.php:470
+#: .././ga_dash.php:480
 msgid "Organic Searches"
 msgstr ""
 
-#: .././ga_dash.php:580
+#: .././ga_dash.php:590
 msgid "Country/City"
 msgstr ""
 
-#: .././ga_dash.php:609
+#: .././ga_dash.php:619
 msgid "Source"
 msgstr ""
 
-#: .././ga_dash.php:615
+#: .././ga_dash.php:625
 msgid "Type"
 msgstr ""
 
-#: .././ga_dash.php:625
+#: .././ga_dash.php:635
 msgid "Traffic Sources"
 msgstr ""
 
-#: .././ga_dash.php:633
+#: .././ga_dash.php:643
 msgid "New vs. Returning"
 msgstr ""
 
-#: .././ga_dash.php:646
+#: .././ga_dash.php:656
 msgid "Top Pages"
 msgstr ""
 
-#: .././ga_dash.php:670
+#: .././ga_dash.php:680
 msgid "Top Referrers"
 msgstr ""
 
-#: .././ga_dash.php:718
+#: .././ga_dash.php:728
 msgid "Real-Time"
 msgstr ""
 
-#: .././ga_dash.php:719
+#: .././ga_dash.php:729
 msgid "Today"
 msgstr ""
 
-#: .././ga_dash.php:720
+#: .././ga_dash.php:730
 msgid "Yesterday"
 msgstr ""
 
-#: .././ga_dash.php:721
+#: .././ga_dash.php:731
 msgid "Last 30 days"
 msgstr ""
 
-#: .././ga_dash.php:722
+#: .././ga_dash.php:732
 msgid "Last 90 days"
 msgstr ""
 
-#: .././ga_dash.php:731
+#: .././ga_dash.php:741
 msgid "Visits:"
 msgstr ""
 
-#: .././ga_dash.php:733
+#: .././ga_dash.php:743
 msgid "Visitors:"
 msgstr ""
 
-#: .././ga_dash.php:735
+#: .././ga_dash.php:745
 msgid "Page Views:"
 msgstr ""
 
-#: .././ga_dash.php:739
+#: .././ga_dash.php:749
 msgid "Bounce Rate:"
 msgstr ""
 
-#: .././ga_dash.php:741
+#: .././ga_dash.php:751
 msgid "Organic Search:"
 msgstr ""
 
-#: .././ga_dash.php:743
+#: .././ga_dash.php:753
 msgid "Pages per Visit:"
 msgstr ""
 
-#: .././ga_dash.php:752
+#: .././ga_dash.php:762
 msgid ""
 "This is a beta feature and is only available when using my Developer Key! ("
 msgstr ""
 
-#: .././ga_dash.php:752
+#: .././ga_dash.php:762
 msgid "more about this feature"
 msgstr ""
 
-#: .././ga_dash.php:752 .././ga_dash_admin.php:269 .././ga_dash_admin.php:281
+#: .././ga_dash.php:762 .././ga_dash_admin.php:269 .././ga_dash_admin.php:281
 msgid ")"
 msgstr ""
 
-#: .././ga_dash.php:782
+#: .././ga_dash.php:792
 msgid "Visits from "
 msgstr ""
 
-#: .././ga_dash.php:784
+#: .././ga_dash.php:794
 msgid "Visits by Country"
 msgstr ""
 
-#: .././ga_dash.php:791
+#: .././ga_dash.php:801
 msgid "Traffic Overview"
 msgstr ""
 

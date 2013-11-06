@@ -1,11 +1,11 @@
 <?php
 /* 
 Plugin Name: Google Analytics Dashboard for WP
-Plugin URI: http://www.deconf.com
+Plugin URI: http://deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Alin Marcu
-Version: 4.2.1
-Author URI: http://www.deconf.com
+Version: 4.2.2
+Author URI: http://deconf.com
 */  
 
 $plugin = plugin_basename(__FILE__);
@@ -759,7 +759,7 @@ function ga_dash_content() {
 	}else{
 	
 		if (get_option('ga_dash_userapi')){	
-			$code.="<p style='padding:100px;line-height:2em;'>".__("This is a beta feature and is only available when using my Developer Key! (",'ga-dash').'<a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wp-real-time-reports/" target="_blank">'.__("more about this feature", 'ga-dash').'</a>'.__(")", 'ga-dash')."</p>";
+			$code.="<p style='padding:100px;line-height:2em;'>".__("This is a beta feature and is only available when using my Developer Key! (",'ga-dash').'<a href="http://deconf.com/google-analytics-dashboard-real-time-reports/" target="_blank">'.__("more about this feature", 'ga-dash').'</a>'.__(")", 'ga-dash')."</p>";
 		}else{
 		
 			$code.="<table width='90%' class='realtime'>

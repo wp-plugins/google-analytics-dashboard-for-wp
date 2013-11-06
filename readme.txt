@@ -2,8 +2,8 @@
 Contributors: deconf
 Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking,realtime,wpmu,multisite
 Requires at least: 2.8
-Tested up to: 3.6.1
-Stable tag: 4.2.1
+Tested up to: 3.7.1
+Stable tag: 4.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,9 +46,9 @@ This plugin suports Google Analytics tracking. Main tracking options and feature
  
 Related Links:
 
-* <a href="http://forum.deconf.com/en/wordpress-plugins-f182/google-analytics-dashboard-for-wp-translations-t532.html" target="_blank">Support and Google Analytics Dashboard translations</a>
+* <a href="http://forum.deconf.com/wordpress-plugins-f182/google-analytics-dashboard-for-wp-translations-t532.html" target="_blank">Support and Google Analytics Dashboard translations</a>
 
-* <a href="http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/" title="Google Analytics Dashboard Plugin"  target="_blank">Google Analytics Dashboard Plugin Homepage</a>
+* <a href="http://deconf.com/google-analytics-dashboard-wordpress/" title="Google Analytics Dashboard Plugin"  target="_blank">Google Analytics Dashboard Plugin Homepage</a>
 
 == Installation ==
 
@@ -58,13 +58,13 @@ Related Links:
 4. Authorize the application using the 'Authorize Application' button
 5. Go back to the plugin configuration page, which is located under Settings -> GA Dashboard to update the final settings.
 
-A step by step tutorial is available here: [Google Analytics Dashboard video tutorial](http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/)
+A step by step tutorial is available here: [Google Analytics Dashboard video tutorial](http://deconf.com/google-analytics-dashboard-wordpress/)
 
 == Frequently Asked Questions == 
 
 = Where can I find my Google API Key, Client Secret, Client ID? =
 
-Follow this step by step video tutorial: [Google Analytics Dashboard ](http://www.deconf.com/en/projects/google-analytics-dashboard-for-wordpress/)
+Follow this step by step video tutorial: [Google Analytics Dashboard ](http://deconf.com/google-analytics-dashboard-wordpress/)
 
 = I have several wordpress websites do I need an API Project for each one? =
 
@@ -76,7 +76,7 @@ We are constantly improving our plugin, sometimes the video tutorial may be a li
 
 = More Questions? =
 
-A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins Support](http://forum.deconf.com/en/wordpress-plugins-f182/)
+A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins Support](http://forum.deconf.com/wordpress-plugins-f182/)
 
 == Screenshots ==
 
@@ -94,6 +94,9 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 This plugin it's released under the GPLv2, you can use it free of charge on your personal or commercial website.
 
 == Changelog ==
+
+= 06.11.2013 - v4.2.2 =
+- small fixes and update
 
 = 12.10.2013 - v4.2.1 =
 - fixed Domain and Subdomains tracking code for Universal Analytics 
