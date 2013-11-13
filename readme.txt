@@ -1,5 +1,6 @@
 === Google Analytics Dashboard for WP ===
 Contributors: deconf
+Donate link: http://deconf.com/donate/
 Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking,realtime,wpmu,multisite
 Requires at least: 2.8
 Tested up to: 3.7.1
