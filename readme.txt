@@ -17,7 +17,7 @@ Authorized users can also view statistics like Views, UniqueViews and top search
 
 Using this plugin, your data is collected in a fast and secure manner because Google Analytics Dashboard uses OAuth2 protocol and Google Analytics API.
 
-= Main benefits =
+= Google Analytics Dashboard =
 
 - you can access all websites statistics in a single widget (websites within same Google Account)
 - real-time feature, displays real-time visitors, real-time sources and per page real-time traffic details
@@ -34,7 +34,7 @@ Using this plugin, your data is collected in a fast and secure manner because Go
 - simple Authorization process
 - has multilingual support, a POT file is available for translations. If you have a complete translation, send me the translation file or upload it to our forum and will be included in next release.
 
-= Tracking options and features =
+= Google Analytics Tracking =
 
 - enable/disable google analytics tracking code
 - switch between universal analytics and classic analytics tracking methods
@@ -49,6 +49,7 @@ Using this plugin, your data is collected in a fast and secure manner because Go
 
 * My [Google Analytics Dashboard](http://deconf.com/google-analytics-dashboard-wordpress/) homepage
 * Other [WordPress Plugins](http://deconf.com/wordpress/) by same author
+* [Google Analytics Dashboard](http://forum.deconf.com/wordpress-plugins-f182/) translations and support 
 
 == Installation ==
 
@@ -57,6 +58,7 @@ Using this plugin, your data is collected in a fast and secure manner because Go
 3. Open the plugin configuration page, which is located under Settings -> GA Dashboard (optionally enter your API Key, Client Secret and Client ID).
 4. Authorize the application using the 'Authorize Application' button
 5. Go back to the plugin configuration page, which is located under Settings -> GA Dashboard to update the final settings.
+6. Use Google Analytics Tracking options to configure/enable/disable tracking
 
 A step by step tutorial is available here: [Google Analytics Dashboard video tutorial](http://deconf.com/google-analytics-dashboard-wordpress/)
 
