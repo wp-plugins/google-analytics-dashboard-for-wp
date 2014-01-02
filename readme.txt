@@ -11,11 +11,11 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Google Analytics Dashboard for WP will display Google Analytics data and statistics inside your WordPress Blog.
 
 == Description ==
-Using a widget, [Google Analytics Dashboard](http://deconf.com/google-analytics-dashboard-wordpress/) displays detailed info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Admin Dashboard.
+Using a widget, [Google Analytics Dashboard](http://deconf.com/google-analytics-dashboard-wordpress/) displays detailed analytics info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Admin Dashboard.
 
 Authorized users can also view statistics like Views, UniqueViews and top searches, on frontend, at the end of each article.
 
-Using this plugin, your data is collected in a fast and secure manner because Google Analytics Dashboard uses OAuth2 protocol and Google Analytics API.
+Using this plugin, your analytics data is collected in a fast and secure manner because Google Analytics Dashboard uses OAuth2 protocol and Google Analytics API.
 
 = Google Analytics Dashboard =
 
@@ -24,8 +24,8 @@ Using this plugin, your data is collected in a fast and secure manner because Go
 - cache feature, this improves loading speed up to 7 times and avoids dailyLimitExceeded, usageLimits.userRateLimitExceededUnreg, userRateLimitExceeded errors from Google Analytics API
 - two themes: Blue Theme and Light Theme
 - main dash access level settings and lock profile feature
-- access level settings for Backend statistics and reports
-- access level settings for Frontend data and reports
+- access level settings for Backend statistics and analytics reports
+- access level settings for Frontend analytics data and reports
 - option to display top 24 pages, referrers and searches (sortable by columns)
 - option to display Visitors by Country on Geo Map
 - local websites and business have an option to display cities, instead of countries, on a regional map
