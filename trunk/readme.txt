@@ -48,7 +48,7 @@ Using this plugin, your data is collected in a fast and secure manner because Go
 = Further reading and info =
 
 * My [Google Analytics Dashboard](http://deconf.com/google-analytics-dashboard-wordpress/) homepage
-* Other [WordPress Plugins](http://deconf.com/wordpress/)
+* Other [WordPress Plugins](http://deconf.com/wordpress/) by same author
 
 == Installation ==
 
