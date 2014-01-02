@@ -4,20 +4,20 @@ Donate link: http://deconf.com/donate/
 Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking,realtime,wpmu,multisite
 Requires at least: 2.8
 Tested up to: 3.7.1
-Stable tag: 4.2.3
+Stable tag: 4.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Google Analytics Dashboard for WP will display Google Analytics data and statistics inside your WordPress Blog.
 
 == Description ==
-Using a widget, Google Analytics Dashboard displays detailed info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Admin Dashboard.
+Using a widget, [Google Analytics Dashboard](http://deconf.com/google-analytics-dashboard-wordpress/) displays detailed info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Admin Dashboard.
 
 Authorized users can also view statistics like Views, UniqueViews and top searches, on frontend, at the end of each article.
 
 Using this plugin, your data is collected in a fast and secure manner because Google Analytics Dashboard uses OAuth2 protocol and Google Analytics API.
 
-Main benefits:
+= Main benefits =
 
 - you can access all websites statistics in a single widget (websites within same Google Account)
 - real-time feature, displays real-time visitors, real-time sources and per page real-time traffic details
@@ -34,7 +34,7 @@ Main benefits:
 - simple Authorization process
 - has multilingual support, a POT file is available for translations. If you have a complete translation, send me the translation file or upload it to our forum and will be included in next release.
 
-This plugin suports Google Analytics tracking. Main tracking options and features:
+= Tracking options and features =
 
 - enable/disable google analytics tracking code
 - switch between universal analytics and classic analytics tracking methods
@@ -45,11 +45,10 @@ This plugin suports Google Analytics tracking. Main tracking options and feature
 - track events feature: track downloads, emails and outbound links (supported for both tracking methods: classic tracking and universal tracking)
 - exclude traffic based on user level access
  
-Related Links:
+= Further reading and info =
 
-* <a href="http://forum.deconf.com/wordpress-plugins-f182/google-analytics-dashboard-for-wp-translations-t532.html" target="_blank">Support and Google Analytics Dashboard translations</a>
-
-* <a href="http://deconf.com/google-analytics-dashboard-wordpress/" title="Google Analytics Dashboard Plugin"  target="_blank">Google Analytics Dashboard Plugin Homepage</a>
+* My [Google Analytics Dashboard](http://deconf.com/google-analytics-dashboard-wordpress/) homepage
+* Other [WordPress Plugins](http://deconf.com/wordpress/)
 
 == Installation ==
 
@@ -95,6 +94,10 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 This plugin it's released under the GPLv2, you can use it free of charge on your personal or commercial website.
 
 == Changelog ==
+
+= 02.01.2014 - v4.2.4 =
+- css fixes
+- clear cache fixes
 
 = 11.11.2013 - v4.2.3 =
 - time zone fixes
