@@ -175,7 +175,7 @@
 			$transient = get_transient($serial);
 			if ( empty( $transient ) ){
 				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions, 'sort' => '-ga:pageviews', 'max-results' => '24', 'filters' => 'ga:pagePath!=/'));
-				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+				set_transient( $serial, $data, 4*60*60 );
 			}else{
 				$data = $transient;	
 			}			
@@ -207,7 +207,7 @@
 			$transient = get_transient($serial);
 			if ( empty( $transient ) ){
 				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions, 'sort' => '-ga:visits', 'max-results' => '24', 'filters' => 'ga:medium==referral'));	
-				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+				set_transient( $serial, $data, 4*60*60 );
 			}else{
 				$data = $transient;		
 			}			
@@ -239,7 +239,7 @@
 			$transient = get_transient($serial);
 			if ( empty( $transient ) ){
 				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions, 'sort' => '-ga:visits', 'max-results' => '24', 'filters' => 'ga:keyword!=(not provided);ga:keyword!=(not set)'));
-				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+				set_transient( $serial, $data, 4*60*60 );
 			}else{
 				$data = $transient;		
 			}			
@@ -281,7 +281,7 @@
 					$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions, 'filters' => $filters, 'sort' => '-ga:visits', 'max-results' => get_option('ga_target_number')));
 				else	
 					$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));
-				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+				set_transient( $serial, $data, 4*60*60 );
 			}else{
 				$data = $transient;		
 			}			
@@ -313,7 +313,7 @@
 			$transient = get_transient($serial);
 			if ( empty( $transient ) ){
 				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));
-				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+				set_transient( $serial, $data, 4*60*60 );
 			}else{
 				$data = $transient;		
 			}			
@@ -344,7 +344,7 @@
 			$transient = get_transient($serial);
 			if ( empty( $transient ) ){
 				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions));
-				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+				set_transient( $serial, $data, 4*60*60 );
 			}else{
 				$data = $transient;		
 			}			
