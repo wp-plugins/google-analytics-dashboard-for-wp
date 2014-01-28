@@ -4,7 +4,7 @@ Plugin Name: Google Analytics Dashboard for WP
 Plugin URI: http://deconf.com
 Description: This plugin will display Google Analytics data and statistics into Admin Dashboard. 
 Author: Alin Marcu
-Version: 4.2.6
+Version: 4.2.7
 Author URI: http://deconf.com
 */  
 
@@ -143,7 +143,7 @@ function ga_dash_front_content($content) {
 		}		
 		
 		$from = '30daysAgo';
-		$to = 'today';		
+		$to = 'yesterday';		
 		$metrics = 'ga:pageviews,ga:uniquePageviews';
 		$dimensions = 'ga:year,ga:month,ga:day';
 		$page_url = $_SERVER["REQUEST_URI"];
@@ -168,7 +168,7 @@ function ga_dash_front_content($content) {
 			$transient = get_transient($serial);
 			if ( empty( $transient ) ){
 				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions,'filters' => 'ga:pagePath=='.$page_url));
-				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+				set_transient( $serial, $data, 6*60*60 );
 			}else{
 				$data = $transient;		
 			}	
@@ -192,7 +192,7 @@ function ga_dash_front_content($content) {
 			$transient = get_transient($serial);
 			if ( empty( $transient ) ){
 				$data = $service->data_ga->get('ga:'.$projectId, $from, $to, $metrics, array('dimensions' => $dimensions, 'sort' => '-ga:visits', 'max-results' => '24', 'filters' => 'ga:keyword!=(not provided);ga:keyword!=(not set);ga:pagePath=='.$page_url));
-				set_transient( $serial, $data, get_option('ga_dash_cachetime') );
+				set_transient( $serial, $data, 6*60*60 );
 			}else{
 				$data = $transient;		
 			}			
@@ -600,7 +600,7 @@ function ga_dash_content() {
 	}  
 
 	if (get_option('ga_dash_map') AND current_user_can(get_option('ga_dash_access_back'))){
-		$ga_dash_visits_country=ga_dash_visits_country($service, $projectId, $from, $to);
+		$ga_dash_visits_country=ga_dash_visits_country($service, $projectId, '30daysAgo', 'yesterday');
 		if ($ga_dash_visits_country){
 
 		 $code.='
@@ -629,8 +629,8 @@ function ga_dash_content() {
 		}
 	}
 	if (get_option('ga_dash_traffic') AND current_user_can(get_option('ga_dash_access_back'))){
-		$ga_dash_traffic_sources=ga_dash_traffic_sources($service, $projectId, $from, $to);
-		$ga_dash_new_return=ga_dash_new_return($service, $projectId, $from, $to);
+		$ga_dash_traffic_sources=ga_dash_traffic_sources($service, $projectId, '30daysAgo', 'yesterday');
+		$ga_dash_new_return=ga_dash_new_return($service, $projectId, '30daysAgo', 'yesterday');
 		if ($ga_dash_traffic_sources AND $ga_dash_new_return){
 		 $code.='
 			google.load("visualization", "1", {packages:["corechart"]})
@@ -667,7 +667,7 @@ function ga_dash_content() {
 		}
 	}	
 	if (get_option('ga_dash_pgd') AND current_user_can(get_option('ga_dash_access_back'))){
-		$ga_dash_top_pages=ga_dash_top_pages($service, $projectId, $from, $to);
+		$ga_dash_top_pages=ga_dash_top_pages($service, $projectId, '30daysAgo', 'yesterday');
 		if ($ga_dash_top_pages){
 		 $code.='
 			google.load("visualization", "1", {packages:["table"]})
@@ -691,7 +691,7 @@ function ga_dash_content() {
 		}
 	}
 	if (get_option('ga_dash_rd') AND current_user_can(get_option('ga_dash_access_back'))){
-		$ga_dash_top_referrers=ga_dash_top_referrers($service, $projectId, $from, $to);
+		$ga_dash_top_referrers=ga_dash_top_referrers($service, $projectId, '30daysAgo', 'yesterday');
 		if ($ga_dash_top_referrers){
 		 $code.='
 			google.load("visualization", "1", {packages:["table"]})
@@ -715,7 +715,7 @@ function ga_dash_content() {
 		}
 	}
 	if (get_option('ga_dash_sd') AND current_user_can(get_option('ga_dash_access_back'))){
-		$ga_dash_top_searches=ga_dash_top_searches($service, $projectId, $from, $to);
+		$ga_dash_top_searches=ga_dash_top_searches($service, $projectId, '30daysAgo', 'yesterday');
 		if ($ga_dash_top_searches){
 		 $code.='
 			google.load("visualization", "1", {packages:["table"]})
@@ -809,16 +809,16 @@ function ga_dash_content() {
 		$code.='<br /><h3>';
 		if (get_option('ga_target_geomap')){
 			require 'constants.php';
-			$code.=__("Visits from ",'ga-dash').$country_codes[get_option('ga_target_geomap')];
+			$code.=__("Visits from ",'ga-dash').$country_codes[get_option('ga_target_geomap')]." ".__("(last 30 days)",'ga-dash');
 		}else{
-			$code.=__("Visits by Country",'ga-dash');
+			$code.=__("Visits by Country (last 30 days)",'ga-dash');
 		}	
 		$code.='</h3>
 		<div id="ga_dash_mapdata"></div>';
 	}
 	
 	if (get_option('ga_dash_traffic') AND current_user_can(get_option('ga_dash_access_back'))){
-		$code.='<br /><h3>'.__("Traffic Overview",'ga-dash').'</h3>
+		$code.='<br /><h3>'.__("Traffic Overview (last 30 days)",'ga-dash').'</h3>
 		<table width="100%"><tr><td width="50%"><div id="ga_dash_trafficdata"></div></td><td width="50%"><div id="ga_dash_nvrdata"></div></td></tr></table>';
 	}
 	
