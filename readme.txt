@@ -97,9 +97,13 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
-= 28.01.2014 - v4.2.7 =
-- slightly increased cache time for frontend and backend
-- maps and traffic overview will report last 30 days stats
+= 16.02.2014 - v4.2.7b =
+- plugin code rewritten from scratch
+- new enhanced, user friendly interface
+- added custom tracking code
+- added a new frontend widget
+- cache improvements, loading speeds optimization, less GAPI queries
+- responsive design
 
 = 20.01.2014 - v4.2.6 =
 - google analytics api token refresh bugfix
