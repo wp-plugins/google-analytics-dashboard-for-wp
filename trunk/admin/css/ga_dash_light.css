@@ -56,16 +56,25 @@ span.gadash-bigtext{
 
 .gadash-pgdetailsl {
 	min-width:250px;
-} 
-
-.ga-note{
-	border:2px solid #a1a1a1;
-	padding:10px 20px; 
-	background:white;
-	border-radius:25px;
-	width:25%;
 }
 
-.ga-note li{
-	line-height:1.5em;
+.postbox{
+	margin-right:10px;
+}
+
+
+table.options{
+	padding-left:10px;
+	width:100%;
+}
+
+.options td{
+	padding:0px 5px 5px 5px;
+}
+
+td.title{
+	min-width:120px;
+	font-weight:bold;
+	padding-left:20px;
+	
 }
