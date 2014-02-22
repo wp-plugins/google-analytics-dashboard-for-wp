@@ -50,7 +50,7 @@ Class GADASH_Install{
 			$options ['ga_dash_map'] = get_option ( 'ga_dash_map' );
 			$options ['ga_dash_traffic'] = get_option ( 'ga_dash_traffic' );
 			$options ['ga_dash_frontend_stats'] = get_option ( 'ga_dash_frontend' );
-			$options ['ga_dash_style'] = get_option ( 'ga_dash_style' );
+			$options ['ga_dash_style'] = '#568cbf';
 			$options ['ga_dash_jailadmins'] = get_option ( 'ga_dash_jailadmins' );
 			$options ['ga_dash_cachetime'] = get_option ( 'ga_dash_cachetime' );
 				
