@@ -4,7 +4,7 @@
  * Plugin URI: http://deconf.com 
  * Description: Displays Google Analytics stats in your Dashboard and automatically inserts the tracking code in every page of your website.  
  * Author: Alin Marcu 
- * Version: 4.2.7b 
+ * Version: 4.2.8b 
  * Author URI: http://deconf.com
  */  
 
