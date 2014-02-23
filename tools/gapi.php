@@ -502,7 +502,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			$metrics = 'ga:visits';
 			$dimensions = 'ga:year,ga:month,ga:day';
 			
-			$title = __ ( "Visits", 'ga-dash' ) . ($anonim ? __ ( " trends", 'ga-dash' ) : '');
+			$title = __ ( "Visits", 'ga-dash' ) . ($anonim ? __ ( "\' trend", 'ga-dash' ) : '');
 			
 			/*
 			 * Include Tools
@@ -573,7 +573,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				  legend: {position: 'none'},
 				  pointSize: 3," . $css . "
 				  title: '" . $title . "',
-				  chartArea: {width: '95%'},
+				  chartArea: {width: '100%'},
 				  hAxis: { textPosition: 'none' },
 				  vAxis: { textPosition: 'none', minValue: 0},
 			 	};

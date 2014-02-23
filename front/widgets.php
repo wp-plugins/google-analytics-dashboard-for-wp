@@ -63,7 +63,7 @@ class GADSH_Frontend_Widget extends WP_Widget {
         	$content .= $GADASH_GAPI->frontend_widget_stats($projectId, $instance['period'], (int)$instance['anonim']);
 
 	        $content .= "</script>";
-	        $content .= '<div id="ga_dash_widgetstatsdata"></div>';	        
+	        $content .= '<div id="ga_dash_widgetstatsdata" style="width:100%;"></div>';	        
 	        
 	        echo $content;
 	        

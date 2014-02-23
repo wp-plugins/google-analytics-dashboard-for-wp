@@ -56,8 +56,6 @@ Class GADASH_Install{
 				
 			if (get_option ( 'ga_dash_tracking' ) == 4) {
 				$options ['ga_dash_tracking'] = 0;
-			} else if (get_option ( 'ga_dash_tracking' ) > 1) {
-				$options ['ga_dash_tracking'] = 2;
 			} else {
 				$options ['ga_dash_tracking'] = 1;
 			}

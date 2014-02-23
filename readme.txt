@@ -97,6 +97,10 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
+= 23.02.2014 - v4.2.8b =
+- checkboxes replaced with switch on/off buttons
+- multiple bug fixes
+
 = 16.02.2014 - v4.2.7b =
 - plugin code rewritten from scratch
 - new enhanced, user friendly interface
