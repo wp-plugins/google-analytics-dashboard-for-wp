@@ -49,7 +49,7 @@ Using this plugin, your analytics data is collected in a fast and secure manner 
 
 * My [Google Analytics Dashboard](http://deconf.com/google-analytics-dashboard-wordpress/) homepage
 * Other [WordPress Plugins](http://deconf.com/wordpress/) by same author
-* [Google Analytics Dashboard](http://forum.deconf.com/wordpress-plugins-f182/) translations and support 
+* [Google Analytics Dashboard](http://deconf.com/ask/) translations and support 
 
 == Installation ==
 
@@ -78,7 +78,7 @@ We are constantly improving our plugin, sometimes the video tutorial may be a li
 
 = More Questions? =
 
-A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins Support](http://forum.deconf.com/wordpress-plugins-f182/)
+A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins Support](http://deconf.com/ask/)
 
 == Screenshots ==
 
@@ -96,6 +96,10 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 This plugin it's released under the GPLv2, you can use it free of charge on your personal or commercial website.
 
 == Changelog ==
+
+= 24.02.2014 - v4.2.9b =
+- refresh token handles additional uncaught exceptions
+- partially resolved conflicts with other analytics plugins
 
 = 23.02.2014 - v4.2.8b =
 - checkboxes replaced with switch on/off buttons

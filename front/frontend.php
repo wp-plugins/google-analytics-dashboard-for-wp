@@ -44,7 +44,8 @@ if (! class_exists ( 'GADASH_Frontend' )) {
 				}
 				
 				//$page_url = '/diverse/economizor-de-energie-este-teapa/';
-				$page_url = $_SERVER ["REQUEST_URI"];
+				$page_url = str_replace(site_url(), "", get_permalink());
+				//echo $page_url;
 				$post_id = $post->ID;
 				
 				$content .= '<style>

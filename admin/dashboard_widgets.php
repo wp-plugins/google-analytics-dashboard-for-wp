@@ -106,7 +106,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			$tools = new GADASH_Tools ();
 			
 			if (! $GADASH_GAPI->client->getAccessToken ()) {
-				echo '<p>' . __ ( 'This plugin needs an authorization:', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Authorize Plugin', 'ga-dash' ), 'secondary' ) . '</form>';
+				echo '<p>' . __ ( 'This plugin needs an authorization:', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Authorize Plugin', 'ga-dash' ), 'secondary' ) . '<input type="hidden" name="Authorize" value="auhtorize"></form>';
 				return;
 			}
 			
@@ -126,11 +126,12 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 						} else {
 							$GADASH_Config->options ['ga_dash_tableid'] = $tools->guess_default_domain ( $profiles );
 						}
-					}?>
+					}
+					?>
+
+<form id="ga-dash" method="POST">
 					
-					<form id="ga-dash">
-					
-					<?php 
+					<?php
 					$profile_switch .= '<select id="ga_dash_profile_select" name="ga_dash_profile_select" onchange="this.form.submit()">';
 					foreach ( $profiles as $profile ) {
 						if (! $GADASH_Config->options ['ga_dash_tableid']) {
@@ -173,7 +174,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			}
 			
 			if (! ($projectId)) {
-				echo '<p>' . __ ( 'Something went wrong while retrieving property data.', 'ga-dash' ) . '</p><form action="http://deconf.com/ask/" method="POST">' . get_submit_button ( __ ( 'Get Help!', 'ga-dash' ), 'secondary' ) . '</form>';
+				echo '<p>' . __ ( 'Something went wrong while retrieving property data. You need to create and properly configure a Google Analytics account:', 'ga-dash' ) . '</p> <form action="http://deconf.com/how-to-set-up-google-analytics-on-your-website/" method="POST">' . get_submit_button ( __ ( 'Find out more!', 'ga-dash' ), 'secondary' ) . '</form>';
 				return;
 			} else {
 				$profile_info = $tools->get_selected_profile ( $GADASH_Config->options ['ga_dash_profile_list'], $projectId );
@@ -189,18 +190,18 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			else
 				$query = "visits";
 			
-			if (isset ( $_REQUEST ['period'] )){
-				if ( $_REQUEST ['period'] == "realtime"){
+			if (isset ( $_REQUEST ['period'] )) {
+				if ($_REQUEST ['period'] == "realtime") {
 					$realtime = "realtime";
 					$period = "";
-				}else{
+				} else {
 					$realtime = "";
 					$period = $_REQUEST ['period'];
 				}
-			}else{
+			} else {
 				$period = "30daysAgo";
 				$realtime = "";
-			}	
+			}
 			
 			?>
 
@@ -221,16 +222,15 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 	</select>
 	<?php if (!$realtime) {?>
 	<select id="ga_dash_query" name="query" onchange="this.form.submit()">
-		<option value="visits"
-			<?php selected ( "visits", $query, true ); ?>><?php _e("Visits",'ga-dash'); ?></option>
-		<option value="visitors" 
+		<option value="visits" <?php selected ( "visits", $query, true ); ?>><?php _e("Visits",'ga-dash'); ?></option>
+		<option value="visitors"
 			<?php selected ( "visitors", $query, true ); ?>><?php _e("Visitors",'ga-dash'); ?></option>
-		<option value="pageviews"
-			<?php selected ( "pageviews", $query, true ); ?>><?php _e("Views",'ga-dash'); ?></option>
 		<option value="organicSearches"
-			<?php selected ( "organicSearches", $query, true ); ?>><?php _e("Searches",'ga-dash'); ?></option>
+			<?php selected ( "organicSearches", $query, true ); ?>><?php _e("Organic",'ga-dash'); ?></option>
+		<option value="pageviews"
+			<?php selected ( "pageviews", $query, true ); ?>><?php _e("Page Views",'ga-dash'); ?></option>
 		<option value="visitBounceRate"
-			<?php selected ( "visitBounceRate", $query, true ); ?>><?php _e("Bounce",'ga-dash'); ?></option>
+			<?php selected ( "visitBounceRate", $query, true ); ?>><?php _e("Bounce Rate",'ga-dash'); ?></option>
 	</select> 	
 	<?php }?>
 </form>
@@ -240,30 +240,43 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				case 'today' :
 					$from = 'today';
 					$to = 'today';
+					$haxis = 4;
+					$dh = __ ( "Hour", 'ga-dash' );
 					break;
 				
 				case 'yesterday' :
 					$from = 'yesterday';
 					$to = 'yesterday';
+					$haxis = 4;
+					$dh = __ ( "Hour", 'ga-dash' );
 					break;
 				
 				case '7daysAgo' :
 					$from = '7daysAgo';
 					$to = 'yesterday';
+					$haxis = 2;
+					$dh = __ ( "Date", 'ga-dash' );
 					break;
 				
 				case '14daysAgo' :
 					$from = '14daysAgo';
 					$to = 'yesterday';
+					$haxis = 3;
+					$dh = __ ( "Date", 'ga-dash' );
 					break;
+				
 				case '30daysAgo' :
 					$from = '30daysAgo';
 					$to = 'yesterday';
+					$haxis = 5;
+					$dh = __ ( "Date", 'ga-dash' );
 					break;
 				
 				default :
 					$from = '90daysAgo';
 					$to = 'yesterday';
+					$haxis = 16;
+					$dh = __ ( "Date", 'ga-dash' );
 					break;
 			}
 			
@@ -310,8 +323,8 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 						$title = __ ( "Visits", 'ga-dash' );
 				}
 			}
-
-			if ($query=='visitBounceRate') {
+			
+			if ($query == 'visitBounceRate') {
 				$formater = "var formatter = new google.visualization.NumberFormat({
 				  pattern: '#,##%',
 				  fractionDigits: 2
@@ -320,7 +333,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				formatter.format(data, 1);	";
 			} else {
 				$formater = '';
-			}			
+			}
 			
 			$ga_dash_statsdata = $GADASH_GAPI->ga_dash_main_charts ( $projectId, $period, $from, $to, $query );
 			if (! $ga_dash_statsdata) {
@@ -335,13 +348,13 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			}
 			
 			if (isset ( $GADASH_Config->options ['ga_dash_style'] )) {
-				$light_color = $tools->colourVariator ( $GADASH_Config->options ['ga_dash_style'], 20 );
-				$dark_color = $tools->colourVariator ( $GADASH_Config->options ['ga_dash_style'], -20 );
+				$light_color = $tools->colourVariator ( $GADASH_Config->options ['ga_dash_style'], 40 );
+				$dark_color = $tools->colourVariator ( $GADASH_Config->options ['ga_dash_style'], - 20 );
 				$css = "colors:['" . $GADASH_Config->options ['ga_dash_style'] . "','" . $tools->colourVariator ( $GADASH_Config->options ['ga_dash_style'], - 20 ) . "'],";
 				$color = $GADASH_Config->options ['ga_dash_style'];
 			} else {
 				$css = "";
-				$color = "#568cbf";
+				$color = "#3366CC";
 			}
 			
 			$code = '<script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -374,7 +387,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				
 				$code .= 'function ga_dash_drawstats() {
         var data = google.visualization.arrayToDataTable([' . "
-          ['" . __ ( "Date", 'ga-dash' ) . "', '" . $title . "']," . $ga_dash_statsdata . "
+          ['" . $dh . "', '" . $title . "']," . $ga_dash_statsdata . "
         ]);
 		
         var options = {
@@ -383,9 +396,9 @@ if (! class_exists ( 'GADASH_Widgets' )) {
           title: '" . $title . "',
 		  chartArea: {width: '85%'},
 		  vAxis: {minValue: 0},
-          hAxis: { title: '" . __ ( "Date", 'ga-dash' ) . "',  titleTextStyle: {color: '" . $dark_color . "'}, showTextEvery: 5}
+          hAxis: { title: '" . $dh . "',  titleTextStyle: {color: '" . $dark_color . "'}, showTextEvery: " . $haxis . "}
 		};
-		".$formater."
+		" . $formater . "
         var chart = new google.visualization.AreaChart(document.getElementById('ga_dash_statsdata'));
 		chart.draw(data, options);
 		
@@ -522,7 +535,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			}
 			$code .= "</script>";
 			$code .= "</script>";
-
+			
 			if ($realtime != "realtime") {
 				$code .= '<div id="ga_dash_statsdata" class="widefat" style="height: 350px;"></div>
 		<div id="details_div">
@@ -592,7 +605,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				$code .= '<br /><h3>' . __ ( "Traffic Overview (last 30 days)", 'ga-dash' ) . '</h3>
 		<table width="100%"><tr><td width="50%"><div id="ga_dash_trafficdata"></div></td><td width="50%"><div id="ga_dash_nvrdata"></div></td></tr></table>';
 			}
-
+			
 			if ($GADASH_Config->options ['ga_dash_pgd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] ))
 				$code .= '<div id="ga_dash_pgddata"></div>';
 			if ($GADASH_Config->options ['ga_dash_rd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] ))
