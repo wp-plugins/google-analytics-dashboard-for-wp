@@ -40,6 +40,9 @@ if (! class_exists ( 'GADASH_Config' )) {
 			/*
 			 * Get plugin options
 			 */
+			if (!get_option ( 'gadash_options' )){
+				GADASH_Install::install();
+			}
 			$this->options = ( array ) json_decode ( get_option ( 'gadash_options' ) );
 		}
 
