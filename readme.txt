@@ -288,3 +288,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 = 11.03.2013 - v1.0 =
 
 * first release
+
+== Upgrade Notice ==
+
+There are some major changes on v4.2.10, after updating make sure the plugin is activated (look in your Plugins menu) and check if the Google Analytics -> Tracking Code is properly configured.
