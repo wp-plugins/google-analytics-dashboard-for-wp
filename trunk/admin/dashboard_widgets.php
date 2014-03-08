@@ -449,18 +449,20 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		
 			var chart = new google.visualization.PieChart(document.getElementById('ga_dash_trafficdata'));
 			chart.draw(data, {
-				is3D: true,
+				is3D: false,
 				tooltipText: 'percentage',
 				legend: 'none',
-				title: '" . __ ( "Traffic Sources", 'ga-dash' ) . "'
+				title: '" . __ ( "Traffic Sources", 'ga-dash' ) . "',
+				colors:['" . $GADASH_Config->options ['ga_dash_style'] . "','" . $tools->colourVariator ( $GADASH_Config->options ['ga_dash_style'], - 10 ) . "','" . $tools->colourVariator ( $GADASH_Config->options ['ga_dash_style'], +20 ) . "','" . $tools->colourVariator ( $GADASH_Config->options ['ga_dash_style'], +10 ) . "','" . $tools->colourVariator ( $GADASH_Config->options ['ga_dash_style'], -20 ) . "']
 			});
 		
 			var chart1 = new google.visualization.PieChart(document.getElementById('ga_dash_nvrdata'));
 			chart1.draw(datanvr,  {
-				is3D: true,
+				is3D: false,
 				tooltipText: 'percentage',
 				legend: 'none',
-				title: '" . __ ( "New vs. Returning", 'ga-dash' ) . "'
+				title: '" . __ ( "New vs. Returning", 'ga-dash' ) . "',
+				colors:['" . $GADASH_Config->options ['ga_dash_style'] . "','" . $tools->colourVariator ( $GADASH_Config->options ['ga_dash_style'], - 10 ) . "','" . $tools->colourVariator ( $GADASH_Config->options ['ga_dash_style'], +20 ) . "','" . $tools->colourVariator ( $GADASH_Config->options ['ga_dash_style'], +10 ) . "','" . $tools->colourVariator ( $GADASH_Config->options ['ga_dash_style'], -20 ) . "']				
 			});
 		
 		  }";
