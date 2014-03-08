@@ -9,5 +9,8 @@ $rootdomain = $tools->get_root_domain ( $profile [3] );
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
   ga('create', '<?php echo $profile[2]; ?>', '<?php echo $rootdomain['domain']; ?>');
+  <?php	if ($GADASH_Config->options ['ga_enhanced_links']) {?>
+  ga('require', 'linkid', 'linkid.js');
+  <?php }?>
   <?php	if ($GADASH_Config->options ['ga_dash_anonim']) {?>ga('send', 'pageview', {'anonymizeIp': true});<?php } else {?>ga('send', 'pageview');<?php }?>
 </script>

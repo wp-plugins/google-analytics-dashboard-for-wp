@@ -44,6 +44,11 @@ if (! class_exists ( 'GADASH_Config' )) {
 				GADASH_Install::install();
 			}
 			$this->options = ( array ) json_decode ( get_option ( 'gadash_options' ) );
+			
+			//Maintain Compatibility
+			if (!isset($this->options['ga_enhanced_links'])){
+				$this->options['ga_enhanced_links'] = 0;
+			}
 		}
 
 	}

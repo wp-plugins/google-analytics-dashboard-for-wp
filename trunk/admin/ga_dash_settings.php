@@ -9,6 +9,7 @@ class GADASH_Settings {
 			if ($who == 'tracking') {
 				$options ['ga_dash_anonim'] = 0;
 				$options ['ga_event_tracking'] = 0;
+				$options ['ga_enhanced_links'] = 0;
 				if (isset ( $_REQUEST ['options'] ['ga_tracking_code'] )) {
 					$new_options ['ga_tracking_code'] = trim ( $new_options ['ga_tracking_code'], "\t" );
 				}
@@ -415,6 +416,22 @@ class GADASH_Settings {
 
 								</td>
 							</tr>
+							<tr>
+								<td colspan="2" class="title">
+
+									<div class="onoffswitch">
+										<input type="checkbox" name="options[ga_enhanced_links]"
+											value="1" class="onoffswitch-checkbox" id="ga_enhanced_links"
+											<?php checked( $options['ga_enhanced_links'], 1 ); ?>> <label
+											class="onoffswitch-label" for="ga_enhanced_links">
+											<div class="onoffswitch-inner"></div>
+											<div class="onoffswitch-switch"></div>
+										</label>
+									</div>
+									<div class="switch-desc"><?php _e ( " enable enhanced link attribution", 'ga-dash' );?></div>
+
+								</td>
+							</tr>							
 							<?php
 			} else if ($options ['ga_dash_tracking'] == 2) {
 				?>
