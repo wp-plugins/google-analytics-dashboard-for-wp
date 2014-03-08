@@ -94,6 +94,9 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
+= 08.03.2014 - v4.2.11 =
+- added support for enhanced link attribution
+
 = 08.03.2014 - v4.2.10 =
 - using predefined color for pie charts 
 
