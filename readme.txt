@@ -79,7 +79,7 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 
 == Screenshots ==
 
-1. Google Analytics Dashboard Blue Theme
+1. Google Analytics Dashboard Blue Color
 2. Google Analytics Dashboard Real-Time
 3. Google Analytics Dashboard Settings
 4. Google Analytics Dashboard Geo Map
@@ -87,6 +87,7 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 6. Google Analytics Dashboard Traffic Overview
 7. Google Analytics Dashboard statistics per page on Frontend
 8. Google Analytics Dashboard cities on region map
+9. Google Analytics Dashboard Widget
 
 == License ==
 
