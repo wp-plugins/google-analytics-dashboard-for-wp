@@ -4,14 +4,14 @@ Donate link: http://deconf.com/donate/
 Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking,realtime,wpmu,multisite
 Requires at least: 2.8
 Tested up to: 3.8.1
-Stable tag: 4.2.10
+Stable tag: 4.2.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Displays Google Analytics stats in your Dashboard and automatically inserts Google Analytics tracking code in every page of your website.
+Displays Google Analytics Reports and Real-Time Statistics in your Dashboard. Automatically inserts Google Analytics tracking code in every page of your website.
 
 == Description ==
-Using a widget, [Google Analytics Dashboard](http://deconf.com/google-analytics-dashboard-wordpress/) displays detailed analytics info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Admin Dashboard.
+Using a widget, [Google Analytics Dashboard](http://deconf.com/google-analytics-dashboard-wordpress/) displays detailed analytics info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Administration Dashboard.
 
 Authorized users can also view statistics like Views, UniqueViews and top searches, on frontend, at the end of each article.
 
@@ -21,18 +21,15 @@ Using this plugin, your analytics data is collected in a fast and secure manner 
 
 - you can access all websites statistics in a single widget (websites within same Google Account)
 - real-time feature, displays real-time visitors, real-time sources and per page real-time traffic details
-- cache feature, this improves loading speed up to 7 times and avoids dailyLimitExceeded, usageLimits.userRateLimitExceededUnreg, userRateLimitExceeded errors from Google Analytics API
-- option to choose a default color for your graphs and maps
-- main dash access level settings and lock profile feature
-- access level settings for Backend statistics and analytics reports
-- access level settings for Frontend analytics data and reports
+- option to choose a default color for your charts, graphs and maps
 - option to display top 24 pages, referrers and searches (sortable by columns)
 - option to display Visitors by Country on Geo Map
 - local websites and business have an option to display cities, instead of countries, on a regional map
 - option to display Traffic Overview in Pie Charts
+- access level settings for Backend statistics and analytics reports
+- access level settings for Frontend analytics data and reports
 - option to display Google Analytics statistics on frontend, at the end of each article
 - frontend widget with website's analytics stats and analytics data anonymization feature
-- simple Authorization process
 - has multilingual support, a POT file is available for translations. If you have a complete translation, send me the translation file or upload it to our forum and will be included in next release.
 
 = Google Analytics Tracking =
@@ -43,6 +40,7 @@ Using this plugin, your analytics data is collected in a fast and secure manner 
 - supports ga.js tracking for comaptibility with Classic Analytics web property
 - automatically generates the tracking code; the user can also define a custom code
 - IP address anonymization feature
+- enhanced link attribution feature
 - track events feature: track downloads, emails and outbound links (supported for both tracking methods: classic tracking and universal tracking)
 - exclude traffic based on user level access
  
@@ -95,8 +93,9 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
-= 08.03.2014 - v4.2.11 =
+= 09.03.2014 - v4.2.11 =
 - added support for enhanced link attribution
+- bugfix on classic tracking code
 
 = 08.03.2014 - v4.2.10 =
 - using predefined color for pie charts 
