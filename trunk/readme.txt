@@ -96,6 +96,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 = 09.03.2014 - v4.2.12 =
 - refreshing charts when the time interval changes
 - saving last selection
+- minimizing requests by using same query serial for frontend and backend queries
  
 = 09.03.2014 - v4.2.11 =
 - added support for enhanced link attribution
