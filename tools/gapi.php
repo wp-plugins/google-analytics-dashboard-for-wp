@@ -263,6 +263,13 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			
 			$metrics = 'ga:pageviews';
 			$dimensions = 'ga:pageTitle';
+			
+			if ($from == "today") {
+				$timeouts = 0;
+			}else {
+				$timeouts = 1;
+			}
+						
 			try {
 				$serial = 'gadash_qr4' . $projectId . $from;
 				$transient = get_transient ( $serial );
@@ -273,7 +280,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 							'max-results' => '24',
 							'userIp' => $_SERVER['SERVER_ADDR'] 
 					) ); // 'filters' => 'ga:pagePath!=/'
-					set_transient ( $serial, $data, $this->get_timeouts ( 1 ) );
+					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
 					$data = $transient;
 				}
@@ -304,6 +311,13 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			
 			$metrics = 'ga:visits';
 			$dimensions = 'ga:source,ga:medium';
+			
+			if ($from == "today") {
+				$timeouts = 0;
+			}else {
+				$timeouts = 1;
+			}			
+			
 			try {
 				$serial = 'gadash_qr5' . $projectId . $from;
 				$transient = get_transient ( $serial );
@@ -315,7 +329,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 							'filters' => 'ga:medium==referral',
 							'userIp' => $_SERVER['SERVER_ADDR'] 
 					) );
-					set_transient ( $serial, $data, $this->get_timeouts ( 1 ) );
+					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
 					$data = $transient;
 				}
@@ -346,6 +360,13 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			
 			$metrics = 'ga:visits';
 			$dimensions = 'ga:keyword';
+			
+			if ($from == "today") {
+				$timeouts = 0;
+			}else {
+				$timeouts = 1;
+			}			
+			
 			try {
 				$serial = 'gadash_qr6' . $projectId . $from;
 				$transient = get_transient ( $serial );
@@ -356,7 +377,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 							'max-results' => '24',
 							'userIp' => $_SERVER['SERVER_ADDR']
 					) );
-					set_transient ( $serial, $data, $this->get_timeouts ( 1 ) );
+					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
 					$data = $transient;
 				}
@@ -388,6 +409,13 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			
 			$metrics = 'ga:visits';
 			$options = "";
+			
+			if ($from == "today") {
+				$timeouts = 0;
+			}else {
+				$timeouts = 1;
+			}			
+			
 			if ($GADASH_Config->options ['ga_target_geomap']) {
 				$dimensions = 'ga:city';
 				$this->getcountrycodes ();
@@ -398,7 +426,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			}
 			try {
 				if ($GADASH_Config->options ['ga_target_geomap']) {
-					$serial = 'gadash_qr7' . $projectId . $from . $GADASH_Config->options ['ga_target_geomap'] . $GADASH_Config->options ['ga_target_number'];
+					$serial = 'gadash_qr7' . $projectId . $from  . $GADASH_Config->options ['ga_target_geomap'] . $GADASH_Config->options ['ga_target_number'];
 				} else {
 					$serial = 'gadash_qr7' . $projectId . $from;
 				}
@@ -417,7 +445,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 								'dimensions' => $dimensions,
 								'userIp' => $_SERVER['SERVER_ADDR'] 
 						) );
-					set_transient ( $serial, $data, $this->get_timeouts ( 1 ) );
+					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
 					$data = $transient;
 				}
@@ -447,6 +475,13 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			
 			$metrics = 'ga:visits';
 			$dimensions = 'ga:medium';
+			
+			if ($from == "today") {
+				$timeouts = 0;
+			}else {
+				$timeouts = 1;
+			}			
+			
 			try {
 				$serial = 'gadash_qr8' . $projectId . $from;
 				$transient = get_transient ( $serial );
@@ -455,7 +490,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 							'dimensions' => $dimensions,
 							'userIp' => $_SERVER['SERVER_ADDR'] 
 					) );
-					set_transient ( $serial, $data, $this->get_timeouts ( 1 ) );
+					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
 					$data = $transient;
 				}
@@ -481,6 +516,13 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			
 			$metrics = 'ga:visits';
 			$dimensions = 'ga:visitorType';
+			
+			if ($from == "today") {
+				$timeouts = 0;
+			}else {
+				$timeouts = 1;
+			}			
+			
 			try {
 				$serial = 'gadash_qr9' . $projectId . $from;
 				$transient = get_transient ( $serial );
@@ -489,7 +531,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 							'dimensions' => $dimensions,
 							'userIp' => $_SERVER['SERVER_ADDR'] 
 					) );
-					set_transient ( $serial, $data, $this->get_timeouts ( 1 ) );
+					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
 					$data = $transient;
 				}
@@ -538,7 +580,13 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			}
 			
 			try {
-				$serial = 'gadash_front_widget' . $period . $projectId;
+
+				$serial = 'gadash_qr2' . str_replace ( array (
+						'ga:',
+						',',
+						'-'
+				), "", $projectId . $from . $metrics );
+				
 				$transient = get_transient ( $serial );
 				if (empty ( $transient )) {
 					$data = $this->service->data_ga->get ( 'ga:' . $projectId, $from, $to, $metrics, array (

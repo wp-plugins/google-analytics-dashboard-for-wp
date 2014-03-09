@@ -185,23 +185,31 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				}
 			}
 			
-			if (isset ( $_REQUEST ['query'] ))
+			if (isset ( $_REQUEST ['query'] )){
 				$query = $_REQUEST ['query'];
-			else
-				$query = "visits";
+				$GADASH_Config->options ['ga_dash_default_metric'] = $query;
+				$GADASH_Config->set_plugin_options ();
+			}else{
+				$query = isset($GADASH_Config->options ['ga_dash_default_metric'])?$GADASH_Config->options ['ga_dash_default_metric']:'visits';
+			}	
 			
 			if (isset ( $_REQUEST ['period'] )) {
-				if ($_REQUEST ['period'] == "realtime") {
-					$realtime = "realtime";
-					$period = "";
-				} else {
-					$realtime = "";
-					$period = $_REQUEST ['period'];
+				$period = $_REQUEST ['period'];
+				if ($period <> 'today'){
+					$GADASH_Config->options ['ga_dash_default_dimension'] = $period;
+					$GADASH_Config->set_plugin_options ();
 				}
+
 			} else {
-				$period = "30daysAgo";
-				$realtime = "";
+					$period = isset($GADASH_Config->options ['ga_dash_default_dimension'])?$GADASH_Config->options ['ga_dash_default_dimension']:'30daysAgo';
 			}
+			
+			if ($period == "realtime") {
+				$realtime = "realtime";
+				$period = '';
+			} else {
+				$realtime = '';
+			}			
 			
 			?>
 
@@ -406,7 +414,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			}
 			
 			if ($GADASH_Config->options ['ga_dash_map'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
-				$ga_dash_visits_country = $GADASH_GAPI->ga_dash_visits_country ( $projectId, '30daysAgo', 'yesterday' );
+				$ga_dash_visits_country = $GADASH_GAPI->ga_dash_visits_country ( $projectId, $from, $to );
 				if ($ga_dash_visits_country) {
 					
 					$code .= '
@@ -433,8 +441,8 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				}
 			}
 			if ($GADASH_Config->options ['ga_dash_traffic'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
-				$ga_dash_traffic_sources = $GADASH_GAPI->ga_dash_traffic_sources ( $projectId, '30daysAgo', 'yesterday' );
-				$ga_dash_new_return = $GADASH_GAPI->ga_dash_new_return ( $projectId, '30daysAgo', 'yesterday' );
+				$ga_dash_traffic_sources = $GADASH_GAPI->ga_dash_traffic_sources ( $projectId, $from, $to );
+				$ga_dash_new_return = $GADASH_GAPI->ga_dash_new_return ( $projectId, $from, $to );
 				if ($ga_dash_traffic_sources and $ga_dash_new_return) {
 					$code .= '
 			google.load("visualization", "1", {packages:["corechart"]})
@@ -469,7 +477,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				}
 			}
 			if ($GADASH_Config->options ['ga_dash_pgd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
-				$ga_dash_top_pages = $GADASH_GAPI->ga_dash_top_pages ( $projectId, '30daysAgo', 'yesterday' );
+				$ga_dash_top_pages = $GADASH_GAPI->ga_dash_top_pages ( $projectId, $from, $to );
 				if ($ga_dash_top_pages) {
 					$code .= '
 			google.load("visualization", "1", {packages:["table"]})
@@ -491,7 +499,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				}
 			}
 			if ($GADASH_Config->options ['ga_dash_rd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
-				$ga_dash_top_referrers = $GADASH_GAPI->ga_dash_top_referrers ( $projectId, '30daysAgo', 'yesterday' );
+				$ga_dash_top_referrers = $GADASH_GAPI->ga_dash_top_referrers ( $projectId, $from, $to );
 				if ($ga_dash_top_referrers) {
 					$code .= '
 			google.load("visualization", "1", {packages:["table"]})
@@ -513,7 +521,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				}
 			}
 			if ($GADASH_Config->options ['ga_dash_sd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
-				$ga_dash_top_searches = $GADASH_GAPI->ga_dash_top_searches ( $projectId, '30daysAgo', 'yesterday' );
+				$ga_dash_top_searches = $GADASH_GAPI->ga_dash_top_searches ( $projectId, $from, $to );
 				if ($ga_dash_top_searches) {
 					$code .= '
 			google.load("visualization", "1", {packages:["table"]})
@@ -595,16 +603,16 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				$code .= '<br /><h3>';
 				if ($GADASH_Config->options ['ga_target_geomap']) {
 					$GADASH_GAPI->getcountrycodes ();
-					$code .= __ ( "Visits from ", 'ga-dash' ) . $GADASH_GAPI->country_codes [$GADASH_Config->options ['ga_target_geomap']] . ' ' . __ ( "(last 30 days)", 'ga-dash' );
+					$code .= __ ( "Visits from ", 'ga-dash' ) . $GADASH_GAPI->country_codes [$GADASH_Config->options ['ga_target_geomap']];
 				} else {
-					$code .= __ ( "Visits by Country (last 30 days)", 'ga-dash' );
+					$code .= __ ( "Visits by Country", 'ga-dash' );
 				}
 				$code .= '</h3>
 		<div id="ga_dash_mapdata"></div>';
 			}
 			
 			if ($GADASH_Config->options ['ga_dash_traffic'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] ) and ($ga_dash_top_referrers or $ga_dash_top_pages or ($ga_dash_traffic_sources and $ga_dash_new_return))) {
-				$code .= '<br /><h3>' . __ ( "Traffic Overview (last 30 days)", 'ga-dash' ) . '</h3>
+				$code .= '<br /><h3>' . __ ( "Traffic Overview", 'ga-dash' ) . '</h3>
 		<table width="100%"><tr><td width="50%"><div id="ga_dash_trafficdata"></div></td><td width="50%"><div id="ga_dash_nvrdata"></div></td></tr></table>';
 			}
 			

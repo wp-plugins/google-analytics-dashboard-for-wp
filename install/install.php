@@ -36,6 +36,8 @@ Class GADASH_Install{
 			$options ['ga_dash_frontend_keywords'] = 0;
 			$options ['ga_tracking_code'] = '';
 			$options ['ga_enhanced_links'] = 0;
+			$options ['ga_dash_default_metric'] = 'visits';
+			$options ['ga_dash_default_dimension'] = '30daysAgo';
 		}else{
 			$options = array();
 			$options ['ga_dash_apikey'] = get_option ( 'ga_dash_apikey' );
@@ -77,6 +79,8 @@ Class GADASH_Install{
 			$options ['ga_dash_tableid'] = get_option ( 'ga_dash_tableid' );
 			$options ['ga_dash_frontend_keywords'] = 0;
 			$options ['ga_enhanced_links'] = 0;
+			$options ['ga_dash_default_metric'] = 'visits';
+			$options ['ga_dash_default_dimension'] = '30daysAgo';
 				
 			delete_option ( 'ga_dash_apikey' );
 			delete_option ( 'ga_dash_clientid' );
