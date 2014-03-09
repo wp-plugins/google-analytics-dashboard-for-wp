@@ -1,0 +1,80 @@
+.gadash-pg{
+	width:100%;
+	border-collapse:collapse;
+}
+.gadash-pline td{
+	border-bottom: gray solid 1px;
+	padding-top:10px;
+	vertical-align:bottom;
+}
+.gadash-pleft{
+	width:90%;
+	text-align:left;
+}
+.gadash-pright{
+	width:10%;
+	text-align:right;
+	padding-right:2%;
+}
+.realtime{
+	margin-top:20px;
+}
+
+.gadash-online{
+	font-size:100px;
+	font-weight:normal;
+	line-height:1em;
+}
+
+.gadash-tdo-left{
+	width:45%;
+	text-align:center;
+}
+
+.gadash-tdo-right{
+	width:30%;
+	text-align:left;
+	font-weight:bold;	
+	vertical-align:middle;
+}
+
+.gadash-tdo-rights{
+	width:25%;
+	text-align:left;
+	font-weight:bold;	
+	vertical-align:middle;
+}
+
+span.gadash-bigtext{
+	font-size:14px;
+}
+
+.gadash-pgdetailsr {
+	padding-left:20px;
+	text-align:right;
+} 
+
+.gadash-pgdetailsl {
+	min-width:250px;
+}
+
+.postbox{
+	margin-right:10px;
+}
+
+
+table.options{
+	padding-left:10px;
+	width:100%;
+}
+
+.options td{
+	padding:0px 5px 5px 5px;
+}
+
+td.title{
+	min-width:120px;
+	font-weight:bold;
+	padding-left:20px;
+	
+}
