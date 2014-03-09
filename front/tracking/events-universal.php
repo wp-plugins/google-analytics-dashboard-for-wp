@@ -2,7 +2,7 @@
 (function($){
     $(window).load(function() {
             $('a').filter(function() {
-                return this.href.match(/.*\.(<?php echo get_option("ga_event_downloads");?>)/);
+                return this.href.match(/.*\.(<?php echo $GADASH_Config->options['ga_event_downloads'];?>)/);
             }).click(function(e) {
                 ga('send','event', 'download', 'click', this.href);
             });
@@ -14,7 +14,7 @@
             loc = loc.join('.');
             var localURLs = [
                               loc,
-                              '<?php echo get_option("ga_default_domain");?>'
+                              '<?php echo get_option('siteurl');?>'
                             ];
             $('a[href^="http"]').filter(function() {
                 for (var i = 0; i < localURLs.length; i++) {
