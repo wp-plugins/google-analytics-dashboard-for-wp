@@ -8,7 +8,7 @@ Stable tag: 4.2.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Displays Google Analytics Reports and Real-Time Statistics in your Dashboard. Automatically inserts Google Analytics tracking code in every page of your website.
+Displays Google Analytics Reports and Real-Time Statistics in your Dashboard. Automatically inserts the tracking code in every page of your website.
 
 == Description ==
 Using a widget, [Google Analytics Dashboard](http://deconf.com/google-analytics-dashboard-wordpress/) displays detailed analytics info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your Administration Dashboard.
@@ -93,6 +93,10 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
+= 09.03.2014 - v4.2.12 =
+- refreshing charts when the time interval changes
+- saving last selection
+ 
 = 09.03.2014 - v4.2.11 =
 - added support for enhanced link attribution
 - bugfix on classic tracking code
