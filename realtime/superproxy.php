@@ -25,14 +25,15 @@ if (!isset($table_prefix)){
 	ga_dash_search_wpconfig(dirname(dirname(__FILE__)));
 	include_once $ga_dash_wproot."/wp-load.php";
 }
+$options = (array) json_decode ( get_option ( 'gadash_options' ) );
+$token=json_decode($options['ga_dash_token']);
 
-$token=json_decode(get_option('ga_dash_token'));
 if ($_REQUEST['access_token']==$token->access_token AND isset($_REQUEST['key'])){
-	$data = get_transient("ga_dash_realtimecache_".get_option('ga_dash_tableid'));
+	$data = get_transient("gadash_realtimecache_".$options['ga_dash_tableid']);
 	if ( empty( $data ) ){
 		$devkey=$_REQUEST['key'];
 		$access_token=$_REQUEST['access_token'];
-		$url="https://www.googleapis.com/analytics/v3/data/realtime?ids=ga:".get_option('ga_dash_tableid')."&metrics=ga:activeVisitors&dimensions=ga:pagePath,ga:source,ga:keyword,ga:trafficType,ga:visitorType,ga:pageTitle&access_token=".($access_token)."&key=$devkey";
+		$url="https://www.googleapis.com/analytics/v3/data/realtime?ids=ga:".$options['ga_dash_tableid']."&metrics=ga:activeVisitors&dimensions=ga:pagePath,ga:source,ga:keyword,ga:trafficType,ga:visitorType,ga:pageTitle&access_token=".($access_token)."&key=$devkey";
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -42,10 +43,9 @@ if ($_REQUEST['access_token']==$token->access_token AND isset($_REQUEST['key']))
 		echo curl_error ( $ch );
 		curl_close($ch);
 		print_r($data);
-		set_transient("ga_dash_realtimecache",$data,20);
+		set_transient("gadash_realtimecache",$data,20);
 	}else{
 		print_r($data);
 	}
 	
 } else print_r("Invalid Login");	
-?>
