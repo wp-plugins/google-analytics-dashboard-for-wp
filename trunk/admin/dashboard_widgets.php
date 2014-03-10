@@ -25,6 +25,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		}
 		function ga_dash_admin_actions() {
 			global $GADASH_Config;
+			global $wp_version;
 			
 			if (current_user_can ( 'manage_options' )) {
 				include ($GADASH_Config->plugin_path . '/admin/ga_dash_settings.php');
@@ -32,7 +33,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				add_menu_page ( __ ( 'Google Analytics' ), __ ( 'Google Analytics' ), 'manage_options', 'gadash_settings', array (
 						'GADASH_Settings',
 						'general_settings' 
-				), $GADASH_Config->plugin_url . '/admin/images/gadash-icon.png' );
+				), version_compare($wp_version, '3.8.0', '>=')?'dashicons-chart-area':$GADASH_Config->plugin_url . '/admin/images/gadash-icon.png' );
 				add_submenu_page ( 'gadash_settings', __ ( 'General Settings' ), __ ( 'General Settings' ), 'manage_options', 'gadash_settings', array (
 						'GADASH_Settings',
 						'general_settings' 
@@ -127,11 +128,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 							$GADASH_Config->options ['ga_dash_tableid'] = $tools->guess_default_domain ( $profiles );
 						}
 					}
-					?>
 
-<form id="ga-dash" method="POST">
-					
-					<?php
 					$profile_switch .= '<select id="ga_dash_profile_select" name="ga_dash_profile_select" onchange="this.form.submit()">';
 					foreach ( $profiles as $profile ) {
 						if (! $GADASH_Config->options ['ga_dash_tableid']) {
@@ -151,6 +148,10 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			}
 			
 			$GADASH_Config->set_plugin_options ();
+			
+			?>
+				<form id="ga-dash" method="POST">
+			<?php			
 			
 			if (current_user_can ( 'manage_options' )) {
 				if ($GADASH_Config->options ['ga_dash_jailadmins']) {

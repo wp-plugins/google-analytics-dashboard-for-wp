@@ -93,10 +93,12 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
-= 09.03.2014 - v4.2.12 =
+= 10.03.2014 - v4.2.12 =
 - refreshing charts when the time interval changes
 - saving last selection
 - minimizing requests by using same query serial for frontend and backend queries
+- fixed bug in dashboard's switch options for non-admins
+- fixed Notice: Undefined index: ga_dash_frontend_stats for new installs 
  
 = 09.03.2014 - v4.2.11 =
 - added support for enhanced link attribution
