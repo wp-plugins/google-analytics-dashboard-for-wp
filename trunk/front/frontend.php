@@ -18,15 +18,19 @@ if (! class_exists ( 'GADASH_Frontend' )) {
 				/*
 				 * Include GAPI
 				*/
-				include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
-				global $GADASH_GAPI;
+				if ($GADASH_Config->options ['ga_dash_token']) {
+					include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
+					global $GADASH_GAPI;
+				} else {
+					return $content;
+				}	
 				
 				/*
 				 * Include Tools
 				*/
 				include_once ($GADASH_Config->plugin_path . '/tools/tools.php');			
 				$tools = new GADASH_Tools ();
-		
+				
 				if (! $GADASH_GAPI->client->getAccessToken ()){
 					return $content;
 				}

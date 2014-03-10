@@ -98,7 +98,8 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - saving last selection
 - minimizing requests by using same query serial for frontend and backend queries
 - fixed bug in dashboard's switch options for non-admins
-- fixed Notice: Undefined index: ga_dash_frontend_stats for new installs 
+- fixed Notice: Undefined index: ga_dash_frontend_stats for new installs
+- no more queries if there is no token 
  
 = 09.03.2014 - v4.2.11 =
 - added support for enhanced link attribution

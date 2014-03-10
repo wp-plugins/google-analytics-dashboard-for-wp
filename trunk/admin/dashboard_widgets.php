@@ -97,8 +97,13 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			/*
 			 * Include GAPI
 			 */
-			include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
-			global $GADASH_GAPI;
+			if ($GADASH_Config->options ['ga_dash_token']) {
+				include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
+				global $GADASH_GAPI;
+			} else {
+				echo '<p>' . __ ( 'This plugin needs an authorization:', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Authorize Plugin', 'ga-dash' ), 'secondary' ) . '<input type="hidden" name="Authorize" value="auhtorize"></form>';
+				return;
+			}
 			
 			/*
 			 * Include Tools

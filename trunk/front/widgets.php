@@ -21,8 +21,12 @@ class GADSH_Frontend_Widget extends WP_Widget {
 	        /*
 	         * Include GAPI
 	        */
-	        include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
-	        global $GADASH_GAPI;
+    		if ($GADASH_Config->options ['ga_dash_token']) {
+				include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
+				global $GADASH_GAPI;
+			} else {
+				return;
+			}
 	        
 	        /*
 	         * Include Tools
@@ -30,7 +34,7 @@ class GADSH_Frontend_Widget extends WP_Widget {
 	        include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
 	        $tools = new GADASH_Tools ();
 	        
-	        if (! $GADASH_GAPI->client->getAccessToken ()){
+			if (! $GADASH_GAPI->client->getAccessToken ()){
 	        	return;
 	        }
 	        
