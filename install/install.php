@@ -14,7 +14,6 @@ Class GADASH_Install{
 			$options ['ga_dash_sd'] = 0;
 			$options ['ga_dash_map'] = 0;
 			$options ['ga_dash_traffic'] = 0;
-			$options ['ga_dash_frontend'] = 0;
 			$options ['ga_dash_style'] = '#3366CC';
 			$options ['ga_dash_jailadmins'] = 1;
 			$options ['ga_dash_cachetime'] = 3600;
@@ -38,6 +37,7 @@ Class GADASH_Install{
 			$options ['ga_enhanced_links'] = 0;
 			$options ['ga_dash_default_metric'] = 'visits';
 			$options ['ga_dash_default_dimension'] = '30daysAgo';
+			$options ['ga_dash_frontend_stats'] = 0;
 		}else{
 			$options = array();
 			$options ['ga_dash_apikey'] = get_option ( 'ga_dash_apikey' );
