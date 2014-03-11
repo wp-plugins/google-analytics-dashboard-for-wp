@@ -4,7 +4,7 @@ Donate link: http://deconf.com/donate/
 Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking,realtime,wpmu,multisite
 Requires at least: 2.8
 Tested up to: 3.8.1
-Stable tag: 4.2.11
+Stable tag: 4.2.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,7 +98,8 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - saving last selection
 - minimizing requests by using same query serial for frontend and backend queries
 - fixed bug in dashboard's switch options for non-admins
-- fixed Notice: Undefined index: ga_dash_frontend_stats for new installs 
+- fixed Notice: Undefined index: ga_dash_frontend_stats for new installs
+- no more queries if there is no token 
  
 = 09.03.2014 - v4.2.11 =
 - added support for enhanced link attribution
