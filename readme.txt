@@ -93,6 +93,9 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
+= 12.03.2014 - v4.2.13 =
+- bugfix for I18n
+
 = 10.03.2014 - v4.2.12 =
 - refreshing charts when the time interval changes
 - saving last selection

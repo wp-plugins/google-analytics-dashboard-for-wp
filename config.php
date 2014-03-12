@@ -10,12 +10,6 @@ if (! class_exists ( 'GADASH_Config' )) {
 			
 			// get plugin options
 			$this->get_plugin_options ();
-
-			// Plugin i18n			
-			add_action ( 'plugins_loaded', array (
-					$this,
-					'ga_dash_load_i18n' 
-			) );
 		}
 
 		public function set_plugin_options() {
@@ -30,10 +24,6 @@ if (! class_exists ( 'GADASH_Config' )) {
 			 */
 			$this->plugin_path = dirname ( __FILE__ );
 			$this->plugin_url = plugins_url ( "", __FILE__ );
-		}
-		
-		function ga_dash_load_i18n() {
-			load_plugin_textdomain ( 'ga-dash', false, $this->plugin_path . '/languages' );
 		}
 
 		private function get_plugin_options() {
