@@ -527,32 +527,32 @@ class GADASH_Settings {
 		$tools = new GADASH_Tools ();
 		
 		if (isset ( $_REQUEST ['ga_dash_code'] )) {
-			$GADASH_GAPI->client->authenticate ( $_REQUEST ['ga_dash_code'] );
-			$GADASH_Config->options ['ga_dash_token'] = $GADASH_GAPI->client->getAccessToken ();
-			$google_token = json_decode ( $GADASH_GAPI->client->getAccessToken () );
-			$GADASH_Config->options ['ga_dash_refresh_token'] = $google_token->refresh_token;
-			$GADASH_Config->set_plugin_options ();
-			$message = "<div class='updated'><p><strong>" . __ ( 'Plugin authorization succeeded.', 'ga-dash' ) . "</strong></p></div>";
-			$options = self::set_get_options ( 'general' );
-		}
-		
-		if ($GADASH_GAPI->client->getAccessToken ()) {
-			$profiles = $GADASH_GAPI->refresh_profiles ();
-			if ($profiles) {
-				$GADASH_Config->options ['ga_dash_profile_list'] = $profiles;
-				if (! $GADASH_Config->options ['ga_dash_tableid_jail']) {
-					$profile = $tools->guess_default_domain ( $profiles );
-					$GADASH_Config->options ['ga_dash_tableid_jail'] = $profile;
-					$GADASH_Config->options ['ga_dash_tableid'] = $profile;
-				}
+				$GADASH_GAPI->client->authenticate ( $_REQUEST ['ga_dash_code'] );
+				$GADASH_Config->options ['ga_dash_token'] = $GADASH_GAPI->client->getAccessToken ();
+				$google_token = json_decode ( $GADASH_GAPI->client->getAccessToken () );
+				$GADASH_Config->options ['ga_dash_refresh_token'] = $google_token->refresh_token;
 				$GADASH_Config->set_plugin_options ();
+				$message = "<div class='updated'><p><strong>" . __ ( 'Plugin authorization succeeded.', 'ga-dash' ) . "</strong></p></div>";
 				$options = self::set_get_options ( 'general' );
-			} else {
-				$error = explode ( '(', $GADASH_GAPI->last_error->getMessage () );
-				$message = "<div class='error'><p> " . __ ( 'Unable to update profiles', 'ga-dash' ) . ": (" . $error [1] . "</p></div>";
+		}
+		if (function_exists('curl_version')){
+			if ($GADASH_GAPI->client->getAccessToken ()) {
+				$profiles = $GADASH_GAPI->refresh_profiles ();
+				if ($profiles) {
+					$GADASH_Config->options ['ga_dash_profile_list'] = $profiles;
+					if (! $GADASH_Config->options ['ga_dash_tableid_jail']) {
+						$profile = $tools->guess_default_domain ( $profiles );
+						$GADASH_Config->options ['ga_dash_tableid_jail'] = $profile;
+						$GADASH_Config->options ['ga_dash_tableid'] = $profile;
+					}
+					$GADASH_Config->set_plugin_options ();
+					$options = self::set_get_options ( 'general' );
+				} else {
+					$error = explode ( '(', $GADASH_GAPI->last_error->getMessage () );
+					$message = "<div class='error'><p> " . __ ( 'Unable to update profiles', 'ga-dash' ) . ": (" . $error [1] . "</p></div>";
+				}
 			}
 		}
-		
 		if (isset ( $_REQUEST ['Clear'] )) {
 			$tools->ga_dash_clear_cache ();
 			$message = "<div class='updated'><p><strong>" . __ ( 'Cleared Cache.', 'ga-dash' ) . "</strong></p></div>";
@@ -565,8 +565,16 @@ class GADASH_Settings {
 			$options = self::set_get_options ( 'general' );
 		}
 		
-		if (isset ( $_REQUEST ['ga_dash_hidden'] ) and ! isset ( $_REQUEST ['Clear'] ) and ! isset ( $_REQUEST ['Reset'] )) {
+		if (isset ( $_REQUEST ['Log'] )) {
+			$message = "<div class='updated'><p><strong>" . __ ( 'Dumping log data.', 'ga-dash' ) . "</strong></p></div>";
+		}		
+		
+		if (isset ( $_REQUEST ['ga_dash_hidden'] ) and ! isset ( $_REQUEST ['Clear'] ) and ! isset ( $_REQUEST ['Reset']) and ! isset ( $_REQUEST ['Log'])) {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Options saved.', 'ga-dash' ) . "</strong></p></div>";
+		}
+		
+		if (!function_exists('curl_version')){
+			$message = "<div class='error'><p><strong>" . __ ( 'CURL is required. Please install/enable CURL!', 'ga-dash' ) . "</strong></p></div>";
 		}
 		
 		?>
@@ -701,6 +709,33 @@ class GADASH_Settings {
 							</tr>
 							<tr>
 								<td colspan="2"><hr></td>
+
+							</tr>							
+							<tr>
+								<td class="debugging"><?php echo "<h2>" . __( 'Debugging Data', 'ga-dash' ) . "</h2></td>".'<td><a href="#" id="show_hide" class="show_hide">Show Log</a>'; ?></td>
+							</tr>								
+								<tr>
+								<td colspan="2">
+								<div class="log_data">
+								<?php
+								echo '<pre>************************************* Start Log *************************************<br/><br/>';
+								$anonim = $GADASH_Config->options;
+								if ($anonim['ga_dash_token']){
+									$anonim['ga_dash_token'] = 'HIDDEN';
+								}
+								if ($anonim['ga_dash_refresh_token']){
+									$anonim['ga_dash_refresh_token'] = 'HIDDEN';
+								}
+								print_r($anonim); 
+								echo '<br/>Last Error: ';
+								print_r(get_option('ga_dash_lasterror','N/A'));
+								echo '<br/><br/>************************************* End Log *************************************</pre>';
+								?>
+								</div>
+								</td>
+								</tr>							
+							<tr>
+								<td colspan="2"><hr></td>
 							</tr>
 							<tr>
 								<td colspan="2" class="submit"><input type="submit"
@@ -722,6 +757,37 @@ class GADASH_Settings {
 									type="submit" name="Clear" class="button button-secondary"
 									value="<?php _e( "Clear Cache", 'ga-dash' ); ?>" /></td>
 							</tr>
+							<tr>
+								<td colspan="2"><hr></td>
+
+							</tr>		
+							<tr>
+								<td class="debugging"><?php echo "<h2>" . __( 'Debugging Data', 'ga-dash' ) . "</h2></td>".'<td><a href="#" id="show_hide" class="show_hide">Show Log</a>'; ?></td>
+							</tr>
+								<tr>
+								<td colspan="2">
+								<div class="log_data">
+								<?php
+								echo '<pre>************************************* Start Log *************************************<br/><br/>';
+								$anonim = $GADASH_Config->options;
+								if ($anonim['ga_dash_token']){
+									$anonim['ga_dash_token'] = 'HIDDEN';
+								}
+								if ($anonim['ga_dash_refresh_token']){
+									$anonim['ga_dash_refresh_token'] = 'HIDDEN';
+								}
+								print_r($anonim); 
+								echo '<br/>Last Error: ';
+								print_r(get_option('ga_dash_lasterror','N/A'));
+								echo '<br/><br/>************************************* End Log *************************************</pre>';
+								?>
+								</div>
+								</td>
+								</tr>
+								<tr>
+									<td colspan="2"><hr></td>
+	
+								</tr>								
 						</table>
 					</form>
 			<?php

@@ -96,6 +96,10 @@ td.title, td.info{
 	padding-left:20px;
 }
 
+td.debugging {
+	width:150px;
+}
+
 td.info{
 	padding-bottom:15px;
 }
@@ -188,3 +192,6 @@ pre.gadash{
 	margin-left:10px;
 }
 
+.show_hide {
+    display:none;
+}

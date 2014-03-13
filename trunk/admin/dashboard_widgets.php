@@ -76,6 +76,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			wp_enqueue_script ( 'wp-color-picker-script-handle', plugins_url ( 'js/wp-color-picker-script.js', __FILE__ ), array (
 					'wp-color-picker' 
 			), false, true );
+			wp_enqueue_script ( 'gadash-general-settings', plugins_url ( 'js/admin.js', __FILE__ ), array('jquery') );
 		}
 		function ga_dash_settings_link($links) {
 			$settings_link = '<a href="' . get_admin_url ( null, 'admin.php?page=gadash_settings' ) . '">' . __ ( "Settings", 'ga-dash' ) . '</a>';
@@ -97,11 +98,11 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			/*
 			 * Include GAPI
 			 */
-			if ($GADASH_Config->options ['ga_dash_token']) {
+			if ($GADASH_Config->options ['ga_dash_token'] and function_exists('curl_version')) {
 				include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
 				global $GADASH_GAPI;
 			} else {
-				echo '<p>' . __ ( 'This plugin needs an authorization:', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Authorize Plugin', 'ga-dash' ), 'secondary' ) . '<input type="hidden" name="Authorize" value="auhtorize"></form>';
+				echo '<p>' . __ ( 'This plugin needs an authorization:', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Authorize Plugin', 'ga-dash' ), 'secondary' ) . '</form>';
 				return;
 			}
 			
