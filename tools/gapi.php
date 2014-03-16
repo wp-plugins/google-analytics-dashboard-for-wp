@@ -7,7 +7,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 		function __construct() {
 			global $GADASH_Config;
 			if (!function_exists('curl_version')){
-				update_option('ga_dash_lasterror','CURL disabled. Please enable CURL!');
+				update_option('gadash_lasterror','CURL disabled. Please enable CURL!');
 				return;
 			}			
 			if (! class_exists ( 'Google_Client' )) {
@@ -114,7 +114,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$client->setUseObjects ( false );
 			} catch ( Google_ServiceException $e ) {
 				$this->last_error = $e;
-				update_option('ga_dash_lasterror',$e);
+				update_option('gadash_lasterror',$e);
 				return 0;
 			}
 		}
@@ -143,7 +143,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 			} catch ( Exception $e ) {
 				$this->ga_dash_reset_token();
-				update_option('ga_dash_lasterror',$e);
+				update_option('gadash_lasterror',$e);
 				return false;
 			}
 			
@@ -196,7 +196,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 			} catch ( Google_ServiceException $e ) {
 				$this->last_error = $e;
-				update_option('ga_dash_lasterror',$e);				
+				update_option('gadash_lasterror',$e);				
 				return 0;
 			}
 			
@@ -242,7 +242,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 			} catch ( Google_ServiceException $e ) {
 				$this->last_error = $e;
-				update_option('ga_dash_lasterror',$e);				
+				update_option('gadash_lasterror',$e);				
 				return 0;
 			}
 			
@@ -287,7 +287,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 			} catch ( Google_ServiceException $e ) {
 				$this->last_error = $e;
-				update_option('ga_dash_lasterror',$e);				
+				update_option('gadash_lasterror',$e);				
 				return 0;
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -337,7 +337,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 			} catch ( Google_ServiceException $e ) {
 				$this->last_error = $e;
-				update_option('ga_dash_lasterror',$e);				
+				update_option('gadash_lasterror',$e);				
 				return 0;
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -386,7 +386,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 			} catch ( Google_ServiceException $e ) {
 				$this->last_error = $e;
-				update_option('ga_dash_lasterror',$e);				
+				update_option('gadash_lasterror',$e);				
 				return 0;
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -455,7 +455,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 			} catch ( Google_ServiceException $e ) {
 				$this->last_error = $e;
-				update_option('ga_dash_lasterror',$e);				
+				update_option('gadash_lasterror',$e);				
 				return 0;
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -501,7 +501,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 			} catch ( Google_ServiceException $e ) {
 				$this->last_error = $e;
-				update_option('ga_dash_lasterror',$e);				
+				update_option('gadash_lasterror',$e);				
 				return 0;
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -543,7 +543,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 			} catch ( Google_ServiceException $e ) {
 				$this->last_error = $e;
-				update_option('ga_dash_lasterror',$e);				
+				update_option('gadash_lasterror',$e);				
 				return 0;
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -606,7 +606,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 			} catch ( exception $e ) {
 				$this->last_error = $e;
-				update_option('ga_dash_lasterror',$e);				
+				update_option('gadash_lasterror',$e);				
 				return '';
 			}
 			if (! $data ['rows']) {
@@ -707,7 +707,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 			} catch ( exception $e ) {
 				$this->last_error = $e;
-				update_option('ga_dash_lasterror',$e);				
+				update_option('gadash_lasterror',$e);				
 				return '';
 			}
 			if (! $data ['rows']) {
@@ -770,7 +770,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 			} catch ( exception $e ) {
 				$this->last_error = $e;
-				update_option('ga_dash_lasterror',$e);				
+				update_option('gadash_lasterror',$e);				
 				return '';
 			}
 			
