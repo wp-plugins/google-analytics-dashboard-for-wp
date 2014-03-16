@@ -537,7 +537,11 @@ class GADASH_Settings {
 		}
 		if (function_exists('curl_version')){
 			if ($GADASH_GAPI->client->getAccessToken ()) {
-				$profiles = $GADASH_GAPI->refresh_profiles ();
+				if ($GADASH_Config->options ['ga_dash_profile_list']){
+					$profiles = $GADASH_Config->options ['ga_dash_profile_list'];
+				}else{
+					$profiles = $GADASH_GAPI->refresh_profiles ();
+				}	
 				if ($profiles) {
 					$GADASH_Config->options ['ga_dash_profile_list'] = $profiles;
 					if (! $GADASH_Config->options ['ga_dash_tableid_jail']) {
@@ -553,6 +557,7 @@ class GADASH_Settings {
 				}
 			}
 		}
+		
 		if (isset ( $_REQUEST ['Clear'] )) {
 			$tools->ga_dash_clear_cache ();
 			$message = "<div class='updated'><p><strong>" . __ ( 'Cleared Cache.', 'ga-dash' ) . "</strong></p></div>";
@@ -567,12 +572,19 @@ class GADASH_Settings {
 		
 		if (isset ( $_REQUEST ['Log'] )) {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Dumping log data.', 'ga-dash' ) . "</strong></p></div>";
-		}		
+		}
 		
 		if (isset ( $_REQUEST ['ga_dash_hidden'] ) and ! isset ( $_REQUEST ['Clear'] ) and ! isset ( $_REQUEST ['Reset']) and ! isset ( $_REQUEST ['Log'])) {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Options saved.', 'ga-dash' ) . "</strong></p></div>";
 		}
 		
+		if (isset ( $_REQUEST ['Hide'] )) {
+			$message = "<div class='updated'><p><strong>" . __ ( 'All other domains/properties were removed.', 'ga-dash' ) . "</strong></p></div>";
+			$lock_profile = $tools->get_selected_profile ( $GADASH_Config->options ['ga_dash_profile_list'], $GADASH_Config->options ['ga_dash_tableid_jail'] );
+			$GADASH_Config->options ['ga_dash_profile_list'] = array($lock_profile);
+			$options = self::set_get_options ( 'general' );
+		}
+				
 		if (!function_exists('curl_version')){
 			$message = "<div class='error'><p><strong>" . __ ( 'CURL is required. Please install/enable CURL!', 'ga-dash' ) . "</strong></p></div>";
 		}
@@ -680,7 +692,12 @@ class GADASH_Settings {
 					}
 				}
 				?>
-							</select></td>
+							</select> <?php _e( "and/or hide all other domains", 'ga-dash' ); ?> <input
+									type="submit" name="Hide" class="button button-secondary"
+									value="<?php _e( "Hide Now", 'ga-dash' ); ?>" />
+							
+							
+							</td>
 							</tr>
 							<?php
 				if ($options ['ga_dash_tableid_jail']) {
@@ -694,7 +711,8 @@ class GADASH_Settings {
 							</tr>							
 							<?php
 				}
-				?>	
+				?>
+
 							<tr>
 								<td class="title"><label for="ga_dash_style"><?php _e("Theme Color: ", 'ga-dash' ); ?></label></td>
 								<td><input type="text" id="ga_dash_style" class="ga_dash_style"
@@ -752,8 +770,8 @@ class GADASH_Settings {
 							</tr>
 							<tr>
 								<td colspan="2"><input type="submit" name="Authorize"
-									class="button button-secondary"
-									value="<?php _e( "Authorize Plugin", 'ga-dash' ); ?>" /> <input
+									class="button button-secondary" id="authorize"
+									value="<?php _e( "Authorize Plugin", 'ga-dash' ); ?>" <?php echo (!function_exists('curl_version')?'disabled':''); ?>/> <input
 									type="submit" name="Clear" class="button button-secondary"
 									value="<?php _e( "Clear Cache", 'ga-dash' ); ?>" /></td>
 							</tr>
