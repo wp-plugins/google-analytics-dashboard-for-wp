@@ -93,10 +93,11 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
-= 14.03.2014 - v4.2.13 =
+= 16.03.2014 - v4.2.13 =
 - bugfix for I18n
 - implemented a basic debugging log
-- CURL required error messages 
+- CURL required error messages
+- option to hide all other properties/views from Select Domain list 
 
 = 10.03.2014 - v4.2.12 =
 - refreshing charts when the time interval changes

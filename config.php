@@ -40,7 +40,6 @@ if (! class_exists ( 'GADASH_Config' )) {
 				$this->options['ga_enhanced_links'] = 0;
 			}
 		}
-
 	}
 }
 

@@ -89,16 +89,9 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 		}
 		function refresh_profiles() {
 			try {
+
 				$this->client->setUseObjects ( true );
-				$serial = 'gadash_qr1';
-				$transient = get_transient ( $serial );
-				if (empty ( $transient )) {
-					$profiles = $this->service->management_profiles->listManagementProfiles ( '~all', '~all' );
-					set_transient ( $serial, $profiles, 60 * 60 * 24 );
-				} else {
-					$profiles = $transient;
-				}
-				
+				$profiles = $this->service->management_profiles->listManagementProfiles ( '~all', '~all' );
 				$items = $profiles->getItems ();
 				// print_r($profiles);
 				if (count ( $items ) != 0) {

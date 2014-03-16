@@ -128,11 +128,13 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				
 				if (is_array ( $profiles )) {
 					if (! $GADASH_Config->options ['ga_dash_tableid']) {
-						if (isset ( $GADASH_Config->options ['ga_dash_tableid_jail'] )) {
+						if ($GADASH_Config->options ['ga_dash_tableid_jail'] ) {
 							$GADASH_Config->options ['ga_dash_tableid'] = $GADASH_Config->options ['ga_dash_tableid_jail'];
 						} else {
 							$GADASH_Config->options ['ga_dash_tableid'] = $tools->guess_default_domain ( $profiles );
 						}
+					} else if ($GADASH_Config->options['ga_dash_jailadmins'] AND $GADASH_Config->options ['ga_dash_tableid_jail']){
+						$GADASH_Config->options ['ga_dash_tableid'] = $GADASH_Config->options ['ga_dash_tableid_jail'];
 					}
 
 					$profile_switch .= '<select id="ga_dash_profile_select" name="ga_dash_profile_select" onchange="this.form.submit()">';

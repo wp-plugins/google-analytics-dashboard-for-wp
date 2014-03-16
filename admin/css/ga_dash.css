@@ -192,6 +192,6 @@ pre.gadash{
 	margin-left:10px;
 }
 
-.show_hide {
+.show_hide, .log_data {
     display:none;
 }
