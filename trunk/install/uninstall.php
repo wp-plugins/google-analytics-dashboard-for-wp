@@ -4,6 +4,7 @@ Class GADASH_Uninstall{
 		global $wpdb;
 		$sqlquery = $wpdb->query ( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_gadash%%'" );
 		$sqlquery = $wpdb->query ( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_gadash%%'" );		
-		delete_option(gadash_options);
+		delete_option('gadash_options');
+		delete_option('gadash_lasterror');
 	}
 }

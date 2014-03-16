@@ -112,6 +112,8 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
 			$tools = new GADASH_Tools ();
 			
+			$tools->ga_dash_cleanup_timeouts();
+			
 			if (! $GADASH_GAPI->client->getAccessToken ()) {
 				echo '<p>' . __ ( 'This plugin needs an authorization:', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Authorize Plugin', 'ga-dash' ), 'secondary' ) . '<input type="hidden" name="Authorize" value="auhtorize"></form>';
 				return;
