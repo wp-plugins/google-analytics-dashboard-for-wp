@@ -692,11 +692,16 @@ class GADASH_Settings {
 					}
 				}
 				?>
-							</select> <?php _e( "and/or hide all other domains", 'ga-dash' ); ?> <input
-									type="submit" name="Hide" class="button button-secondary"
-									value="<?php _e( "Hide Now", 'ga-dash' ); ?>" />
+							</select> 
 							
-							
+							<?php 
+							if (count($options ['ga_dash_profile_list']) > 1){
+								_e( "and/or hide all other domains", 'ga-dash' ); 
+							?> 
+								<input type="submit" name="Hide" class="button button-secondary" value="<?php _e( "Hide Now", 'ga-dash' ); ?>" />
+							<?php 
+							}
+							?>
 							</td>
 							</tr>
 							<?php

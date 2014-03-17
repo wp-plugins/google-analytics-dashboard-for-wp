@@ -93,7 +93,6 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$this->client->setUseObjects ( true );
 				$profiles = $this->service->management_profiles->listManagementProfiles ( '~all', '~all' );
 				$items = $profiles->getItems ();
-				// print_r($profiles);
 				if (count ( $items ) != 0) {
 					$ga_dash_profile_list = array ();
 					foreach ( $items as $profile ) {
@@ -109,9 +108,13 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 								$profile->getTimezone () 
 						);
 					}
+					$this->client->setUseObjects ( false );
 					return ($ga_dash_profile_list);
+				} else {
+					$this->client->setUseObjects ( false );
+					$this->last_error = $e;
+					update_option('gadash_lasterror','No properties were found in this account');
 				}
-				$client->setUseObjects ( false );
 			} catch ( Google_ServiceException $e ) {
 				$this->last_error = $e;
 				update_option('gadash_lasterror',$e);
