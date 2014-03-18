@@ -42,6 +42,11 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$this->client->setAccessToken ( $token );
 				}	
 			}
+			
+			if (get_option('gadash_lasterror','N/A')=='NOACCOUNT'){
+				$this->ga_dash_reset_token();
+			}
+			
 		}
 		function get_timeouts($daily) {
 			$local_time = time () + $this->timeshift;
@@ -88,8 +93,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 <?php
 		}
 		function refresh_profiles() {
-			try {
-
+				update_option('gadash_lasterror','NOACCOUNT');
 				$this->client->setUseObjects ( true );
 				$profiles = $this->service->management_profiles->listManagementProfiles ( '~all', '~all' );
 				$items = $profiles->getItems ();
@@ -109,17 +113,13 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 						);
 					}
 					$this->client->setUseObjects ( false );
+					update_option('gadash_lasterror','N/A');
 					return ($ga_dash_profile_list);
 				} else {
 					$this->client->setUseObjects ( false );
 					$this->last_error = $e;
 					update_option('gadash_lasterror','No properties were found in this account');
 				}
-			} catch ( Google_ServiceException $e ) {
-				$this->last_error = $e;
-				update_option('gadash_lasterror',$e);
-				return 0;
-			}
 		}
 		function ga_dash_refresh_token() {
 			global $GADASH_Config;
@@ -155,13 +155,16 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			global $GADASH_Config;
 			
 			delete_transient ( 'ga_dash_refresh_token' );
+			if ($GADASH_Config->options ['ga_dash_token']){	
+				$this->client->revokeToken ();
+			}	
 			$GADASH_Config->options ['ga_dash_token'] = "";
 			$GADASH_Config->options ['ga_dash_tableid'] = "";
 			$GADASH_Config->options ['ga_dash_tableid_jail'] = "";
 			$GADASH_Config->options ['ga_dash_profile_list'] = "";
 			$GADASH_Config->options ['ga_dash_refresh_token'] = "";
 			$GADASH_Config->set_plugin_options ();
-			$this->client->revokeToken ();
+			
 		}
 		
 		// Get Main Chart
