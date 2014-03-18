@@ -37,6 +37,7 @@ class GADASH_Settings {
 		return $options;
 	}
 	public static function frontend_settings() {
+		global $GADASH_Config;
 		if (! current_user_can ( 'manage_options' )) {
 			return;
 		}
@@ -46,6 +47,10 @@ class GADASH_Settings {
 		if (isset ( $_REQUEST ['ga_dash_hidden'] )) {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Options saved.', 'ga-dash' ) . "</strong></p></div>";
 		}
+
+		if (!$GADASH_Config->options ['ga_dash_tableid_jail'] OR !$GADASH_Config->options ['ga_dash_token']){
+			$message = "<div class='error'><p><strong>" . __ ( 'Something went wrong, fix this', 'ga-dash' ) . "</strong> <a href='".menu_page_url ( 'gadash_settings', false )."'>".__('issue','ga-dash')."</a>!</p></div>";
+		}		
 		
 		?>
 <form name="ga_dash_form" method="post"
@@ -130,6 +135,7 @@ class GADASH_Settings {
 		self::output_sidebar ();
 	}
 	public static function backend_settings() {
+		global $GADASH_Config;
 		if (! current_user_can ( 'manage_options' )) {
 			return;
 		}
@@ -139,6 +145,10 @@ class GADASH_Settings {
 		if (isset ( $_REQUEST ['ga_dash_hidden'] )) {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Options saved.', 'ga-dash' ) . "</strong></p></div>";
 		}
+		
+		if (!$GADASH_Config->options ['ga_dash_tableid_jail'] OR !$GADASH_Config->options ['ga_dash_token']){
+			$message = "<div class='error'><p><strong>" . __ ( 'Something went wrong, fix this', 'ga-dash' ) . "</strong> <a href='".menu_page_url ( 'gadash_settings', false )."'>".__('issue','ga-dash')."</a>!</p></div>";
+		}		
 		
 		?>
 <form name="ga_dash_form" method="post"
@@ -340,6 +350,10 @@ class GADASH_Settings {
 		if (isset ( $_REQUEST ['ga_dash_hidden'] )) {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Options saved.', 'ga-dash' ) . "</strong></p></div>";
 		}
+		
+		if (!$GADASH_Config->options ['ga_dash_tableid_jail'] OR !$GADASH_Config->options ['ga_dash_token']){
+			$message = "<div class='error'><p><strong>" . __ ( 'Something went wrong, fix this', 'ga-dash' ) . "</strong> <a href='".menu_page_url ( 'gadash_settings', false )."'>".__('issue','ga-dash')."</a>!</p></div>";
+		}		
 		
 		?>
 <form name="ga_dash_form" method="post"
