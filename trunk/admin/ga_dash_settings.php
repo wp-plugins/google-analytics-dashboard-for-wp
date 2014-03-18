@@ -622,7 +622,7 @@ class GADASH_Settings {
 							</tr>
 							<tr>
 								<td colspan="2" class="info">
-						<?php echo __("You should watch the video and read this", 'ga-dash')." <a href='http://deconf.com/google-analytics-dashboard-wordpress/' target='_blank'>". __("tutorial")."</a> ".__("before proceeding to authorization", 'ga-dash').".";?>
+						<?php echo __("This plugin requires a properly configured Google Analytics account. You should watch the video and read this", 'ga-dash')." <a href='http://deconf.com/google-analytics-dashboard-wordpress/' target='_blank'>". __("tutorial")."</a> ".__("before proceeding to authorization", 'ga-dash').".";?>
 						</td>
 							</tr>
 						<?php
