@@ -93,7 +93,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
-= 16.03.2014 - v4.2.13 =
+= 18.03.2014 - v4.2.13 =
 - bugfix for I18n
 - implemented a basic debugging log
 - CURL required error messages
@@ -101,6 +101,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - added periodical _transient_timeout cleanup
 - fixed bug in property refresh method
 - disable hide option when none or a single property is available
+- better handling errors when a user authorizes without actually having a Google Analytics account
 
 = 10.03.2014 - v4.2.12 =
 - refreshing charts when the time interval changes

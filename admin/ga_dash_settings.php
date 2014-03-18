@@ -534,7 +534,10 @@ class GADASH_Settings {
 				$GADASH_Config->set_plugin_options ();
 				$message = "<div class='updated'><p><strong>" . __ ( 'Plugin authorization succeeded.', 'ga-dash' ) . "</strong></p></div>";
 				$options = self::set_get_options ( 'general' );
-		}
+		}else if (get_option('gadash_lasterror','N/A')=='NOACCOUNT'){
+			$message = "<div class='error'><p><strong>" . __ ( 'You need to create and properly configure a Google Analytics account, follow this', 'ga-dash' ) . "</strong> <a href='http://deconf.com/how-to-set-up-google-analytics-on-your-website/' target='_blank'>".__('short tutorial','ga-dash')."</a>!</p></div>";
+		}		
+		
 		if (function_exists('curl_version')){
 			if ($GADASH_GAPI->client->getAccessToken ()) {
 				if ($GADASH_Config->options ['ga_dash_profile_list']){
@@ -584,7 +587,7 @@ class GADASH_Settings {
 			$GADASH_Config->options ['ga_dash_profile_list'] = array($lock_profile);
 			$options = self::set_get_options ( 'general' );
 		}
-				
+		
 		if (!function_exists('curl_version')){
 			$message = "<div class='error'><p><strong>" . __ ( 'CURL is required. Please install/enable CURL!', 'ga-dash' ) . "</strong></p></div>";
 		}
@@ -751,7 +754,7 @@ class GADASH_Settings {
 								}
 								print_r($anonim); 
 								echo '<br/>Last Error: ';
-								print_r(get_option('ga_dash_lasterror','N/A'));
+								print_r(get_option('gadash_lasterror','N/A'));
 								echo '<br/><br/>************************************* End Log *************************************</pre>';
 								?>
 								</div>
@@ -801,7 +804,7 @@ class GADASH_Settings {
 								}
 								print_r($anonim); 
 								echo '<br/>Last Error: ';
-								print_r(get_option('ga_dash_lasterror','N/A'));
+								print_r(get_option('gadash_lasterror','N/A'));
 								echo '<br/><br/>************************************* End Log *************************************</pre>';
 								?>
 								</div>
