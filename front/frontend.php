@@ -18,7 +18,7 @@ if (! class_exists ( 'GADASH_Frontend' )) {
 				/*
 				 * Include GAPI
 				*/
-				if (function_exists('curl_version') and $GADASH_Config->options ['ga_dash_tableid_jail']) {
+				if (function_exists('curl_version') and $GADASH_Config->options ['ga_dash_tableid_jail'] and $GADASH_Config->options ['ga_dash_token']) {
 					include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
 					global $GADASH_GAPI;
 				} else {

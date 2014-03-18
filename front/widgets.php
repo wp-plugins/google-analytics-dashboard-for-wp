@@ -21,7 +21,7 @@ class GADSH_Frontend_Widget extends WP_Widget {
 	        /*
 	         * Include GAPI
 	        */
-    		if ($GADASH_Config->options ['ga_dash_tableid_jail'] and function_exists('curl_version')) {
+    		if ($GADASH_Config->options ['ga_dash_token'] and $GADASH_Config->options ['ga_dash_tableid_jail'] and function_exists('curl_version')) {
 				include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
 				global $GADASH_GAPI;
 			} else {
