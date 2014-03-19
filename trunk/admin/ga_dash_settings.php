@@ -4,7 +4,7 @@ class GADASH_Settings {
 		global $GADASH_Config;
 		
 		$options = $GADASH_Config->options;
-		if (isset ( $_REQUEST ['ga_dash_hidden'] ) and isset ( $_REQUEST ['options'] )) {
+		if (isset ( $_REQUEST ['ga_dash_hidden'] ) and isset ( $_REQUEST ['options'] ) and $who!='Reset') {
 			$new_options = $_REQUEST ['options'];
 			if ($who == 'tracking') {
 				$options ['ga_dash_anonim'] = 0;
@@ -584,7 +584,7 @@ class GADASH_Settings {
 			$GADASH_GAPI->ga_dash_reset_token ();
 			$tools->ga_dash_clear_cache ();
 			$message = "<div class='updated'><p><strong>" . __ ( 'Token Reseted and Revoked.', 'ga-dash' ) . "</strong></p></div>";
-			$options = self::set_get_options ( 'general' );
+			$options = self::set_get_options ( 'Reset' );
 		}
 		
 		if (isset ( $_REQUEST ['Log'] )) {

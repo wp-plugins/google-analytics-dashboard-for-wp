@@ -34,7 +34,7 @@ if (! class_exists ( 'GADASH_Tracking' )) {
 				include_once ($GADASH_Config->plugin_path . '/tools/tools.php');			
 				$tools = new GADASH_Tools ();
 				
-				if (current_user_can ( $GADASH_Config->options ['ga_track_exclude'] )) {
+				if (current_user_can ( $GADASH_Config->options ['ga_track_exclude'] ) OR !$GADASH_Config->options ['ga_dash_tableid_jail']) {
 					return;
 				}
 								
