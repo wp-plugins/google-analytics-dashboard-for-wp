@@ -50,7 +50,7 @@ if (! class_exists ( 'GADASH_Frontend' )) {
 				$page_url = str_replace(site_url(), "", get_permalink());
 
 				$post_id = $post->ID;
-				
+				if ($data_visits= $GADASH_GAPI->frontend_afterpost_visits($projectId, $page_url, $post_id ) OR $data_keywords= $GADASH_GAPI->frontend_afterpost_searches($projectId, $page_url, $post_id ) ){
 				$content .= '<style>
 				#ga_dash_sdata td{
 					line-height:1.5em;
@@ -77,15 +77,17 @@ if (! class_exists ( 'GADASH_Frontend' )) {
 				}';
 						
 				if ($GADASH_Config->options ['ga_dash_frontend_stats']) {		
-					$content .= $GADASH_GAPI->frontend_afterpost_visits($projectId, $page_url, $post_id );
+					$content .= $data_visits;
 				}	 
 				
 				if ($GADASH_Config->options ['ga_dash_frontend_keywords']) {
-					$content .= $GADASH_GAPI->frontend_afterpost_searches($projectId, $page_url, $post_id );
+					$content .= $data_keywords;
 				}
 				
 				$content .= "</script>";
 				$content .= '<p><div id="ga_dash_statsdata"></div><div id="ga_dash_sdata" ></div></p>';
+				
+				}
 				
 			}
 			

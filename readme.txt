@@ -93,7 +93,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
-= 18.03.2014 - v4.2.13 =
+= 19.03.2014 - v4.2.13 =
 - bugfix for I18n
 - implemented a basic debugging log
 - CURL required error messages
@@ -102,6 +102,8 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - fixed bug in property refresh method
 - disable hide option when none or a single property is available
 - better handling errors when a user authorizes without actually having a Google Analytics account
+- fixed bug in token revoke method
+- additional validations on frontend features
 
 = 10.03.2014 - v4.2.12 =
 - refreshing charts when the time interval changes
@@ -109,7 +111,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - minimizing requests by using same query serial for frontend and backend queries
 - fixed bug in dashboard's switch options for non-admins
 - fixed Notice: Undefined index: ga_dash_frontend_stats for new installs
-- no more queries if there is no token 
+- no more queries if there is no token
  
 = 09.03.2014 - v4.2.11 =
 - added support for enhanced link attribution
