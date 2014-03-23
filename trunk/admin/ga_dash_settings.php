@@ -526,13 +526,14 @@ class GADASH_Settings {
 		}
 		
 		global $GADASH_Config;
+		
+		$options = self::set_get_options ( 'general' );		
+		
 		/*
 		 * Include GAPI
 		 */
 		include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
 		global $GADASH_GAPI;
-		
-		$options = self::set_get_options ( 'general' );
 		
 		/*
 		 * Include Tools
@@ -541,15 +542,17 @@ class GADASH_Settings {
 		$tools = new GADASH_Tools ();
 		
 		if (isset ( $_REQUEST ['ga_dash_code'] )) {
-				$GADASH_GAPI->client->authenticate ( $_REQUEST ['ga_dash_code'] );
-				$GADASH_Config->options ['ga_dash_token'] = $GADASH_GAPI->client->getAccessToken ();
-				$google_token = json_decode ( $GADASH_GAPI->client->getAccessToken () );
-				$GADASH_Config->options ['ga_dash_refresh_token'] = $google_token->refresh_token;
-				$GADASH_Config->set_plugin_options ();
-				$message = "<div class='updated'><p><strong>" . __ ( 'Plugin authorization succeeded.', 'ga-dash' ) . "</strong></p></div>";
-				$options = self::set_get_options ( 'general' );
-		}else if (get_option('gadash_lasterror','N/A')=='NOACCOUNT'){
-			$message = "<div class='error'><p><strong>" . __ ( 'You need to create and properly configure a Google Analytics account, follow this', 'ga-dash' ) . "</strong> <a href='http://deconf.com/how-to-set-up-google-analytics-on-your-website/' target='_blank'>".__('short tutorial','ga-dash')."</a>!</p></div>";
+				try{
+					$GADASH_GAPI->client->authenticate ( $_REQUEST ['ga_dash_code'] );
+					$GADASH_Config->options ['ga_dash_token'] = $GADASH_GAPI->client->getAccessToken ();
+					$google_token = json_decode ( $GADASH_GAPI->client->getAccessToken () );
+					$GADASH_Config->options ['ga_dash_refresh_token'] = $google_token->refresh_token;
+					$GADASH_Config->set_plugin_options ();
+					$message = "<div class='updated'><p><strong>" . __ ( 'Plugin authorization succeeded.', 'ga-dash' ) . "</strong></p></div>";
+					$options = self::set_get_options ( 'general' );
+				}catch (Exception $e){
+					update_option('gadash_lasterror',esc_html($e));
+				}	
 		}		
 		
 		if (function_exists('curl_version')){
@@ -568,9 +571,6 @@ class GADASH_Settings {
 					}
 					$GADASH_Config->set_plugin_options ();
 					$options = self::set_get_options ( 'general' );
-				} else {
-					$error = explode ( '(', $GADASH_GAPI->last_error->getMessage () );
-					$message = "<div class='error'><p> " . __ ( 'Unable to update profiles', 'ga-dash' ) . ": (" . $error [1] . "</p></div>";
 				}
 			}
 		}
@@ -758,7 +758,7 @@ class GADASH_Settings {
 								<td colspan="2">
 								<div class="log_data">
 								<?php
-								echo '<pre>************************************* Start Log *************************************<br/><br/>';
+								echo '<pre class="log_data">************************************* Start Log *************************************<br/><br/>';
 								$anonim = $GADASH_Config->options;
 								if ($anonim['ga_dash_token']){
 									$anonim['ga_dash_token'] = 'HIDDEN';
@@ -766,6 +766,15 @@ class GADASH_Settings {
 								if ($anonim['ga_dash_refresh_token']){
 									$anonim['ga_dash_refresh_token'] = 'HIDDEN';
 								}
+								if ($anonim['ga_dash_clientid']){
+									$anonim['ga_dash_clientid'] = 'HIDDEN';
+								}
+								if ($anonim['ga_dash_clientsecret']){
+									$anonim['ga_dash_clientsecret'] = 'HIDDEN';
+								}
+								if ($anonim['ga_dash_apikey']){
+									$anonim['ga_dash_apikey'] = 'HIDDEN';
+								}	
 								print_r($anonim); 
 								echo '<br/>Last Error: ';
 								print_r(get_option('gadash_lasterror','N/A'));
@@ -795,7 +804,8 @@ class GADASH_Settings {
 									class="button button-secondary" id="authorize"
 									value="<?php _e( "Authorize Plugin", 'ga-dash' ); ?>" <?php echo (!function_exists('curl_version')?'disabled':''); ?>/> <input
 									type="submit" name="Clear" class="button button-secondary"
-									value="<?php _e( "Clear Cache", 'ga-dash' ); ?>" /></td>
+									value="<?php _e( "Clear Cache", 'ga-dash' ); ?>" />
+								</td>
 							</tr>
 							<tr>
 								<td colspan="2"><hr></td>
@@ -808,7 +818,7 @@ class GADASH_Settings {
 								<td colspan="2">
 								<div class="log_data">
 								<?php
-								echo '<pre>************************************* Start Log *************************************<br/><br/>';
+								echo '<pre class="log_data">************************************* Start Log *************************************<br/><br/>';
 								$anonim = $GADASH_Config->options;
 								if ($anonim['ga_dash_token']){
 									$anonim['ga_dash_token'] = 'HIDDEN';
@@ -816,6 +826,15 @@ class GADASH_Settings {
 								if ($anonim['ga_dash_refresh_token']){
 									$anonim['ga_dash_refresh_token'] = 'HIDDEN';
 								}
+								if ($anonim['ga_dash_clientid']){
+									$anonim['ga_dash_clientid'] = 'HIDDEN';
+								}
+								if ($anonim['ga_dash_clientsecret']){
+									$anonim['ga_dash_clientsecret'] = 'HIDDEN';
+								}
+								if ($anonim['ga_dash_apikey']){
+									$anonim['ga_dash_apikey'] = 'HIDDEN';
+								}																																
 								print_r($anonim); 
 								echo '<br/>Last Error: ';
 								print_r(get_option('gadash_lasterror','N/A'));

@@ -1,7 +1,7 @@
 <?php
 if (! class_exists ( 'GADASH_GAPI' )) {
 	class GADASH_GAPI {
-		public $client, $service, $last_error;
+		public $client, $service;
 		public $country_codes;
 		public $timeshift;
 		function __construct() {
@@ -41,10 +41,6 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				if ($token) {
 					$this->client->setAccessToken ( $token );
 				}
-			}
-			
-			if (get_option ( 'gadash_lasterror', 'N/A' ) == 'NOACCOUNT') {
-				$this->ga_dash_reset_token (true);
 			}
 		}
 		function get_timeouts($daily) {
@@ -91,33 +87,36 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 <?php
 		}
 		function refresh_profiles() {
-			update_option ( 'gadash_lasterror', 'NOACCOUNT' );
-			$this->client->setUseObjects ( true );
-			$profiles = $this->service->management_profiles->listManagementProfiles ( '~all', '~all' );
-			$items = $profiles->getItems ();
-			if (count ( $items ) != 0) {
-				$ga_dash_profile_list = array ();
-				foreach ( $items as $profile ) {
-					$timetz = new DateTimeZone ( $profile->getTimezone () );
-					$localtime = new DateTime ( 'now', $timetz );
-					$timeshift = strtotime ( $localtime->format ( 'Y-m-d H:i:s' ) ) - time ();
-					$ga_dash_profile_list [] = array (
-							$profile->getName (),
-							$profile->getId (),
-							$profile->getwebPropertyId (),
-							$profile->getwebsiteUrl (),
-							$timeshift,
-							$profile->getTimezone () 
-					);
+			try{
+				$this->client->setUseObjects ( true );
+				$profiles = $this->service->management_profiles->listManagementProfiles ( '~all', '~all' );
+				$items = $profiles->getItems ();
+				if (count ( $items ) != 0) {
+					$ga_dash_profile_list = array ();
+					foreach ( $items as $profile ) {
+						$timetz = new DateTimeZone ( $profile->getTimezone () );
+						$localtime = new DateTime ( 'now', $timetz );
+						$timeshift = strtotime ( $localtime->format ( 'Y-m-d H:i:s' ) ) - time ();
+						$ga_dash_profile_list [] = array (
+								$profile->getName (),
+								$profile->getId (),
+								$profile->getwebPropertyId (),
+								$profile->getwebsiteUrl (),
+								$timeshift,
+								$profile->getTimezone () 
+						);
+					}
+					$this->client->setUseObjects ( false );
+					update_option ( 'gadash_lasterror', 'N/A' );
+					return ($ga_dash_profile_list);
+				} else {
+					$this->client->setUseObjects ( false );
+					update_option ( 'gadash_lasterror', 'No properties were found in this account!' );
 				}
-				$this->client->setUseObjects ( false );
-				update_option ( 'gadash_lasterror', 'N/A' );
-				return ($ga_dash_profile_list);
-			} else {
-				$this->client->setUseObjects ( false );
-				$this->last_error = $e;
-				update_option ( 'gadash_lasterror', 'No properties were found in this account' );
-			}
+			} catch (Exception $e){
+				update_option('gadash_lasterror',esc_html($e));
+				$this->ga_dash_reset_token (true);
+			}	
 		}
 		function ga_dash_refresh_token() {
 			global $GADASH_Config;
@@ -144,7 +143,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 			} catch ( Exception $e ) {
 				$this->ga_dash_reset_token (false);
-				update_option ( 'gadash_lasterror', $e );
+				update_option ( 'gadash_lasterror', esc_html($e ));
 				return false;
 			}
 		}
@@ -201,8 +200,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$data = $transient;
 				}
 			} catch ( Google_ServiceException $e ) {
-				$this->last_error = $e;
-				update_option ( 'gadash_lasterror', $e );
+				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
 			
@@ -247,8 +245,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$data = $transient;
 				}
 			} catch ( Google_ServiceException $e ) {
-				$this->last_error = $e;
-				update_option ( 'gadash_lasterror', $e );
+				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
 			
@@ -292,8 +289,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$data = $transient;
 				}
 			} catch ( Google_ServiceException $e ) {
-				$this->last_error = $e;
-				update_option ( 'gadash_lasterror', $e );
+				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -342,8 +338,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$data = $transient;
 				}
 			} catch ( Google_ServiceException $e ) {
-				$this->last_error = $e;
-				update_option ( 'gadash_lasterror', $e );
+				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -391,8 +386,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$data = $transient;
 				}
 			} catch ( Google_ServiceException $e ) {
-				$this->last_error = $e;
-				update_option ( 'gadash_lasterror', $e );
+				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -460,8 +454,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$data = $transient;
 				}
 			} catch ( Google_ServiceException $e ) {
-				$this->last_error = $e;
-				update_option ( 'gadash_lasterror', $e );
+				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -506,8 +499,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$data = $transient;
 				}
 			} catch ( Google_ServiceException $e ) {
-				$this->last_error = $e;
-				update_option ( 'gadash_lasterror', $e );
+				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -548,8 +540,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$data = $transient;
 				}
 			} catch ( Google_ServiceException $e ) {
-				$this->last_error = $e;
-				update_option ( 'gadash_lasterror', $e );
+				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -611,8 +602,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$data = $transient;
 				}
 			} catch ( exception $e ) {
-				$this->last_error = $e;
-				update_option ( 'gadash_lasterror', $e );
+				update_option ( 'gadash_lasterror', esc_html($e ));
 				return '';
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -712,8 +702,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$data = $transient;
 				}
 			} catch ( exception $e ) {
-				$this->last_error = $e;
-				update_option ( 'gadash_lasterror', $e );
+				update_option ( 'gadash_lasterror', esc_html($e ));
 				return '';
 			}
 			if (! isset ( $data ['rows'] )) {
@@ -775,8 +764,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$data = $transient;
 				}
 			} catch ( exception $e ) {
-				$this->last_error = $e;
-				update_option ( 'gadash_lasterror', $e );
+				update_option ( 'gadash_lasterror', esc_html($e));
 				return '';
 			}
 			

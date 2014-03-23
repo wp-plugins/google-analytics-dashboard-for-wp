@@ -93,6 +93,11 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
+= 23.03.2014 - v4.2.14 =
+- bugfix for error reporting
+- custom API credential are now saved before starting the authorization procedure
+- hidding additional info in log data
+
 = 23.03.2014 - v4.2.13 =
 - bugfix for I18n
 - implemented a basic debugging log
