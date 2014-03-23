@@ -356,13 +356,13 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			
 			$ga_dash_statsdata = $GADASH_GAPI->ga_dash_main_charts ( $projectId, $period, $from, $to, $query );
 			if (! $ga_dash_statsdata) {
-				echo $tools->ga_dash_pretty_error ( $GADASH_GAPI->last_error );
+				echo '<p>' . __ ( 'No stats available. Please check the Debugging Data section for possible errors', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Error Log', 'ga-dash' ), 'secondary' ) . '</form>';
 				return;
 			}
 			
 			$ga_dash_bottom_stats = $GADASH_GAPI->ga_dash_bottom_stats ( $projectId, $period, $from, $to );
 			if (! $ga_dash_bottom_stats) {
-				echo $tools->ga_dash_pretty_error ( $GADASH_GAPI->last_error );
+				echo '<p>' . __ ( 'No stats available. Please check the Debugging Data section for possible errors', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Error Log', 'ga-dash' ), 'secondary' ) . '</form>';
 				return;
 			}
 			
