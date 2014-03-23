@@ -44,7 +44,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			}
 			
 			if (get_option ( 'gadash_lasterror', 'N/A' ) == 'NOACCOUNT') {
-				$this->ga_dash_reset_token ();
+				$this->ga_dash_reset_token (true);
 			}
 		}
 		function get_timeouts($daily) {
@@ -143,23 +143,27 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					return $transient;
 				}
 			} catch ( Exception $e ) {
-				$this->ga_dash_reset_token ();
+				$this->ga_dash_reset_token (false);
 				update_option ( 'gadash_lasterror', $e );
 				return false;
 			}
 		}
-		function ga_dash_reset_token() {
+		function ga_dash_reset_token($all = true) {
 			global $GADASH_Config;
 			
 			delete_transient ( 'ga_dash_refresh_token' );
 			if ($GADASH_Config->options ['ga_dash_token']) {
 				$this->client->revokeToken ();
 			}
+			
 			$GADASH_Config->options ['ga_dash_token'] = "";
-			$GADASH_Config->options ['ga_dash_tableid'] = "";
-			$GADASH_Config->options ['ga_dash_tableid_jail'] = "";
-			$GADASH_Config->options ['ga_dash_profile_list'] = "";
 			$GADASH_Config->options ['ga_dash_refresh_token'] = "";
+						
+			if ($all){
+				$GADASH_Config->options ['ga_dash_tableid'] = "";
+				$GADASH_Config->options ['ga_dash_tableid_jail'] = "";
+				$GADASH_Config->options ['ga_dash_profile_list'] = "";
+			}	
 			$GADASH_Config->set_plugin_options ();
 		}
 		
