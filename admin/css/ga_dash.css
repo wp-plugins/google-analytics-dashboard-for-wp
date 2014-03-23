@@ -195,3 +195,7 @@ pre.gadash{
 .show_hide, .log_data {
     display:none;
 }
+
+pre.log_data{
+	white-space: pre-wrap;
+} 
