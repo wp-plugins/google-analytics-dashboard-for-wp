@@ -581,7 +581,7 @@ class GADASH_Settings {
 		}
 		
 		if (isset ( $_REQUEST ['Reset'] )) {
-			$GADASH_GAPI->ga_dash_reset_token ();
+			$GADASH_GAPI->ga_dash_reset_token (true);
 			$tools->ga_dash_clear_cache ();
 			$message = "<div class='updated'><p><strong>" . __ ( 'Token Reseted and Revoked.', 'ga-dash' ) . "</strong></p></div>";
 			$options = self::set_get_options ( 'Reset' );
