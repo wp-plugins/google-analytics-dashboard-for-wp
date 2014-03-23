@@ -4,7 +4,7 @@ class GADASH_Settings {
 		global $GADASH_Config;
 		
 		$options = $GADASH_Config->options;
-		if (isset ( $_REQUEST ['ga_dash_hidden'] ) and isset ( $_REQUEST ['options'] )) {
+		if (isset ( $_REQUEST ['ga_dash_hidden'] ) and isset ( $_REQUEST ['options'] ) and $who!='Reset') {
 			$new_options = $_REQUEST ['options'];
 			if ($who == 'tracking') {
 				$options ['ga_dash_anonim'] = 0;
@@ -37,6 +37,7 @@ class GADASH_Settings {
 		return $options;
 	}
 	public static function frontend_settings() {
+		global $GADASH_Config;
 		if (! current_user_can ( 'manage_options' )) {
 			return;
 		}
@@ -46,6 +47,10 @@ class GADASH_Settings {
 		if (isset ( $_REQUEST ['ga_dash_hidden'] )) {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Options saved.', 'ga-dash' ) . "</strong></p></div>";
 		}
+
+		if (!$GADASH_Config->options ['ga_dash_tableid_jail'] OR !$GADASH_Config->options ['ga_dash_token']){
+			$message = "<div class='error'><p><strong>" . __ ( 'Something went wrong, fix this', 'ga-dash' ) . "</strong> <a href='".menu_page_url ( 'gadash_settings', false )."'>".__('issue','ga-dash')."</a>!</p></div>";
+		}		
 		
 		?>
 <form name="ga_dash_form" method="post"
@@ -130,6 +135,7 @@ class GADASH_Settings {
 		self::output_sidebar ();
 	}
 	public static function backend_settings() {
+		global $GADASH_Config;
 		if (! current_user_can ( 'manage_options' )) {
 			return;
 		}
@@ -139,6 +145,10 @@ class GADASH_Settings {
 		if (isset ( $_REQUEST ['ga_dash_hidden'] )) {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Options saved.', 'ga-dash' ) . "</strong></p></div>";
 		}
+		
+		if (!$GADASH_Config->options ['ga_dash_tableid_jail'] OR !$GADASH_Config->options ['ga_dash_token']){
+			$message = "<div class='error'><p><strong>" . __ ( 'Something went wrong, fix this', 'ga-dash' ) . "</strong> <a href='".menu_page_url ( 'gadash_settings', false )."'>".__('issue','ga-dash')."</a>!</p></div>";
+		}		
 		
 		?>
 <form name="ga_dash_form" method="post"
@@ -341,6 +351,10 @@ class GADASH_Settings {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Options saved.', 'ga-dash' ) . "</strong></p></div>";
 		}
 		
+		if (!$GADASH_Config->options ['ga_dash_tableid_jail'] OR !$GADASH_Config->options ['ga_dash_token']){
+			$message = "<div class='error'><p><strong>" . __ ( 'Something went wrong, fix this', 'ga-dash' ) . "</strong> <a href='".menu_page_url ( 'gadash_settings', false )."'>".__('issue','ga-dash')."</a>!</p></div>";
+		}		
+		
 		?>
 <form name="ga_dash_form" method="post"
 	action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
@@ -534,7 +548,10 @@ class GADASH_Settings {
 				$GADASH_Config->set_plugin_options ();
 				$message = "<div class='updated'><p><strong>" . __ ( 'Plugin authorization succeeded.', 'ga-dash' ) . "</strong></p></div>";
 				$options = self::set_get_options ( 'general' );
-		}
+		}else if (get_option('gadash_lasterror','N/A')=='NOACCOUNT'){
+			$message = "<div class='error'><p><strong>" . __ ( 'You need to create and properly configure a Google Analytics account, follow this', 'ga-dash' ) . "</strong> <a href='http://deconf.com/how-to-set-up-google-analytics-on-your-website/' target='_blank'>".__('short tutorial','ga-dash')."</a>!</p></div>";
+		}		
+		
 		if (function_exists('curl_version')){
 			if ($GADASH_GAPI->client->getAccessToken ()) {
 				if ($GADASH_Config->options ['ga_dash_profile_list']){
@@ -564,10 +581,10 @@ class GADASH_Settings {
 		}
 		
 		if (isset ( $_REQUEST ['Reset'] )) {
-			$GADASH_GAPI->ga_dash_reset_token ();
+			$GADASH_GAPI->ga_dash_reset_token (true);
 			$tools->ga_dash_clear_cache ();
 			$message = "<div class='updated'><p><strong>" . __ ( 'Token Reseted and Revoked.', 'ga-dash' ) . "</strong></p></div>";
-			$options = self::set_get_options ( 'general' );
+			$options = self::set_get_options ( 'Reset' );
 		}
 		
 		if (isset ( $_REQUEST ['Log'] )) {
@@ -584,7 +601,7 @@ class GADASH_Settings {
 			$GADASH_Config->options ['ga_dash_profile_list'] = array($lock_profile);
 			$options = self::set_get_options ( 'general' );
 		}
-				
+		
 		if (!function_exists('curl_version')){
 			$message = "<div class='error'><p><strong>" . __ ( 'CURL is required. Please install/enable CURL!', 'ga-dash' ) . "</strong></p></div>";
 		}
@@ -619,7 +636,7 @@ class GADASH_Settings {
 							</tr>
 							<tr>
 								<td colspan="2" class="info">
-						<?php echo __("You should watch the video and read this", 'ga-dash')." <a href='http://deconf.com/google-analytics-dashboard-wordpress/' target='_blank'>". __("tutorial")."</a> ".__("before proceeding to authorization", 'ga-dash').".";?>
+						<?php echo __("This plugin requires a properly configured Google Analytics account. You should watch the video and read this", 'ga-dash')." <a href='http://deconf.com/google-analytics-dashboard-wordpress/' target='_blank'>". __("tutorial")."</a> ".__("before proceeding to authorization", 'ga-dash').".";?>
 						</td>
 							</tr>
 						<?php
@@ -751,7 +768,7 @@ class GADASH_Settings {
 								}
 								print_r($anonim); 
 								echo '<br/>Last Error: ';
-								print_r(get_option('ga_dash_lasterror','N/A'));
+								print_r(get_option('gadash_lasterror','N/A'));
 								echo '<br/><br/>************************************* End Log *************************************</pre>';
 								?>
 								</div>
@@ -801,7 +818,7 @@ class GADASH_Settings {
 								}
 								print_r($anonim); 
 								echo '<br/>Last Error: ';
-								print_r(get_option('ga_dash_lasterror','N/A'));
+								print_r(get_option('gadash_lasterror','N/A'));
 								echo '<br/><br/>************************************* End Log *************************************</pre>';
 								?>
 								</div>
