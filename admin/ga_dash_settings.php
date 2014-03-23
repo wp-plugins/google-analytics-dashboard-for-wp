@@ -552,6 +552,7 @@ class GADASH_Settings {
 					$options = self::set_get_options ( 'general' );
 				}catch (Exception $e){
 					update_option('gadash_lasterror',esc_html($e));
+					ga_dash_reset_token(false);
 				}	
 		}		
 		

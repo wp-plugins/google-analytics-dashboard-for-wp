@@ -151,10 +151,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			global $GADASH_Config;
 			
 			delete_transient ( 'ga_dash_refresh_token' );
-			if ($GADASH_Config->options ['ga_dash_token']) {
-				$this->client->revokeToken ();
-			}
-			
+			$revoke = $GADASH_Config->options ['ga_dash_token']?true:false;
 			$GADASH_Config->options ['ga_dash_token'] = "";
 			$GADASH_Config->options ['ga_dash_refresh_token'] = "";
 						
@@ -164,6 +161,11 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$GADASH_Config->options ['ga_dash_profile_list'] = "";
 			}	
 			$GADASH_Config->set_plugin_options ();
+
+			if ($revoke) {
+				$this->client->revokeToken ();
+			}			
+		
 		}
 		
 		// Get Main Chart
