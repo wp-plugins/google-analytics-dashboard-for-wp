@@ -49,7 +49,7 @@ class GADASH_Settings {
 		}
 
 		if (!$GADASH_Config->options ['ga_dash_tableid_jail'] OR !$GADASH_Config->options ['ga_dash_token']){
-			$message = "<div class='error'><p><strong>" . __ ( 'Something went wrong, fix this', 'ga-dash' ) . "</strong> <a href='".menu_page_url ( 'gadash_settings', false )."'>".__('issue','ga-dash')."</a>!</p></div>";
+						$message = "<div class='error'><p><strong>" . __ ( 'Something went wrong, you need to', 'ga-dash' ) . "</strong> <a href='".menu_page_url ( 'gadash_settings', false )."'>".__('auhorize the plugin','ga-dash')."</a><strong> ".__ ( 'or properly configure your', 'ga-dash' ). '</strong> <a href="http://deconf.com/how-to-set-up-google-analytics-on-your-website/" target="_blank">'.__('Google Analytics account','ga-dash')."</a>"."<stong>!</strong></p></div>";
 		}		
 		
 		?>
@@ -147,7 +147,7 @@ class GADASH_Settings {
 		}
 		
 		if (!$GADASH_Config->options ['ga_dash_tableid_jail'] OR !$GADASH_Config->options ['ga_dash_token']){
-			$message = "<div class='error'><p><strong>" . __ ( 'Something went wrong, fix this', 'ga-dash' ) . "</strong> <a href='".menu_page_url ( 'gadash_settings', false )."'>".__('issue','ga-dash')."</a>!</p></div>";
+						$message = "<div class='error'><p><strong>" . __ ( 'Something went wrong, you need to', 'ga-dash' ) . "</strong> <a href='".menu_page_url ( 'gadash_settings', false )."'>".__('auhorize the plugin','ga-dash')."</a><strong> ".__ ( 'or properly configure your', 'ga-dash' ). '</strong> <a href="http://deconf.com/how-to-set-up-google-analytics-on-your-website/" target="_blank">'.__('Google Analytics account','ga-dash')."</a>"."<stong>!</strong></p></div>";
 		}		
 		
 		?>
@@ -352,7 +352,7 @@ class GADASH_Settings {
 		}
 		
 		if (!$GADASH_Config->options ['ga_dash_tableid_jail'] OR !$GADASH_Config->options ['ga_dash_token']){
-			$message = "<div class='error'><p><strong>" . __ ( 'Something went wrong, fix this', 'ga-dash' ) . "</strong> <a href='".menu_page_url ( 'gadash_settings', false )."'>".__('issue','ga-dash')."</a>!</p></div>";
+			$message = "<div class='error'><p><strong>" . __ ( 'Something went wrong, you need to', 'ga-dash' ) . "</strong> <a href='".menu_page_url ( 'gadash_settings', false )."'>".__('auhorize the plugin','ga-dash')."</a><strong> ".__ ( 'or properly configure your', 'ga-dash' ). '</strong> <a href="http://deconf.com/how-to-set-up-google-analytics-on-your-website/" target="_blank">'.__('Google Analytics account','ga-dash')."</a>"."<stong>!</strong></p></div>";
 		}		
 		
 		?>
@@ -636,7 +636,7 @@ class GADASH_Settings {
 							</tr>
 							<tr>
 								<td colspan="2" class="info">
-						<?php echo __("This plugin requires a properly configured Google Analytics account. You should watch the video and read this", 'ga-dash')." <a href='http://deconf.com/google-analytics-dashboard-wordpress/' target='_blank'>". __("tutorial")."</a> ".__("before proceeding to authorization", 'ga-dash').".";?>
+						<?php echo __("You should watch the",'ga-dash')." <a href='http://deconf.com/google-analytics-dashboard-wordpress/' target='_blank'>". __("video",'ga-dash')."</a> ".__("and read this", 'ga-dash')." <a href='http://deconf.com/google-analytics-dashboard-wordpress/' target='_blank'>". __("tutorial",'ga-dash')."</a> ".__("before proceeding to authorization. This plugin requires a properly configured Google Analytics account", 'ga-dash')."!";?>
 						</td>
 							</tr>
 						<?php
