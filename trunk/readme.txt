@@ -95,6 +95,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 = 23.03.2014 - v4.2.15 =
 - force token reset procedure when failing to authenticate
+- deleting refresh token transient on uninstall
 
 = 23.03.2014 - v4.2.14 =
 - bugfix for error reporting
