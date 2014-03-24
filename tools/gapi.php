@@ -141,7 +141,10 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				} else {
 					return $transient;
 				}
-			} catch ( Exception $e ) {
+			} catch ( Google_IOException $e ){
+				update_option ( 'gadash_lasterror', esc_html($e ));
+				return false;
+			}catch ( Exception $e ) {
 				$this->ga_dash_reset_token (false);
 				update_option ( 'gadash_lasterror', esc_html($e ));
 				return false;
@@ -197,7 +200,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				} else {
 					$data = $transient;
 				}
-			} catch ( Google_ServiceException $e ) {
+			} catch ( Exception $e ) {
 				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
@@ -242,7 +245,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				} else {
 					$data = $transient;
 				}
-			} catch ( Google_ServiceException $e ) {
+			} catch ( Exception $e ) {
 				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
@@ -286,7 +289,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				} else {
 					$data = $transient;
 				}
-			} catch ( Google_ServiceException $e ) {
+			} catch ( Exception $e ) {
 				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
@@ -335,7 +338,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				} else {
 					$data = $transient;
 				}
-			} catch ( Google_ServiceException $e ) {
+			} catch ( Exception $e ) {
 				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
@@ -383,7 +386,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				} else {
 					$data = $transient;
 				}
-			} catch ( Google_ServiceException $e ) {
+			} catch ( Exception $e ) {
 				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
@@ -451,7 +454,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				} else {
 					$data = $transient;
 				}
-			} catch ( Google_ServiceException $e ) {
+			} catch ( Exception $e ) {
 				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
@@ -496,7 +499,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				} else {
 					$data = $transient;
 				}
-			} catch ( Google_ServiceException $e ) {
+			} catch ( Exception $e ) {
 				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
@@ -537,7 +540,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				} else {
 					$data = $transient;
 				}
-			} catch ( Google_ServiceException $e ) {
+			} catch ( Exception $e ) {
 				update_option ( 'gadash_lasterror', esc_html($e ));
 				return 0;
 			}
@@ -599,7 +602,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				} else {
 					$data = $transient;
 				}
-			} catch ( exception $e ) {
+			} catch ( Exception $e ) {
 				update_option ( 'gadash_lasterror', esc_html($e ));
 				return '';
 			}
@@ -699,7 +702,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				} else {
 					$data = $transient;
 				}
-			} catch ( exception $e ) {
+			} catch ( Exception $e ) {
 				update_option ( 'gadash_lasterror', esc_html($e ));
 				return '';
 			}
@@ -761,7 +764,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				} else {
 					$data = $transient;
 				}
-			} catch ( exception $e ) {
+			} catch ( Exception $e ) {
 				update_option ( 'gadash_lasterror', esc_html($e));
 				return '';
 			}
