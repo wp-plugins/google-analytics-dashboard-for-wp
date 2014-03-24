@@ -550,7 +550,10 @@ class GADASH_Settings {
 					$GADASH_Config->set_plugin_options ();
 					$message = "<div class='updated'><p><strong>" . __ ( 'Plugin authorization succeeded.', 'ga-dash' ) . "</strong></p></div>";
 					$options = self::set_get_options ( 'general' );
-				}catch (Exception $e){
+				} catch ( Google_IOException $e ){
+				update_option ( 'gadash_lasterror', esc_html($e ));
+				return false;
+			}catch (Exception $e){
 					update_option('gadash_lasterror',esc_html($e));
 					ga_dash_reset_token(false);
 				}	

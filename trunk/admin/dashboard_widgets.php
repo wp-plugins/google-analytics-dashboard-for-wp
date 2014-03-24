@@ -86,7 +86,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		function ga_dash_setup() {
 			global $GADASH_Config;
 			if (current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
-				wp_add_dashboard_widget ( 'ga-dash-widget', "<a href='http://deconf.com/google-analytics-dashboard-wordpress/' style='font-size:1em;text-decoration:none;' target='_blank'>" . __ ( "Google Analytics Dashboard", 'ga-dash' ) . "</a>", array (
+				wp_add_dashboard_widget ( 'ga-dash-widget', __ ( "Google Analytics Dashboard", 'ga-dash' ), array (
 						$this,
 						'gadash_dashboard_widgets' 
 				), $control_callback = null );
@@ -115,7 +115,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			$tools->ga_dash_cleanup_timeouts();
 			
 			if (! $GADASH_GAPI->client->getAccessToken ()) {
-				echo '<p>' . __ ( 'This plugin needs an authorization:', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Authorize Plugin', 'ga-dash' ), 'secondary' ) . '<input type="hidden" name="Authorize" value="auhtorize"></form>';
+				echo '<p>' . __ ( 'Something went wrong. Please check the Debugging Data section for possible errors', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Error Log', 'ga-dash' ), 'secondary' ) . '</form>';
 				return;
 			}
 			
