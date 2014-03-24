@@ -6,8 +6,8 @@ Class GADASH_Install{
 			$options ['ga_dash_apikey'] = '';
 			$options ['ga_dash_clientid'] = '';
 			$options ['ga_dash_clientsecret'] = '';
-			$options ['ga_dash_access_front'] = 'manage_options';
-			$options ['ga_dash_access_back'] = 'manage_options';
+			$options ['ga_dash_access_front'] = 'administrator';
+			$options ['ga_dash_access_back'] = 'administrator';
 			$options ['ga_dash_tableid_jail'] = '';
 			$options ['ga_dash_pgd'] = 0;
 			$options ['ga_dash_rd'] = 0;
@@ -24,7 +24,7 @@ Class GADASH_Install{
 			$options ['ga_dash_userapi'] = 0;
 			$options ['ga_event_tracking'] = 0;
 			$options ['ga_event_downloads'] = 'zip|mp3|mpeg|pdf|doc*|ppt*|xls*|jpeg|png|gif|tiff';
-			$options ['ga_track_exclude'] = 'manage_options';
+			$options ['ga_track_exclude'] = 'administrator';
 			$options ['ga_target_geomap'] = '';
 			$options ['ga_target_number'] = 10;
 			$options ['ga_realtime_pages'] = 10;

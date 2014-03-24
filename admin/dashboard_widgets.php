@@ -85,7 +85,14 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		}
 		function ga_dash_setup() {
 			global $GADASH_Config;
-			if (current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
+			
+			/*
+			 * Include Tools
+			*/
+			include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
+			$tools = new GADASH_Tools ();
+						
+			if ($tools->check_roles($GADASH_Config->options ['ga_dash_access_back'])) {
 				wp_add_dashboard_widget ( 'ga-dash-widget', __ ( "Google Analytics Dashboard", 'ga-dash' ), array (
 						$this,
 						'gadash_dashboard_widgets' 
@@ -424,7 +431,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
       }";
 			}
 			
-			if ($GADASH_Config->options ['ga_dash_map'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
+			if ($GADASH_Config->options ['ga_dash_map'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back'])) {
 				$ga_dash_visits_country = $GADASH_GAPI->ga_dash_visits_country ( $projectId, $from, $to );
 				if ($ga_dash_visits_country) {
 					
@@ -451,7 +458,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		  }";
 				}
 			}
-			if ($GADASH_Config->options ['ga_dash_traffic'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
+			if ($GADASH_Config->options ['ga_dash_traffic'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back'])) {
 				$ga_dash_traffic_sources = $GADASH_GAPI->ga_dash_traffic_sources ( $projectId, $from, $to );
 				$ga_dash_new_return = $GADASH_GAPI->ga_dash_new_return ( $projectId, $from, $to );
 				if ($ga_dash_traffic_sources and $ga_dash_new_return) {
@@ -487,7 +494,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		  }";
 				}
 			}
-			if ($GADASH_Config->options ['ga_dash_pgd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
+			if ($GADASH_Config->options ['ga_dash_pgd'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back'])) {
 				$ga_dash_top_pages = $GADASH_GAPI->ga_dash_top_pages ( $projectId, $from, $to );
 				if ($ga_dash_top_pages) {
 					$code .= '
@@ -509,7 +516,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		  }";
 				}
 			}
-			if ($GADASH_Config->options ['ga_dash_rd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
+			if ($GADASH_Config->options ['ga_dash_rd'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back'])) {
 				$ga_dash_top_referrers = $GADASH_GAPI->ga_dash_top_referrers ( $projectId, $from, $to );
 				if ($ga_dash_top_referrers) {
 					$code .= '
@@ -531,7 +538,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		  }";
 				}
 			}
-			if ($GADASH_Config->options ['ga_dash_sd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
+			if ($GADASH_Config->options ['ga_dash_sd'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back'])) {
 				$ga_dash_top_searches = $GADASH_GAPI->ga_dash_top_searches ( $projectId, $from, $to );
 				if ($ga_dash_top_searches) {
 					$code .= '
@@ -610,7 +617,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 					$code .= $GADASH_GAPI->ga_realtime ( 'AIzaSyBG7LlUoHc29ZeC_dsShVaBEX15SfRl_WY', $GADASH_Config->plugin_url . '/realtime/superproxy.php' );
 				}
 			}
-			if ($GADASH_Config->options ['ga_dash_map'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] ) and $ga_dash_visits_country) {
+			if ($GADASH_Config->options ['ga_dash_map'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back']) and $ga_dash_visits_country) {
 				$code .= '<br /><h3>';
 				if ($GADASH_Config->options ['ga_target_geomap']) {
 					$GADASH_GAPI->getcountrycodes ();
@@ -622,16 +629,16 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		<div id="ga_dash_mapdata"></div>';
 			}
 			
-			if ($GADASH_Config->options ['ga_dash_traffic'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] ) and ($ga_dash_top_referrers or $ga_dash_top_pages or ($ga_dash_traffic_sources and $ga_dash_new_return))) {
+			if ($GADASH_Config->options ['ga_dash_traffic'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back']) and ($ga_dash_top_referrers or $ga_dash_top_pages or ($ga_dash_traffic_sources and $ga_dash_new_return))) {
 				$code .= '<br /><h3>' . __ ( "Traffic Overview", 'ga-dash' ) . '</h3>
 		<table width="100%"><tr><td width="50%"><div id="ga_dash_trafficdata"></div></td><td width="50%"><div id="ga_dash_nvrdata"></div></td></tr></table>';
 			}
 			
-			if ($GADASH_Config->options ['ga_dash_pgd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] ))
+			if ($GADASH_Config->options ['ga_dash_pgd'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back']))
 				$code .= '<div id="ga_dash_pgddata"></div>';
-			if ($GADASH_Config->options ['ga_dash_rd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] ))
+			if ($GADASH_Config->options ['ga_dash_rd'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back']))
 				$code .= '<div id="ga_dash_rdata"></div>';
-			if ($GADASH_Config->options ['ga_dash_sd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] ))
+			if ($GADASH_Config->options ['ga_dash_sd'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back']))
 				$code .= '<div id="ga_dash_sdata"></div>';
 			
 			echo $code;
