@@ -99,6 +99,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - trying to catch all possible exceptions in gapi
 - no token reset on network connection errors
 - fixed screen options bug
+- added capability to select each role for access levels and exclude tracking
 
 = 23.03.2014 - v4.2.14 =
 - bugfix for error reporting

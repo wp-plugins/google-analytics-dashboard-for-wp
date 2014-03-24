@@ -77,5 +77,20 @@ if (! class_exists ( 'GADASH_Tools' )) {
 			}
 			return '#' . $rgb;
 		}
+		
+		function check_roles($access_level, $tracking=false){
+			if(is_user_logged_in() && isset($access_level)){
+				global $current_user;
+				$user_role = array_shift($current_user->roles);
+				if (($user_role=='administrator') and !$tracking){
+					return true;
+				}
+				if(in_array($user_role,$access_level)){
+					return true;
+				}else{
+					return false;
+				}
+			}			
+		}		
 	}
 }

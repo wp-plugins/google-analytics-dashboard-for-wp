@@ -640,7 +640,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				google.load("visualization", "1", {packages:["corechart"]});
 				function ga_dash_drawwidgetstats() {
 				var data = google.visualization.arrayToDataTable([' . "
-				  ['" . __ ( "Date", 'ga-dash' ) . "', '" . __ ( "Visits", 'ga-dash' ) . ($anonim ? __ ( " trends", 'ga-dash' ) : '') . "']," . $ga_dash_statsdata . "
+				  ['" . __ ( "Date", 'ga-dash' ) . "', '" . __ ( "Visits", 'ga-dash' ) . ($anonim ? __ ( "\' trend", 'ga-dash' ) : '') . "']," . $ga_dash_statsdata . "
 				]);
 		
 				var options = {
