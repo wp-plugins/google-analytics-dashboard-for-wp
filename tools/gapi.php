@@ -267,7 +267,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			global $GADASH_Config;
 			
 			$metrics = 'ga:pageviews';
-			$dimensions = 'ga:pageTitle';
+			$dimensions = 'ga:pageTitle,ga:hostname,ga:pagePath';
 			
 			if ($from == "today") {
 				$timeouts = 0;
@@ -299,11 +299,12 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			
 			$ga_dash_data = "";
 			$i = 0;
+			//print_r($data ['rows'] );
 			while ( isset ( $data ['rows'] [$i] [0] ) ) {
-				$ga_dash_data .= "['" . str_replace ( array (
+				$ga_dash_data .= "['<a href=\"http://".$data ['rows'] [$i] [1].$data ['rows'] [$i] [2]."\" target=\"_blank\">" . str_replace ( array (
 						"'",
 						"\\" 
-				), " ", $data ['rows'] [$i] [0] ) . "'," . $data ['rows'] [$i] [1] . "],";
+				), " ", $data ['rows'] [$i] [0] ) . "</a>'," . $data ['rows'] [$i] [3] . "],";
 				$i ++;
 			}
 			
@@ -315,7 +316,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			global $GADASH_Config;
 			
 			$metrics = 'ga:visits';
-			$dimensions = 'ga:source,ga:medium';
+			$dimensions = 'ga:source,ga:fullReferrer,ga:medium';
 			
 			if ($from == "today") {
 				$timeouts = 0;
@@ -349,10 +350,10 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			$ga_dash_data = "";
 			$i = 0;
 			while ( isset ( $data ['rows'] [$i] [0] ) ) {
-				$ga_dash_data .= "['" . str_replace ( array (
+				$ga_dash_data .= "['<a href=\"http://".$data ['rows'] [$i] [1]."\"target=\"_blank\">" . str_replace ( array (
 						"'",
 						"\\" 
-				), " ", $data ['rows'] [$i] [0] ) . "'," . $data ['rows'] [$i] [2] . "],";
+				), " ", $data ['rows'] [$i] [0] ) . "</a>'," . $data ['rows'] [$i] [3] . "],";
 				$i ++;
 			}
 			
@@ -560,7 +561,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 		}
 		
 		// Frontend Widget Stats
-		function frontend_widget_stats($projectId, $period, $anonim) {
+		function frontend_widget_stats($projectId, $period, $anonim, $display) {
 			global $GADASH_Config;
 			$content = '';
 			$from = $period;
@@ -611,7 +612,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			}
 			
 			$ga_dash_statsdata = "";
-			
+
 			$max_array = array ();
 			foreach ( $data ['rows'] as $item ) {
 				$max_array [] = $item [3];
@@ -624,42 +625,71 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			$ga_dash_statsdata = rtrim ( $ga_dash_statsdata, ',' );
 			
 			if ($ga_dash_statsdata) {
-				
-				if ($anonim) {
-					$formater = "var formatter = new google.visualization.NumberFormat({ 
-				  pattern: '#,##%', 
-				  fractionDigits: 2
-				});
-
-				formatter.format(data, 1);	";
-				} else {
-					$formater = '';
+				if ($display != 3){				
+					if ($anonim) {
+						$formater = "var formatter = new google.visualization.NumberFormat({ 
+					  pattern: '#,##%', 
+					  fractionDigits: 2
+					});
+	
+					formatter.format(data, 1);	";
+					} else {
+						$formater = '';
+					}
+					
+					$content = '<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+						<script type="text/javascript">
+						  google.setOnLoadCallback(ga_dash_callback);
+					
+						  function ga_dash_callback(){
+					
+								if(typeof ga_dash_drawwidgetstats == "function"){
+									ga_dash_drawwidgetstats();
+								}
+					
+						}';				
+					
+					$content .= '
+					google.load("visualization", "1", {packages:["corechart"]});
+					function ga_dash_drawwidgetstats() {
+					var data = google.visualization.arrayToDataTable([' . "
+					  ['" . __ ( "Date", 'ga-dash' ) . "', '" . __ ( "Visits", 'ga-dash' ) . ($anonim ? __ ( "\' trend", 'ga-dash' ) : '') . "']," . $ga_dash_statsdata . "
+					]);
+			
+					var options = {
+					  legend: {position: 'none'},
+					  pointSize: 3," . $css . "
+					  title: '" . $title . "',
+					  titlePosition: 'in',
+					  chartArea: {width: '100%',height:'85%'},
+					  hAxis: { textPosition: 'none' },
+					  vAxis: { textPosition: 'none', minValue: 0},
+				 	};
+					
+					var chart = new google.visualization.AreaChart(document.getElementById('ga_dash_widgetstatsdata'));
+					
+					" . $formater . "
+					
+					chart.draw(data, options);
+			
+					}";
 				}
+	
+				$content .= "</script>";
 				
-				$content .= '
-				google.load("visualization", "1", {packages:["corechart"]});
-				function ga_dash_drawwidgetstats() {
-				var data = google.visualization.arrayToDataTable([' . "
-				  ['" . __ ( "Date", 'ga-dash' ) . "', '" . __ ( "Visits", 'ga-dash' ) . ($anonim ? __ ( "\' trend", 'ga-dash' ) : '') . "']," . $ga_dash_statsdata . "
-				]);
-		
-				var options = {
-				  legend: {position: 'none'},
-				  pointSize: 3," . $css . "
-				  title: '" . $title . "',
-				  chartArea: {width: '100%'},
-				  hAxis: { textPosition: 'none' },
-				  vAxis: { textPosition: 'none', minValue: 0},
-			 	};
-				
-				var chart = new google.visualization.AreaChart(document.getElementById('ga_dash_widgetstatsdata'));
-				
-				" . $formater . "
-				
-				chart.draw(data, options);
-		
-				}";
-			}
+				$content .= '<div id="ga_dash_widgetstatsdata" style="width:100%;"></div>';
+			}			
+			if ($display != 2 and isset($data['totalsForAllResults']['ga:visits'])){
+				switch ($period){
+					case '7daysAgo': $periodtext = __('Last 7 Days','ga-dash'); break;
+					case '14daysAgo': $periodtext = __('Last 14 Days','ga-dash'); break;
+					default: $periodtext = __('Last 30 Days','ga-dash'); break;
+				}
+					
+				$content.= '<table style="border:none;"><tr><td style="font-weight:bold;">'.__("Period:",'ga-dash').'</td><td style="padding:'.($display==3?'15px':'0').' 0 10px 20px;">'.$periodtext.'</td></tr>
+				<tr><td style="font-weight:bold;">'.__('Total Visits:','ga-dash').'</td><td style="padding:0 0 15px 20px;">'.($data['totalsForAllResults']['ga:visits']).'</td></tr>
+				</table>';
+			}			
 			
 			return $content;
 		}

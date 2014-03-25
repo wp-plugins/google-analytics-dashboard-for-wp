@@ -507,7 +507,8 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			var options = {
 				page: 'enable',
 				pageSize: 6,
-				width: '100%'
+				width: '100%',
+				allowHtml:true			
 			};
 		
 			var chart = new google.visualization.Table(document.getElementById('ga_dash_pgddata'));
@@ -529,7 +530,8 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			var options = {
 				page: 'enable',
 				pageSize: 6,
-				width: '100%'
+				width: '100%',
+				allowHtml:true	
 			};
 		
 			var chart = new google.visualization.Table(document.getElementById('ga_dash_rdata'));
