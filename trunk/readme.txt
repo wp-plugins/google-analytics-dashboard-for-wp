@@ -93,13 +93,16 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
-= 24.03.2014 - v4.2.15 =
+= 25.03.2014 - v4.2.15 =
 - force token reset procedure when failing to authenticate
 - deleting refresh token transient on uninstall
 - trying to catch all possible exceptions in gapi
 - no token reset on network connection errors
 - fixed screen options bug
 - added capability to select each role for access levels and exclude tracking
+- added links to top pages table
+- added links to top referrers table
+- added option to display Cart&Totals/Chart/Totals to frontend widget
 
 = 23.03.2014 - v4.2.14 =
 - bugfix for error reporting

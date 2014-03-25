@@ -81,7 +81,8 @@ if (! class_exists ( 'GADASH_Tools' )) {
 		function check_roles($access_level, $tracking=false){
 			if(is_user_logged_in() && isset($access_level)){
 				global $current_user;
-				$user_role = array_shift($current_user->roles);
+				$roles = $current_user->roles;
+				$user_role = array_shift($roles);
 				if (($user_role=='administrator') and !$tracking){
 					return true;
 				}
