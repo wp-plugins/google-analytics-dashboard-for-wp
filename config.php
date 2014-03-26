@@ -66,4 +66,8 @@ if (! class_exists ( 'GADASH_Config' )) {
 	}
 }
 
-$GLOBALS ['GADASH_Config'] = new GADASH_Config ();
+if (!isset($GLOBALS ['GADASH_Config'])){
+	$GLOBALS ['GADASH_Config'] = new GADASH_Config ();
+}
+
+	
