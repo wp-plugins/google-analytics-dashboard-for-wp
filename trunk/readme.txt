@@ -103,6 +103,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - added links to top pages table
 - added links to top referrers table
 - added option to display Cart&Totals/Chart/Totals to frontend widget
+- retrieving realtime analytics with wp ajax
 
 = 23.03.2014 - v4.2.14 =
 - bugfix for error reporting

@@ -7,7 +7,6 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 					$this,
 					'ga_dash_setup' 
 			) );
-			
 			// Admin Styles
 			add_action ( 'admin_enqueue_scripts', array (
 					$this,
@@ -22,7 +21,33 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 					$this,
 					'ga_dash_settings_link' 
 			) );
+			//Realtime action
+			add_action ( 'wp_ajax_gadash_get_online_data', array (
+					$this,
+					'gadash_realtime_data'
+			) );			
+			
 		}
+		//Realtime Ajax Response
+		function gadash_realtime_data() { 
+			global $GADASH_Config;
+			
+			if (!isset($_POST['gadash_security'])){
+				return;
+			}
+			
+			if ($GADASH_Config->options ['ga_dash_token'] and function_exists('curl_version')) {
+				include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
+				global $GADASH_GAPI;
+			} else{
+				die();
+			}
+			
+			print_r(stripslashes(json_encode($GADASH_GAPI->gadash_realtime_data($GADASH_Config->options ['ga_dash_tableid'])))); 
+
+			die();
+		}
+		
 		function ga_dash_admin_actions() {
 			global $GADASH_Config;
 			global $wp_version;
@@ -616,7 +641,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 						<td id='gadash-pages' class='gadash-pages' colspan='3'>&nbsp;</td>
 						</tr>
 					</table>";
-					$code .= $GADASH_GAPI->ga_realtime ( 'AIzaSyBG7LlUoHc29ZeC_dsShVaBEX15SfRl_WY', $GADASH_Config->plugin_url . '/realtime/superproxy.php' );
+					$code .= $GADASH_GAPI->ga_realtime ();
 				}
 			}
 			if ($GADASH_Config->options ['ga_dash_map'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back']) and $ga_dash_visits_country) {

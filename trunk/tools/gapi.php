@@ -838,12 +838,32 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			
 			return $content;
 		}
+		
+		//Realtime Ajax Response
+		function gadash_realtime_data($projectId) {
+			$metrics = 'ga:activeVisitors';
+			$dimensions = 'ga:pagePath,ga:source,ga:keyword,ga:trafficType,ga:visitorType,ga:pageTitle';
+			try {
+				$serial = "gadash_realtimecache_".$projectId;
+				$transient = get_transient ( $serial );
+				if (empty ( $transient )) {
+					$data = $this->service->data_realtime->get ( 'ga:' . $projectId, $metrics, array (
+							'dimensions' => $dimensions
+					) );
+					set_transient ( $serial, $data, 20 );
+				} else {
+					$data = $transient;
+				}
+			} catch ( Exception $e ) {
+				update_option ( 'gadash_lasterror', esc_html($e));
+				return '';
+			}
+			return $data;			
+		}		
+		
 		// Realtime Stats
-		function ga_realtime($devkey, $path) {
+		function ga_realtime() {
 			global $GADASH_Config;
-			
-			$token = json_decode ( $GADASH_Config->options ['ga_dash_token'] );
-			$url = $path . "?access_token=" . ($token->access_token) . "&key=$devkey";
 			
 			$code = '
 		
@@ -949,7 +969,9 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			
 				 function online_refresh(){
 					if (focusFlag){
-					jQuery.getJSON("' . $url . '", function(data){
+								
+					jQuery.post(ajaxurl, {action: "gadash_get_online_data", gadash_security: "'.wp_create_nonce('gadash_get_online_data').'"}, function(response){
+						var data = jQuery.parseJSON(response);		
 						if (data["totalsForAllResults"]["ga:activeVisitors"]!==document.getElementById("gadash-online").innerHTML){
 							jQuery("#gadash-online").fadeOut("slow");
 							jQuery("#gadash-online").fadeOut(500);
@@ -1050,5 +1072,6 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 		}
 	}
 }
-
-$GLOBALS ['GADASH_GAPI'] = new GADASH_GAPI ();
+if (!isset($GLOBALS ['GADASH_GAPI'])){
+	$GLOBALS ['GADASH_GAPI'] = new GADASH_GAPI ();
+}
