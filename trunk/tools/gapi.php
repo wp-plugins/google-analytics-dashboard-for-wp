@@ -119,6 +119,9 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$this->client->setUseObjects ( false );
 					update_option ( 'gadash_lasterror', 'No properties were found in this account!' );
 				}
+			} catch ( Google_IOException $e ){
+				update_option ( 'gadash_lasterror', esc_html($e ));
+				return false;
 			} catch (Exception $e){
 				update_option('gadash_lasterror',esc_html($e));
 				$this->ga_dash_reset_token (true);
@@ -977,7 +980,8 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					if (focusFlag){
 								
 					jQuery.post(ajaxurl, {action: "gadash_get_online_data", gadash_security: "'.wp_create_nonce('gadash_get_online_data').'"}, function(response){
-						var data = jQuery.parseJSON(response);		
+						var data = jQuery.parseJSON(response);
+						console.log(response);			
 						if (data["totalsForAllResults"]["ga:activeVisitors"]!==document.getElementById("gadash-online").innerHTML){
 							jQuery("#gadash-online").fadeOut("slow");
 							jQuery("#gadash-online").fadeOut(500);
