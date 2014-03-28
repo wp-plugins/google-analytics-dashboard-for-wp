@@ -23,7 +23,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 					'ga_dash_admin_actions' 
 			) );
 			// Plugin Settings link
-			add_filter ( "plugin_action_links_" . plugin_basename ( $GADASH_Config->plugin_path ) . '/ga_dash.php', array (
+			add_filter ( "plugin_action_links_" . plugin_basename ( $GADASH_Config->plugin_path ) . '/gadwp.php', array (
 					$this,
 					'ga_dash_settings_link' 
 			) );
