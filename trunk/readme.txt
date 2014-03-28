@@ -93,7 +93,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
-= 25.03.2014 - v4.2.15 =
+= 28.03.2014 - v4.2.15 =
 - force token reset procedure when failing to authenticate
 - deleting refresh token transient on uninstall
 - trying to catch all possible exceptions in gapi
@@ -104,6 +104,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - added links to top referrers table
 - added option to display Cart&Totals/Chart/Totals to frontend widget
 - retrieving realtime analytics with wp ajax
+- switching to default jquery-ui-tooltip wordpress library
 
 = 23.03.2014 - v4.2.14 =
 - bugfix for error reporting
