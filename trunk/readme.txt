@@ -102,7 +102,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - added capability to select each role for access levels and exclude tracking
 - added links to top pages table
 - added links to top referrers table
-- added option to display Cart&Totals/Chart/Totals to frontend widget
+- added option to display Chart&Totals/Chart/Totals to frontend widget
 - retrieving realtime analytics with wp ajax
 - switching to default jquery-ui-tooltip wordpress library
 - fixed settings link not displayed in plugins page
