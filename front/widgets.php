@@ -1,7 +1,10 @@
 <?php
-/*
- * Google Analytics Dashboard for WP Widget
- */
+/**
+ * Author: Alin Marcu
+ * Author URI: http://deconf.com
+ * License: GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
 class GADSH_Frontend_Widget extends WP_Widget {
 
     function __construct() {

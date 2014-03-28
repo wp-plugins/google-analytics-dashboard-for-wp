@@ -1,4 +1,10 @@
 <?php
+/**
+ * Author: Alin Marcu
+ * Author URI: http://deconf.com
+ * License: GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ */
 class GADASH_Settings {
 	private static function set_get_options($who) {
 		global $GADASH_Config;

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Author: Alin Marcu
+ * Author URI: http://deconf.com
+ * License: GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ */
 if (! class_exists ( 'GADASH_Widgets' )) {
 	class GADASH_Widgets {
 		function __construct() {
@@ -333,13 +339,14 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			
 			if ($realtime == "realtime") {
 				
-				wp_register_style ( 'jquery-ui-tooltip-1.9.2', $GADASH_Config->plugin_url . '/realtime/jquery/jquery.ui.tooltip.min.1.9.2.css' );
-				wp_register_script ( "jquery-ui-tooltip-1.9.2", $GADASH_Config->plugin_url . '/realtime/jquery/jquery.ui.tooltip.min.1.9.2.js' );
-				wp_enqueue_style ( 'jquery-ui-tooltip-1.9.2' );
-				wp_enqueue_script ( "jquery-ui-tooltip-1.9.2" );
+				wp_register_style ( 'jquery-ui-tooltip-html', $GADASH_Config->plugin_url . '/realtime/jquery/jquery.ui.tooltip.html.css' );
+				wp_enqueue_style ( 'jquery-ui-tooltip-html' );
 				
 				if (! wp_script_is ( 'jquery' )) {
 					wp_enqueue_script ( 'jquery' );
+				}
+				if (! wp_script_is ( 'jquery-ui-tooltip' )) {
+					wp_enqueue_script ( "jquery-ui-tooltip" );
 				}
 				if (! wp_script_is ( 'jquery-ui-core' )) {
 					wp_enqueue_script ( "jquery-ui-core" );
@@ -350,6 +357,10 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				if (! wp_script_is ( 'jquery-ui-position' )) {
 					wp_enqueue_script ( "jquery-ui-position" );
 				}
+
+				wp_register_script ( "jquery-ui-tooltip-html", $GADASH_Config->plugin_url . '/realtime/jquery/jquery.ui.tooltip.html.js' );				
+				wp_enqueue_script ( "jquery-ui-tooltip-html" );
+								
 			} else {
 				
 				switch ($query) {

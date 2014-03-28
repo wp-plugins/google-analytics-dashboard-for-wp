@@ -8,7 +8,6 @@
  * Author URI: http://deconf.com
  */  
 
-
 /*
  * Include Install
 */
