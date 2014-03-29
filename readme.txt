@@ -4,7 +4,7 @@ Donate link: http://deconf.com/donate/
 Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking,realtime,wpmu,multisite
 Requires at least: 2.8
 Tested up to: 3.8.1
-Stable tag: 4.2.14
+Stable tag: 4.2.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,8 +26,8 @@ Using this plugin, your analytics data is collected in a fast and secure manner 
 - option to display Visitors by Country on Geo Map
 - local websites and business have an option to display cities, instead of countries, on a regional map
 - option to display Traffic Overview in Pie Charts
-- access level settings for Backend statistics and analytics reports
-- access level settings for Frontend analytics data and reports
+- user access level settings for Backend statistics and analytics reports
+- user access level settings for Frontend analytics data and reports
 - option to display Google Analytics statistics on frontend, at the end of each article
 - frontend widget with website's analytics stats and analytics data anonymization feature
 - has multilingual support, a POT file is available for translations. If you have a complete translation, send me the translation file or upload it to our forum and will be included in next release.
