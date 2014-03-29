@@ -1,4 +1,10 @@
 <?php
+/**
+ * Author: Alin Marcu
+ * Author URI: http://deconf.com
+ * License: GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ */
 if (! class_exists ( 'GADASH_Widgets' )) {
 	class GADASH_Widgets {
 		function __construct() {
@@ -7,7 +13,6 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 					$this,
 					'ga_dash_setup' 
 			) );
-			
 			// Admin Styles
 			add_action ( 'admin_enqueue_scripts', array (
 					$this,
@@ -18,11 +23,37 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 					'ga_dash_admin_actions' 
 			) );
 			// Plugin Settings link
-			add_filter ( "plugin_action_links_" . plugin_basename ( $GADASH_Config->plugin_path ) . '/ga_dash.php', array (
+			add_filter ( "plugin_action_links_" . plugin_basename ( $GADASH_Config->plugin_path ) . '/gadwp.php', array (
 					$this,
 					'ga_dash_settings_link' 
 			) );
+			//Realtime action
+			add_action ( 'wp_ajax_gadash_get_online_data', array (
+					$this,
+					'gadash_realtime_data'
+			) );			
+			
 		}
+		//Realtime Ajax Response
+		function gadash_realtime_data() { 
+			global $GADASH_Config;
+			
+			if (!isset($_POST['gadash_security'])){
+				return;
+			}
+			
+			if ($GADASH_Config->options ['ga_dash_token'] and function_exists('curl_version')) {
+				include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
+				global $GADASH_GAPI;
+			} else{
+				die();
+			}
+			
+			print_r(stripslashes(json_encode($GADASH_GAPI->gadash_realtime_data($GADASH_Config->options ['ga_dash_tableid'])))); 
+
+			die();
+		}
+		
 		function ga_dash_admin_actions() {
 			global $GADASH_Config;
 			global $wp_version;
@@ -85,8 +116,15 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		}
 		function ga_dash_setup() {
 			global $GADASH_Config;
-			if (current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
-				wp_add_dashboard_widget ( 'ga-dash-widget', "<a href='http://deconf.com/google-analytics-dashboard-wordpress/' style='font-size:1em;text-decoration:none;' target='_blank'>" . __ ( "Google Analytics Dashboard", 'ga-dash' ) . "</a>", array (
+			
+			/*
+			 * Include Tools
+			*/
+			include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
+			$tools = new GADASH_Tools ();
+						
+			if ($tools->check_roles($GADASH_Config->options ['ga_dash_access_back'])) {
+				wp_add_dashboard_widget ( 'ga-dash-widget', __ ( "Google Analytics Dashboard", 'ga-dash' ), array (
 						$this,
 						'gadash_dashboard_widgets' 
 				), $control_callback = null );
@@ -115,7 +153,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			$tools->ga_dash_cleanup_timeouts();
 			
 			if (! $GADASH_GAPI->client->getAccessToken ()) {
-				echo '<p>' . __ ( 'This plugin needs an authorization:', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Authorize Plugin', 'ga-dash' ), 'secondary' ) . '<input type="hidden" name="Authorize" value="auhtorize"></form>';
+				echo '<p>' . __ ( 'Something went wrong. Please check the Debugging Data section for possible errors', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Error Log', 'ga-dash' ), 'secondary' ) . '</form>';
 				return;
 			}
 			
@@ -301,13 +339,14 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			
 			if ($realtime == "realtime") {
 				
-				wp_register_style ( 'jquery-ui-tooltip-1.9.2', $GADASH_Config->plugin_url . '/realtime/jquery/jquery.ui.tooltip.min.1.9.2.css' );
-				wp_register_script ( "jquery-ui-tooltip-1.9.2", $GADASH_Config->plugin_url . '/realtime/jquery/jquery.ui.tooltip.min.1.9.2.js' );
-				wp_enqueue_style ( 'jquery-ui-tooltip-1.9.2' );
-				wp_enqueue_script ( "jquery-ui-tooltip-1.9.2" );
+				wp_register_style ( 'jquery-ui-tooltip-html', $GADASH_Config->plugin_url . '/realtime/jquery/jquery.ui.tooltip.html.css' );
+				wp_enqueue_style ( 'jquery-ui-tooltip-html' );
 				
 				if (! wp_script_is ( 'jquery' )) {
 					wp_enqueue_script ( 'jquery' );
+				}
+				if (! wp_script_is ( 'jquery-ui-tooltip' )) {
+					wp_enqueue_script ( "jquery-ui-tooltip" );
 				}
 				if (! wp_script_is ( 'jquery-ui-core' )) {
 					wp_enqueue_script ( "jquery-ui-core" );
@@ -318,6 +357,10 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				if (! wp_script_is ( 'jquery-ui-position' )) {
 					wp_enqueue_script ( "jquery-ui-position" );
 				}
+
+				wp_register_script ( "jquery-ui-tooltip-html", $GADASH_Config->plugin_url . '/realtime/jquery/jquery.ui.tooltip.html.js' );				
+				wp_enqueue_script ( "jquery-ui-tooltip-html" );
+								
 			} else {
 				
 				switch ($query) {
@@ -424,7 +467,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
       }";
 			}
 			
-			if ($GADASH_Config->options ['ga_dash_map'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
+			if ($GADASH_Config->options ['ga_dash_map'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back'])) {
 				$ga_dash_visits_country = $GADASH_GAPI->ga_dash_visits_country ( $projectId, $from, $to );
 				if ($ga_dash_visits_country) {
 					
@@ -451,7 +494,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		  }";
 				}
 			}
-			if ($GADASH_Config->options ['ga_dash_traffic'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
+			if ($GADASH_Config->options ['ga_dash_traffic'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back'])) {
 				$ga_dash_traffic_sources = $GADASH_GAPI->ga_dash_traffic_sources ( $projectId, $from, $to );
 				$ga_dash_new_return = $GADASH_GAPI->ga_dash_new_return ( $projectId, $from, $to );
 				if ($ga_dash_traffic_sources and $ga_dash_new_return) {
@@ -487,7 +530,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		  }";
 				}
 			}
-			if ($GADASH_Config->options ['ga_dash_pgd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
+			if ($GADASH_Config->options ['ga_dash_pgd'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back'])) {
 				$ga_dash_top_pages = $GADASH_GAPI->ga_dash_top_pages ( $projectId, $from, $to );
 				if ($ga_dash_top_pages) {
 					$code .= '
@@ -500,7 +543,8 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			var options = {
 				page: 'enable',
 				pageSize: 6,
-				width: '100%'
+				width: '100%',
+				allowHtml:true			
 			};
 		
 			var chart = new google.visualization.Table(document.getElementById('ga_dash_pgddata'));
@@ -509,7 +553,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		  }";
 				}
 			}
-			if ($GADASH_Config->options ['ga_dash_rd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
+			if ($GADASH_Config->options ['ga_dash_rd'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back'])) {
 				$ga_dash_top_referrers = $GADASH_GAPI->ga_dash_top_referrers ( $projectId, $from, $to );
 				if ($ga_dash_top_referrers) {
 					$code .= '
@@ -522,7 +566,8 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			var options = {
 				page: 'enable',
 				pageSize: 6,
-				width: '100%'
+				width: '100%',
+				allowHtml:true	
 			};
 		
 			var chart = new google.visualization.Table(document.getElementById('ga_dash_rdata'));
@@ -531,7 +576,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		  }";
 				}
 			}
-			if ($GADASH_Config->options ['ga_dash_sd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] )) {
+			if ($GADASH_Config->options ['ga_dash_sd'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back'])) {
 				$ga_dash_top_searches = $GADASH_GAPI->ga_dash_top_searches ( $projectId, $from, $to );
 				if ($ga_dash_top_searches) {
 					$code .= '
@@ -607,10 +652,10 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 						<td id='gadash-pages' class='gadash-pages' colspan='3'>&nbsp;</td>
 						</tr>
 					</table>";
-					$code .= $GADASH_GAPI->ga_realtime ( 'AIzaSyBG7LlUoHc29ZeC_dsShVaBEX15SfRl_WY', $GADASH_Config->plugin_url . '/realtime/superproxy.php' );
+					$code .= $GADASH_GAPI->ga_realtime ();
 				}
 			}
-			if ($GADASH_Config->options ['ga_dash_map'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] ) and $ga_dash_visits_country) {
+			if ($GADASH_Config->options ['ga_dash_map'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back']) and $ga_dash_visits_country) {
 				$code .= '<br /><h3>';
 				if ($GADASH_Config->options ['ga_target_geomap']) {
 					$GADASH_GAPI->getcountrycodes ();
@@ -622,16 +667,16 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		<div id="ga_dash_mapdata"></div>';
 			}
 			
-			if ($GADASH_Config->options ['ga_dash_traffic'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] ) and ($ga_dash_top_referrers or $ga_dash_top_pages or ($ga_dash_traffic_sources and $ga_dash_new_return))) {
+			if ($GADASH_Config->options ['ga_dash_traffic'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back']) and ($ga_dash_top_referrers or $ga_dash_top_pages or ($ga_dash_traffic_sources and $ga_dash_new_return))) {
 				$code .= '<br /><h3>' . __ ( "Traffic Overview", 'ga-dash' ) . '</h3>
 		<table width="100%"><tr><td width="50%"><div id="ga_dash_trafficdata"></div></td><td width="50%"><div id="ga_dash_nvrdata"></div></td></tr></table>';
 			}
 			
-			if ($GADASH_Config->options ['ga_dash_pgd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] ))
+			if ($GADASH_Config->options ['ga_dash_pgd'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back']))
 				$code .= '<div id="ga_dash_pgddata"></div>';
-			if ($GADASH_Config->options ['ga_dash_rd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] ))
+			if ($GADASH_Config->options ['ga_dash_rd'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back']))
 				$code .= '<div id="ga_dash_rdata"></div>';
-			if ($GADASH_Config->options ['ga_dash_sd'] and current_user_can ( $GADASH_Config->options ['ga_dash_access_back'] ))
+			if ($GADASH_Config->options ['ga_dash_sd'] and $tools->check_roles($GADASH_Config->options ['ga_dash_access_back']))
 				$code .= '<div id="ga_dash_sdata"></div>';
 			
 			echo $code;

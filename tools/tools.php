@@ -1,4 +1,10 @@
 <?php
+/**
+ * Author: Alin Marcu
+ * Author URI: http://deconf.com
+ * License: GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ */
 if (! class_exists ( 'GADASH_Tools' )) {
 	class GADASH_Tools {
 		function guess_default_domain($profiles) {
@@ -35,6 +41,7 @@ if (! class_exists ( 'GADASH_Tools' )) {
 
 		function ga_dash_clear_cache() {
 			global $wpdb;
+			update_option ( 'gadash_lasterror', 'N/A' );
 			$sqlquery = $wpdb->query ( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_gadash%%'" );
 			$sqlquery = $wpdb->query ( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_gadash%%'" );
 			$sqlquery = $wpdb->query ( "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_timeout_ga_dash%%'" );
@@ -77,5 +84,21 @@ if (! class_exists ( 'GADASH_Tools' )) {
 			}
 			return '#' . $rgb;
 		}
+		
+		function check_roles($access_level, $tracking=false){
+			if(is_user_logged_in() && isset($access_level)){
+				global $current_user;
+				$roles = $current_user->roles;
+				$user_role = array_shift($roles);
+				if (($user_role=='administrator') and !$tracking){
+					return true;
+				}
+				if(in_array($user_role,$access_level)){
+					return true;
+				}else{
+					return false;
+				}
+			}			
+		}		
 	}
 }

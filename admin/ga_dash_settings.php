@@ -1,4 +1,10 @@
 <?php
+/**
+ * Author: Alin Marcu
+ * Author URI: http://deconf.com
+ * License: GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ */
 class GADASH_Settings {
 	private static function set_get_options($who) {
 		global $GADASH_Config;
@@ -13,6 +19,9 @@ class GADASH_Settings {
 				if (isset ( $_REQUEST ['options'] ['ga_tracking_code'] )) {
 					$new_options ['ga_tracking_code'] = trim ( $new_options ['ga_tracking_code'], "\t" );
 				}
+				if (empty($new_options['ga_track_exclude'])){
+					$new_options['ga_track_exclude'] = array();
+				}				
 			} else if ($who == 'backend') {
 				$options ['ga_dash_jailadmins'] = 0;
 				$options ['ga_dash_map'] = 0;
@@ -20,12 +29,15 @@ class GADASH_Settings {
 				$options ['ga_dash_pgd'] = 0;
 				$options ['ga_dash_rd'] = 0;
 				$options ['ga_dash_sd'] = 0;
-				if (isset ( $_REQUEST ['options'] ['ga_dash_tableid_jail'] )) {
-					$options ['ga_dash_tableid'] = $options ['ga_dash_tableid_jail'];
-				}
+				if (empty($new_options['ga_dash_access_back'])){
+					$new_options['ga_dash_access_back'][] = 'administrator';
+				}				
 			} else if ($who == 'frontend') {
 				$options ['ga_dash_frontend_stats'] = 0;
 				$options ['ga_dash_frontend_keywords'] = 0;
+				if (empty($new_options['ga_dash_access_front'])){
+					$new_options['ga_dash_access_front'][] = 'administrator';
+				}				
 			} else if ($who == 'general') {
 				$options ['ga_dash_userapi'] = 0;
 			}
@@ -70,18 +82,24 @@ class GADASH_Settings {
 								<td colspan="2"><?php echo "<h2>" . __( 'General Settings', 'ga-dash' ) . "</h2>"; ?></td>
 							</tr>
 							<tr>
-								<td class="title"><label for="ga_dash_access_front"><?php _e("Access Level: ", 'ga-dash' ); ?></label></td>
-								<td><select id="ga_dash_access_front"
-									name="options[ga_dash_access_front]">
-										<option value="manage_options"
-											<?php selected( $options['ga_dash_access_front'], 'manage_options' ); ?>><?php _e("Administrators", 'ga-dash');?></option>
-										<option value="edit_pages"
-											<?php selected( $options['ga_dash_access_front'], 'edit_pages' ); ?>><?php _e("Editors", 'ga-dash');?></option>
-										<option value="publish_posts"
-											<?php selected( $options['ga_dash_access_front'], 'publish_posts' ); ?>><?php _e("Authors", 'ga-dash');?></option>
-										<option value="edit_posts"
-											<?php selected( $options['ga_dash_access_front'], 'edit_posts' ); ?>><?php _e("Contributors", 'ga-dash');?></option>
-								</select></td>
+								<td class="roles title"><label for="ga_dash_access_front"><?php _e("Show stats to: ", 'ga-dash' ); ?></label></td>
+								<td class="roles">
+                               		<?php
+                                    if ( !isset( $wp_roles ) ){
+										$wp_roles = new WP_Roles();
+									}	
+                                    foreach ( $wp_roles->role_names as $role => $name ) {
+										if ($role!='subscriber'){
+                                    ?>
+                                    	<label>
+                                        	<?php echo $name; ?>
+                                            	<input type="checkbox" name="options[ga_dash_access_front][]" value="<?php echo $role; ?>" <?php if (in_array($role,$options['ga_dash_access_front']) OR $role=='administrator') echo 'checked="checked"'; if ($role=='administrator') echo 'disabled';?> />&nbsp;&nbsp;
+										</label>
+                                    <?php
+                                    	}
+                                    }
+                                    ?>
+							</td>
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
@@ -168,18 +186,24 @@ class GADASH_Settings {
 								<td colspan="2"><?php echo "<h2>" . __( 'General Settings', 'ga-dash' ) . "</h2>"; ?></td>
 							</tr>
 							<tr>
-								<td class="title"><label for="ga_dash_access_back"><?php _e("Access Level: ", 'ga-dash' ); ?></label></td>
-								<td><select id="ga_dash_access_back"
-									name="options[ga_dash_access_back]">
-										<option value="manage_options"
-											<?php selected( $options['ga_dash_access_back'], 'manage_options' ); ?>><?php _e("Administrators", 'ga-dash');?></option>
-										<option value="edit_pages"
-											<?php selected( $options['ga_dash_access_back'], 'edit_pages' ); ?>><?php _e("Editors", 'ga-dash');?></option>
-										<option value="publish_posts"
-											<?php selected( $options['ga_dash_access_back'], 'publish_posts' ); ?>><?php _e("Authors", 'ga-dash');?></option>
-										<option value="edit_posts"
-											<?php selected( $options['ga_dash_access_back'], 'edit_posts' ); ?>><?php _e("Contributors", 'ga-dash');?></option>
-								</select></td>
+								<td class="roles title"><label for="ga_dash_access_back"><?php _e("Show stats to: ", 'ga-dash' ); ?></label></td>
+								<td class="roles">
+                               		<?php
+                                    if ( !isset( $wp_roles ) ){
+										$wp_roles = new WP_Roles();
+									}	
+                                    foreach ( $wp_roles->role_names as $role => $name ) {
+										if ($role!='subscriber'){
+                                    ?>
+                                    	<label>
+                                        	<?php echo $name; ?>
+                                            	<input type="checkbox" name="options[ga_dash_access_back][]" value="<?php echo $role; ?>" <?php if (in_array($role,$options['ga_dash_access_back']) OR $role=='administrator') echo 'checked="checked"'; if ($role=='administrator') echo 'disabled';?> />&nbsp;&nbsp;
+										</label>
+                                    <?php
+                                    	}
+                                    }
+                                    ?>
+							</td>
 							</tr>
 
 							<tr>
@@ -486,20 +510,22 @@ class GADASH_Settings {
 								<td colspan="2"><hr><?php echo "<h2>" . __( 'Exclude Tracking', 'ga-dash' ) . "</h2>"; ?></td>
 							</tr>
 							<tr>
-								<td class="title"><label for="ga_track_exclude"><?php _e("Exclude tracking for: ", 'ga-dash' ); ?></label></td>
-								<td><select id="ga_track_exclude"
-									name="options[ga_track_exclude]">
-										<option value="disabled"
-											<?php selected( $options['ga_track_exclude'], 'disabled' ); ?>><?php _e("Disabled", 'ga-dash');?></option>
-										<option value="manage_options"
-											<?php selected( $options['ga_track_exclude'], 'manage_options' ); ?>><?php _e("Administrators", 'ga-dash');?></option>
-										<option value="edit_pages"
-											<?php selected( $options['ga_track_exclude'], 'edit_pages' ); ?>><?php _e("Editors", 'ga-dash');?></option>
-										<option value="publish_posts"
-											<?php selected( $options['ga_track_exclude'], 'publish_posts' ); ?>><?php _e("Authors", 'ga-dash');?></option>
-										<option value="edit_posts"
-											<?php selected( $options['ga_track_exclude'], 'edit_posts' ); ?>><?php _e("Contributors", 'ga-dash');?></option>
-								</select></td>
+								<td class="roles title"><label for="ga_track_exclude"><?php _e("Exclude tracking for: ", 'ga-dash' ); ?></label></td>
+								<td class="roles">
+                               		<?php
+                                    if ( !isset( $wp_roles ) ){
+										$wp_roles = new WP_Roles();
+									}	
+                                    foreach ( $wp_roles->role_names as $role => $name ) {
+                                    ?>
+                                    	<label>
+                                        	<?php echo $name; ?>
+                                            	<input type="checkbox" name="options[ga_track_exclude][]" value="<?php echo $role; ?>" <?php if (in_array($role,$options['ga_track_exclude'])) echo 'checked="checked"'; ?> />&nbsp;&nbsp;
+										</label>
+                                    <?php
+                                    }
+                                    ?>
+							</td>
 							</tr>
 							<?php
 		}
@@ -550,7 +576,10 @@ class GADASH_Settings {
 					$GADASH_Config->set_plugin_options ();
 					$message = "<div class='updated'><p><strong>" . __ ( 'Plugin authorization succeeded.', 'ga-dash' ) . "</strong></p></div>";
 					$options = self::set_get_options ( 'general' );
-				}catch (Exception $e){
+				} catch ( Google_IOException $e ){
+				update_option ( 'gadash_lasterror', esc_html($e ));
+				return false;
+			}catch (Exception $e){
 					update_option('gadash_lasterror',esc_html($e));
 					ga_dash_reset_token(false);
 				}	
