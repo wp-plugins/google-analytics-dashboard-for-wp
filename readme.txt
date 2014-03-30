@@ -94,7 +94,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 == Changelog ==
 
 = 30.03.2014 - v4.2.16 =
-- security update
+- properly nonce verification
 
 = 28.03.2014 - v4.2.15 =
 - force token reset procedure when failing to authenticate
