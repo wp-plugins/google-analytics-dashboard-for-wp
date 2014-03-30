@@ -38,7 +38,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		function gadash_realtime_data() { 
 			global $GADASH_Config;
 			
-			if (!isset($_POST['gadash_security'])){
+			if (!isset($_REQUEST['gadash_security']) OR !wp_verify_nonce($_REQUEST['gadash_security'],'gadash_get_online_data')){
 				return;
 			}
 			
