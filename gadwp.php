@@ -4,10 +4,9 @@
  * Plugin URI: http://deconf.com 
  * Description: Displays Google Analytics Reports and Real-Time Statistics in your Dashboard. Automatically inserts the tracking code in every page of your website.  
  * Author: Alin Marcu 
- * Version: 4.2.15 
+ * Version: 4.2.16 
  * Author URI: http://deconf.com
  */  
-
 
 /*
  * Include Install
@@ -51,11 +50,17 @@ function gadash_admin_init(){
 	 */
 	include_once (dirname ( __FILE__ ) . '/config.php');
 	global $GADASH_Config;
-		
+
+	/*
+	 * Include Tools
+	*/
+	include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
+	$tools = new GADASH_Tools ();	
+	
 	/*
 	 * Include backend widgets
 	 */
-	if (current_user_can ( $GADASH_Config->options['ga_dash_access_back'] )) {
+	if ($tools->check_roles($GADASH_Config->options ['ga_dash_access_back'])) {
 		include_once (dirname ( __FILE__ ) . '/admin/dashboard_widgets.php');
 	}
 	/*
@@ -69,18 +74,24 @@ function gadash_front_init(){
 	 * Include config
 	*/
 	include_once (dirname ( __FILE__ ) . '/config.php');
-	global $GADASH_Config;	
+	global $GADASH_Config;
+
+	/*
+	 * Include Tools
+	*/
+	include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
+	$tools = new GADASH_Tools ();	
 	
 	/*
 	 * Include frontend stats
 	 */
-	if (current_user_can ( $GADASH_Config->options['ga_dash_access_front'] ) AND ($GADASH_Config->options['ga_dash_frontend_stats'] OR $GADASH_Config->options['ga_dash_frontend_keywords'])) {
+	if ($tools->check_roles($GADASH_Config->options ['ga_dash_access_front']) AND ($GADASH_Config->options['ga_dash_frontend_stats'] OR $GADASH_Config->options['ga_dash_frontend_keywords'])) {
 		include_once (dirname ( __FILE__ ) . '/front/frontend.php');
 	}	
 	/*
 	 * Include tracking
 	 */
-	if (!current_user_can ( $GADASH_Config->options ['ga_track_exclude'] ) AND $GADASH_Config->options ['ga_dash_tracking']) {
+	if (!$tools->check_roles($GADASH_Config->options ['ga_track_exclude'], true ) AND $GADASH_Config->options ['ga_dash_tracking']) {
 		include_once (dirname ( __FILE__ ) . '/front/tracking.php');
 	}	
 	/*

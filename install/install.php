@@ -1,4 +1,10 @@
 <?php
+/**
+ * Author: Alin Marcu
+ * Author URI: http://deconf.com
+ * License: GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ */
 Class GADASH_Install{
 	static function install(){
 		if (!get_option ( 'ga_dash_token' )) {
@@ -6,8 +12,8 @@ Class GADASH_Install{
 			$options ['ga_dash_apikey'] = '';
 			$options ['ga_dash_clientid'] = '';
 			$options ['ga_dash_clientsecret'] = '';
-			$options ['ga_dash_access_front'] = 'manage_options';
-			$options ['ga_dash_access_back'] = 'manage_options';
+			$options ['ga_dash_access_front'][] = 'administrator';
+			$options ['ga_dash_access_back'][] = 'administrator';
 			$options ['ga_dash_tableid_jail'] = '';
 			$options ['ga_dash_pgd'] = 0;
 			$options ['ga_dash_rd'] = 0;
@@ -24,7 +30,7 @@ Class GADASH_Install{
 			$options ['ga_dash_userapi'] = 0;
 			$options ['ga_event_tracking'] = 0;
 			$options ['ga_event_downloads'] = 'zip|mp3|mpeg|pdf|doc*|ppt*|xls*|jpeg|png|gif|tiff';
-			$options ['ga_track_exclude'] = 'manage_options';
+			$options ['ga_track_exclude'][] = 'administrator';
 			$options ['ga_target_geomap'] = '';
 			$options ['ga_target_number'] = 10;
 			$options ['ga_realtime_pages'] = 10;
@@ -44,8 +50,8 @@ Class GADASH_Install{
 			$options ['ga_dash_clientid'] = get_option ( 'ga_dash_clientid' );
 			$options ['ga_dash_clientsecret'] = get_option ( 'ga_dash_clientsecret' );
 			$options ['ga_dash_access'] = get_option ( 'ga_dash_access' );
-			$options ['ga_dash_access_front'] = get_option ( 'ga_dash_access_front' );
-			$options ['ga_dash_access_back'] = get_option ( 'ga_dash_access_back' );
+			$options ['ga_dash_access_front'][] = 'administrator';
+			$options ['ga_dash_access_back'][] = 'administrator';
 			$options ['ga_dash_tableid_jail'] = get_option ( 'ga_dash_tableid_jail' );
 			$options ['ga_dash_pgd'] = get_option ( 'ga_dash_pgd' );
 			$options ['ga_dash_rd'] = get_option ( 'ga_dash_rd' );
@@ -69,7 +75,7 @@ Class GADASH_Install{
 			$options ['ga_dash_userapi'] = get_option ( 'ga_dash_userapi' );
 			$options ['ga_event_tracking'] = get_option ( 'ga_event_tracking' );
 			$options ['ga_event_downloads'] = get_option ( 'ga_event_downloads' );
-			$options ['ga_track_exclude'] = get_option ( 'ga_track_exclude' );
+			$options ['ga_track_exclude'][] = 'administrator';
 			$options ['ga_target_geomap'] = get_option ( 'ga_target_geomap' );
 			$options ['ga_target_number'] = get_option ( 'ga_target_number' );
 			$options ['ga_realtime_pages'] = get_option ( 'ga_realtime_pages' );

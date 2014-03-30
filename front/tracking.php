@@ -1,4 +1,10 @@
 <?php
+/**
+ * Author: Alin Marcu
+ * Author URI: http://deconf.com
+ * License: GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ */
 if (! class_exists ( 'GADASH_Tracking' )) {
 	class GADASH_Tracking {
 		function __construct() {
@@ -19,8 +25,13 @@ if (! class_exists ( 'GADASH_Tracking' )) {
 		}
 		function ga_dash_tracking($head) {
 			global $GADASH_Config;
-						
-			if (current_user_can ( $GADASH_Config->options ['ga_track_exclude'] )) {
+			/*
+			 * Include Tools
+			*/
+			include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
+			$tools = new GADASH_Tools ();
+									
+			if ($tools->check_roles($GADASH_Config->options ['ga_track_exclude'],true)) {
 				return;
 			}
 						
@@ -28,13 +39,8 @@ if (! class_exists ( 'GADASH_Tracking' )) {
 			$traking_type = $GADASH_Config->options ['ga_dash_tracking_type'];
 			
 			if ($traking_mode == 1 OR ($traking_mode == 2 AND !$GADASH_Config->options['ga_tracking_code'])) {
-				/*
-				 * Include Tools
-				*/
-				include_once ($GADASH_Config->plugin_path . '/tools/tools.php');			
-				$tools = new GADASH_Tools ();
 				
-				if (current_user_can ( $GADASH_Config->options ['ga_track_exclude'] ) OR !$GADASH_Config->options ['ga_dash_tableid_jail']) {
+				if (!$GADASH_Config->options ['ga_dash_tableid_jail']) {
 					return;
 				}
 								
@@ -58,13 +64,7 @@ if (! class_exists ( 'GADASH_Tracking' )) {
 					echo "\n<!-- END GADWP Classic Tracking -->\n\n";					
 				}
 			} else{
-				
-				/*
-				 * Include Tools
-				*/
-				include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
-				$tools = new GADASH_Tools ();
-								
+
 				if ($GADASH_Config->options['ga_tracking_code']){
 					echo "\n<!-- BEGIN GADWP Custom Tracking - http://deconf.com/google-analytics-dashboard-wordpress/ -->\n";
 					if ($GADASH_Config->options ['ga_event_tracking']){

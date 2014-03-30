@@ -199,3 +199,7 @@ pre.gadash{
 pre.log_data{
 	white-space: pre-wrap;
 } 
+
+td.roles{
+	padding-bottom:15px;
+}
