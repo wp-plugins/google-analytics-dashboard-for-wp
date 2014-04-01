@@ -10,7 +10,7 @@ class GADASH_Settings {
 		global $GADASH_Config;
 		
 		$options = $GADASH_Config->options;
-		if (isset ( $_REQUEST ['ga_dash_hidden'] ) and isset ( $_REQUEST ['options'] ) and $who!='Reset') {
+		if (isset ( $_REQUEST ['options']['ga_dash_hidden'] ) and isset ( $_REQUEST ['options'] ) and $who!='Reset') {
 			$new_options = $_REQUEST ['options'];
 			if ($who == 'tracking') {
 				$options ['ga_dash_anonim'] = 0;
@@ -35,6 +35,7 @@ class GADASH_Settings {
 			} else if ($who == 'frontend') {
 				$options ['ga_dash_frontend_stats'] = 0;
 				$options ['ga_dash_frontend_keywords'] = 0;
+				error_log('Am Salvat',3,'mylog.txt');
 				if (empty($new_options['ga_dash_access_front'])){
 					$new_options['ga_dash_access_front'][] = 'administrator';
 				}				
@@ -56,7 +57,7 @@ class GADASH_Settings {
 		
 		$options = self::set_get_options ( 'frontend' );
 		
-		if (isset ( $_REQUEST ['ga_dash_hidden'] )) {
+		if (isset ( $_REQUEST ['options']['ga_dash_hidden'] )) {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Options saved.', 'ga-dash' ) . "</strong></p></div>";
 		}
 
@@ -146,7 +147,7 @@ class GADASH_Settings {
 									value="<?php _e('Update Options', 'ga-dash' ) ?>" /></td>
 							</tr>
 						</table>
-						<input type="hidden" name="ga_dash_hidden" value="Y">
+						<input type="hidden" name="options[ga_dash_hidden]" value="Y">
 
 </form>
 <?php
@@ -160,7 +161,7 @@ class GADASH_Settings {
 		
 		$options = self::set_get_options ( 'backend' );
 		
-		if (isset ( $_REQUEST ['ga_dash_hidden'] )) {
+		if (isset ( $_REQUEST ['options']['ga_dash_hidden'] )) {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Options saved.', 'ga-dash' ) . "</strong></p></div>";
 		}
 		
@@ -350,7 +351,7 @@ class GADASH_Settings {
 									value="<?php _e('Update Options', 'ga-dash' ) ?>" /></td>
 							</tr>
 						</table>
-						<input type="hidden" name="ga_dash_hidden" value="Y">
+						<input type="hidden" name="options[ga_dash_hidden]" value="Y">
 
 </form>
 <?php
@@ -371,7 +372,7 @@ class GADASH_Settings {
 		
 		$options = self::set_get_options ( 'tracking' );
 		
-		if (isset ( $_REQUEST ['ga_dash_hidden'] )) {
+		if (isset ( $_REQUEST ['options']['ga_dash_hidden'] )) {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Options saved.', 'ga-dash' ) . "</strong></p></div>";
 		}
 		
@@ -540,7 +541,7 @@ class GADASH_Settings {
 									value="<?php _e('Update Options', 'ga-dash' ) ?>" /></td>
 							</tr>
 						</table>
-						<input type="hidden" name="ga_dash_hidden" value="Y">
+						<input type="hidden" name="options[ga_dash_hidden]" value="Y">
 
 </form>
 <?php
@@ -621,7 +622,7 @@ class GADASH_Settings {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Dumping log data.', 'ga-dash' ) . "</strong></p></div>";
 		}
 		
-		if (isset ( $_REQUEST ['ga_dash_hidden'] ) and ! isset ( $_REQUEST ['Clear'] ) and ! isset ( $_REQUEST ['Reset']) and ! isset ( $_REQUEST ['Log'])) {
+		if (isset ( $_REQUEST ['options']['ga_dash_hidden'] ) and ! isset ( $_REQUEST ['Clear'] ) and ! isset ( $_REQUEST ['Reset']) and ! isset ( $_REQUEST ['Log'])) {
 			$message = "<div class='updated'><p><strong>" . __ ( 'Options saved.', 'ga-dash' ) . "</strong></p></div>";
 		}
 		
@@ -659,7 +660,7 @@ class GADASH_Settings {
 			?>
 					<form name="ga_dash_form" method="post"
 						action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
-						<input type="hidden" name="ga_dash_hidden" value="Y">
+						<input type="hidden" name="options[ga_dash_hidden]" value="Y">
 						<table class="options">
 							<tr>
 								<td colspan="2"><?php echo "<h2>" . __( 'Plugin Authorization', 'ga-dash' ) . "</h2>"; ?></td>
@@ -703,7 +704,7 @@ class GADASH_Settings {
 								</td>
 								<td><input type="text" name="options[ga_dash_clientsecret]"
 									value="<?php echo $options['ga_dash_clientsecret']; ?>"
-									size="40"> <input type="hidden" name="ga_dash_hidden" value="Y">
+									size="40"> <input type="hidden" name="options[ga_dash_hidden]" value="Y">
 								</td>
 							</tr>
 						<?php
