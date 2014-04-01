@@ -93,6 +93,9 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
+= 01.04.2014 - v4.2.17 =
+- fixed bug: frontend settings not updating properly
+
 = 30.03.2014 - v4.2.16 =
 - properly nonce verification
 
