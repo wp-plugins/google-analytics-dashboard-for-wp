@@ -93,9 +93,6 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
-= 03.04.2014 - v4.2.18 =
-- translations bugfix
-
 = 01.04.2014 - v4.2.17 =
 - fixed on/off toggle bug for frontend settings
 
