@@ -11,7 +11,7 @@ class GADSH_Frontend_Widget extends WP_Widget {
         parent::__construct(
             'gadash_frontend_widget',
             __('Google Analytics Dashboard', 'ga-dash'),
-            array( 'description' => __( 'Will display your google analytics stats in a widget', 'ga-dash' ), )
+            array( 'description' => __( "Will display your google analytics stats in a widget", 'ga-dash' ), )
         );
     }
 
@@ -72,18 +72,18 @@ class GADSH_Frontend_Widget extends WP_Widget {
     }
 
     public function form( $instance ) {
-        $title = ( isset( $instance[ 'title' ] ) ? $instance[ 'title' ] : __( 'Google Analytics Stats', 'ga-dash' ) );
+        $title = ( isset( $instance[ 'title' ] ) ? $instance[ 'title' ] : __( "Google Analytics Stats", 'ga-dash' ) );
         $period = ( isset( $instance[ 'period' ] ) ? $instance[ 'period' ] : '7daysAgo' );
         $display = ( isset( $instance[ 'display' ] ) ? $instance[ 'display' ] : 1 );
         $give_credits = (isset( $instance[ 'give_credits' ] ) ? $instance[ 'give_credits' ] : 1);
         $anonim = (isset( $instance[ 'anonim' ] ) ? $instance[ 'anonim' ] : 0);
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:','ga-dash' ); ?></label>
+            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( "Title:",'ga-dash' ); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id( 'display' ); ?>"><?php _e( 'Display:','ga-dash' ); ?></label>
+            <label for="<?php echo $this->get_field_id( 'display' ); ?>"><?php _e( "Display:",'ga-dash' ); ?></label>
 			<select id="<?php echo $this->get_field_id('display'); ?>"  class="widefat" name="<?php   echo $this->get_field_name( 'display' ); ?>">
 				<option value="1" <?php selected( $display, 1 ); ?>><?php _e('Chart & Totals', 'ga-dash');?></option>
 				<option value="2" <?php selected( $display, 2 ); ?>><?php _e('Chart', 'ga-dash');?></option>
@@ -95,7 +95,7 @@ class GADSH_Frontend_Widget extends WP_Widget {
             <input class="widefat" id="<?php echo $this->get_field_id( 'anonim' ); ?>" name="<?php echo $this->get_field_name( 'anonim' ); ?>" type="checkbox" <?php checked( $anonim, 1 ); ?> value="1">
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id( 'period' ); ?>"><?php _e( 'Stats for:','ga-dash' ); ?></label>
+            <label for="<?php echo $this->get_field_id( 'period' ); ?>"><?php _e( "Stats for:",'ga-dash' ); ?></label>
 			<select id="<?php echo $this->get_field_id('period'); ?>"  class="widefat" name="<?php   echo $this->get_field_name( 'period' ); ?>">
 				<option value="7daysAgo" <?php selected( $period, '7daysAgo' ); ?>><?php _e('Last 7 Days', 'ga-dash');?></option>
 				<option value="14daysAgo" <?php selected( $period, '14daysAgo' ); ?>><?php _e('Last 14 Days', 'ga-dash');?></option>
@@ -103,7 +103,7 @@ class GADSH_Frontend_Widget extends WP_Widget {
 			</select>
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id( 'give_credits' ); ?>"><?php _e( 'Give credits:','ga-dash' ); ?></label>
+            <label for="<?php echo $this->get_field_id( 'give_credits' ); ?>"><?php _e( "Give credits:",'ga-dash' ); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'give_credits' ); ?>" name="<?php echo $this->get_field_name( 'give_credits' ); ?>" type="checkbox" <?php checked( $give_credits, 1 ); ?> value="1">
         </p>
 
