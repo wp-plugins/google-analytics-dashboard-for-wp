@@ -57,27 +57,27 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		function ga_dash_admin_actions() {
 			global $GADASH_Config;
 			global $wp_version;
-			
+
 			if (current_user_can ( 'manage_options' )) {
 				include ($GADASH_Config->plugin_path . '/admin/ga_dash_settings.php');
 				
-				add_menu_page ( __ ( 'Google Analytics' ), __ ( 'Google Analytics' ), 'manage_options', 'gadash_settings', array (
+				add_menu_page ( __( "Google Analytics",'ga-dash' ), __( "Google Analytics",'ga-dash' ), 'manage_options', 'gadash_settings', array (
 						'GADASH_Settings',
 						'general_settings' 
 				), version_compare($wp_version, '3.8.0', '>=')?'dashicons-chart-area':$GADASH_Config->plugin_url . '/admin/images/gadash-icon.png' );
-				add_submenu_page ( 'gadash_settings', __ ( 'General Settings' ), __ ( 'General Settings' ), 'manage_options', 'gadash_settings', array (
+				add_submenu_page ( 'gadash_settings', __( "General Settings",'ga-dash' ), __( "General Settings",'ga-dash' ), 'manage_options', 'gadash_settings', array (
 						'GADASH_Settings',
 						'general_settings' 
 				) );
-				add_submenu_page ( 'gadash_settings', __ ( 'Backend Settings' ), __ ( 'Backend Settings' ), 'manage_options', 'gadash_backend_settings', array (
+				add_submenu_page ( 'gadash_settings', __( "Backend Settings",'ga-dash' ), __( "Backend Settings",'ga-dash' ), 'manage_options', 'gadash_backend_settings', array (
 						'GADASH_Settings',
 						'backend_settings' 
 				) );
-				add_submenu_page ( 'gadash_settings', __ ( 'Frontend Settings' ), __ ( 'Frontend Settings' ), 'manage_options', 'gadash_frontend_settings', array (
+				add_submenu_page ( 'gadash_settings', __( "Frontend Settings",'ga-dash' ), __( "Frontend Settings",'ga-dash' ), 'manage_options', 'gadash_frontend_settings', array (
 						'GADASH_Settings',
 						'frontend_settings' 
 				) );
-				add_submenu_page ( 'gadash_settings', __ ( 'Tracking Code' ), __ ( 'Tracking Code' ), 'manage_options', 'gadash_tracking_settings', array (
+				add_submenu_page ( 'gadash_settings', __( "Tracking Code",'ga-dash' ), __ ( "Tracking Code",'ga-dash' ), 'manage_options', 'gadash_tracking_settings', array (
 						'GADASH_Settings',
 						'tracking_settings' 
 				) );
@@ -140,7 +140,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
 				global $GADASH_GAPI;
 			} else {
-				echo '<p>' . __ ( 'This plugin needs an authorization:', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Authorize Plugin', 'ga-dash' ), 'secondary' ) . '</form>';
+				echo '<p>' . __( "This plugin needs an authorization:", 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __( "Authorize Plugin", 'ga-dash' ), 'secondary' ) . '</form>';
 				return;
 			}
 			
@@ -153,7 +153,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			$tools->ga_dash_cleanup_timeouts();
 			
 			if (! $GADASH_GAPI->client->getAccessToken ()) {
-				echo '<p>' . __ ( 'Something went wrong. Please check the Debugging Data section for possible errors', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Error Log', 'ga-dash' ), 'secondary' ) . '</form>';
+				echo '<p>' . __( "Something went wrong. Please check the Debugging Data section for possible errors", 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __( "Error Log", 'ga-dash' ), 'secondary' ) . '</form>';
 				return;
 			}
 			
@@ -185,12 +185,12 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 						if (isset ( $profile [3] )) {
 							$profile_switch .= '<option value="' . $profile [1] . '" ';
 							$profile_switch .= selected ( $profile [1], $GADASH_Config->options ['ga_dash_tableid'], false );
-							$profile_switch .= ' title="' . __ ( 'View Name:', 'ga-dash' ) . ' ' . $profile [0] . '">' . $tools->ga_dash_get_profile_domain ( $profile [3] ) . '</option>';
+							$profile_switch .= ' title="' . __( "View Name:", 'ga-dash' ) . ' ' . $profile [0] . '">' . $tools->ga_dash_get_profile_domain ( $profile [3] ) . '</option>';
 						}
 					}
 					$profile_switch .= "</select>";
 				} else {
-					echo '<p>' . __ ( 'Something went wrong while retrieving profiles list.', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'More details', 'ga-dash' ), 'secondary' ) . '</form>';
+					echo '<p>' . __( "Something went wrong while retrieving profiles list.", 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __( "More details", 'ga-dash' ), 'secondary' ) . '</form>';
 					return;
 				}
 			}
@@ -206,7 +206,7 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 					if ($GADASH_Config->options ['ga_dash_tableid_jail']) {
 						$projectId = $GADASH_Config->options ['ga_dash_tableid_jail'];
 					} else {
-						echo '<p>' . __ ( 'An admin should asign a default Google Analytics Profile.', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Select Domain', 'ga-dash' ), 'secondary' ) . '</form>';
+						echo '<p>' . __( "An admin should asign a default Google Analytics Profile.", 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __( "Select Domain", 'ga-dash' ), 'secondary' ) . '</form>';
 						return;
 					}
 				} else {
@@ -217,13 +217,13 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				if ($GADASH_Config->options ['ga_dash_tableid_jail']) {
 					$projectId = $GADASH_Config->options ['ga_dash_tableid_jail'];
 				} else {
-					echo '<p>' . __ ( 'An admin should asign a default Google Analytics Profile.', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Select Domain', 'ga-dash' ), 'secondary' ) . '</form>';
+					echo '<p>' . __( "An admin should asign a default Google Analytics Profile.", 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __( "Select Domain", 'ga-dash' ), 'secondary' ) . '</form>';
 					return;
 				}
 			}
 			
 			if (! ($projectId)) {
-				echo '<p>' . __ ( 'Something went wrong while retrieving property data. You need to create and properly configure a Google Analytics account:', 'ga-dash' ) . '</p> <form action="http://deconf.com/how-to-set-up-google-analytics-on-your-website/" method="POST">' . get_submit_button ( __ ( 'Find out more!', 'ga-dash' ), 'secondary' ) . '</form>';
+				echo '<p>' . __( "Something went wrong while retrieving property data. You need to create and properly configure a Google Analytics account:", 'ga-dash' ) . '</p> <form action="http://deconf.com/how-to-set-up-google-analytics-on-your-website/" method="POST">' . get_submit_button ( __( "Find out more!", 'ga-dash' ), 'secondary' ) . '</form>';
 				return;
 			} else {
 				$profile_info = $tools->get_selected_profile ( $GADASH_Config->options ['ga_dash_profile_list'], $projectId );
@@ -399,13 +399,13 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			
 			$ga_dash_statsdata = $GADASH_GAPI->ga_dash_main_charts ( $projectId, $period, $from, $to, $query );
 			if (! $ga_dash_statsdata) {
-				echo '<p>' . __ ( 'No stats available. Please check the Debugging Data section for possible errors', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Error Log', 'ga-dash' ), 'secondary' ) . '</form>';
+				echo '<p>' . __( "No stats available. Please check the Debugging Data section for possible errors", 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __( "Error Log", 'ga-dash' ), 'secondary' ) . '</form>';
 				return;
 			}
 			
 			$ga_dash_bottom_stats = $GADASH_GAPI->ga_dash_bottom_stats ( $projectId, $period, $from, $to );
 			if (! $ga_dash_bottom_stats) {
-				echo '<p>' . __ ( 'No stats available. Please check the Debugging Data section for possible errors', 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __ ( 'Error Log', 'ga-dash' ), 'secondary' ) . '</form>';
+				echo '<p>' . __( "No stats available. Please check the Debugging Data section for possible errors", 'ga-dash' ) . '</p><form action="' . menu_page_url ( 'gadash_settings', false ) . '" method="POST">' . get_submit_button ( __( "Error Log", 'ga-dash' ), 'secondary' ) . '</form>';
 				return;
 			}
 			
