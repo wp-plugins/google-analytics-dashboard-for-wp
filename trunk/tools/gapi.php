@@ -97,6 +97,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$this->client->setUseObjects ( true );
 				$profiles = $this->service->management_profiles->listManagementProfiles ( '~all', '~all' );
 				$items = $profiles->getItems ();
+				$this->client->setUseObjects ( false );
 				if (count ( $items ) != 0) {
 					$ga_dash_profile_list = array ();
 					foreach ( $items as $profile ) {
@@ -112,11 +113,9 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 								$profile->getTimezone () 
 						);
 					}
-					$this->client->setUseObjects ( false );
 					update_option ( 'gadash_lasterror', 'N/A' );
 					return ($ga_dash_profile_list);
 				} else {
-					$this->client->setUseObjects ( false );
 					update_option ( 'gadash_lasterror', 'No properties were found in this account!' );
 				}
 			} catch ( Google_IOException $e ){
@@ -170,10 +169,14 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$GADASH_Config->options ['ga_dash_tableid'] = "";
 				$GADASH_Config->options ['ga_dash_tableid_jail'] = "";
 				$GADASH_Config->options ['ga_dash_profile_list'] = "";
-				$this->client->revokeToken ();
-			}	
+				try{
+					$this->client->revokeToken ();
+				} catch (Exception $e) {
+					$GADASH_Config->set_plugin_options ();
+				}	
+			}
+				
 			$GADASH_Config->set_plugin_options ();
-		
 		}
 		
 		// Get Main Chart
