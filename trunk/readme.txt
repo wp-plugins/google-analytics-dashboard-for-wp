@@ -3,8 +3,8 @@ Contributors: deconf
 Donate link: http://deconf.com/donate/
 Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking,realtime,wpmu,multisite
 Requires at least: 2.8
-Tested up to: 3.8.1
-Stable tag: 4.2.18
+Tested up to: 3.9
+Stable tag: 4.2.19
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,7 @@ Using this plugin, your analytics data is collected in a fast and secure manner 
 - automatically generates the tracking code; the user can also define a custom code
 - IP address anonymization feature
 - enhanced link attribution feature
+- remarketing, demographics and interests tracking
 - track events feature: track downloads, emails and outbound links (supported for both tracking methods: classic tracking and universal tracking)
 - exclude traffic based on user level access
  
@@ -92,6 +93,13 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 This plugin it's released under the GPLv2, you can use it free of charge on your personal or commercial website.
 
 == Changelog ==
+
+= 28.04.2014 - v4.2.19 =
+- added Portuguese translation
+- frontend widget CSS fix
+- added remarketing, demographics and interests tracking support
+- universal analytics is now the default tracking method
+- CSS fix for dashboard widgets
 
 = 04.04.2014 - v4.2.18 =
 - translations bugfix
