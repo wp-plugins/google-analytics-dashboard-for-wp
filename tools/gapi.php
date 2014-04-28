@@ -6,6 +6,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 if (! class_exists ( 'GADASH_GAPI' )) {
+	//set_include_path(get_include_path() . PATH_SEPARATOR . dirname ( __FILE__ ));
 	class GADASH_GAPI {
 		public $client, $service;
 		public $country_codes;
@@ -97,6 +98,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$this->client->setUseObjects ( true );
 				$profiles = $this->service->management_profiles->listManagementProfiles ( '~all', '~all' );
 				$items = $profiles->getItems ();
+				$this->client->setUseObjects ( false );
 				if (count ( $items ) != 0) {
 					$ga_dash_profile_list = array ();
 					foreach ( $items as $profile ) {
@@ -112,11 +114,9 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 								$profile->getTimezone () 
 						);
 					}
-					$this->client->setUseObjects ( false );
 					update_option ( 'gadash_lasterror', 'N/A' );
 					return ($ga_dash_profile_list);
 				} else {
-					$this->client->setUseObjects ( false );
 					update_option ( 'gadash_lasterror', 'No properties were found in this account!' );
 				}
 			} catch ( Google_IOException $e ){
@@ -170,10 +170,14 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$GADASH_Config->options ['ga_dash_tableid'] = "";
 				$GADASH_Config->options ['ga_dash_tableid_jail'] = "";
 				$GADASH_Config->options ['ga_dash_profile_list'] = "";
-				$this->client->revokeToken ();
-			}	
+				try{
+					$this->client->revokeToken ();
+				} catch (Exception $e) {
+					$GADASH_Config->set_plugin_options ();
+				}	
+			}
+				
 			$GADASH_Config->set_plugin_options ();
-		
 		}
 		
 		// Get Main Chart
@@ -695,8 +699,8 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					default: $periodtext = __('Last 30 Days','ga-dash'); break;
 				}
 					
-				$content.= '<table style="border:none;"><tr><td style="font-weight:bold;">'.__("Period:",'ga-dash').'</td><td style="padding:'.($display==3?'15px':'0').' 0 10px 20px;">'.$periodtext.'</td></tr>
-				<tr><td style="font-weight:bold;">'.__('Total Visits:','ga-dash').'</td><td style="padding:0 0 15px 20px;">'.($data['totalsForAllResults']['ga:visits']).'</td></tr>
+				$content.= '<table style="border:none;"><tr><td style="font-weight:bold;padding:'.($display==3?'15px':'0').' 0 10px 0;">'.__("Period:",'ga-dash').'</td><td style="padding:'.($display==3?'15px':'0').' 0 10px 20px;">'.$periodtext.'</td></tr>
+				<tr><td style="font-weight:bold;padding:0 0 15px 0;">'.__('Total Visits:','ga-dash').'</td><td style="padding:0 0 15px 20px;">'.($data['totalsForAllResults']['ga:visits']).'</td></tr>
 				</table>';
 			}			
 			
