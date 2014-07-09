@@ -115,7 +115,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - single authorization for multisite
 - bugfix: SERVER_ADDR PHP notice
 - bugfix: notices on admin dashboard
-- data validation and sanitizing
+- additional data validation and sanitizing
 - bugfix: realtime switching profile functionality
 - multisite: blog's cleanup on uninstall
 - depricating custom tracking code
