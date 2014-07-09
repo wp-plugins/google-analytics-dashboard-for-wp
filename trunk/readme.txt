@@ -4,7 +4,7 @@ Donate link: http://deconf.com/donate/
 Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking,realtime,wpmu,multisite
 Requires at least: 2.8
 Tested up to: 3.9.1
-Stable tag: 4.2.21
+Stable tag: 4.2.22
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,11 @@ Using this plugin, your analytics data is collected in a fast and secure manner 
 - remarketing, demographics and interests tracking
 - track events feature: track downloads, emails and outbound links (supported for both tracking methods: classic tracking and universal tracking)
 - exclude traffic based on user level access
+
+= WPMU features =
+
+- authorize the entire network with a single Google Account
+- set corresponding properties/views, for each blog, from you Network Admin screen
 
 = Translations =
 
@@ -104,6 +109,15 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 This plugin it's released under the GPLv2, you can use it free of charge on your personal or commercial website.
 
 == Changelog ==
+
+= v4.2.22 =
+- responsive Google Charts
+- single authorization for multisite
+- bugfix: SERVER_ADDR PHP notice
+- bugfix: notices on admin dashboard
+- additional data validation and sanitizing
+- bugfix: realtime switching profile functionality
+- multisite: blog's cleanup on uninstall
 
 = v4.2.21 =
 - added hungarian translation

@@ -67,7 +67,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			
 			?>
 <form name="input"
-	action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>"
+	action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>"
 	method="post">
 	<table class="options">
 		<tr>
@@ -130,7 +130,11 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 		function ga_dash_refresh_token() {
 			global $GADASH_Config;
 			try {
-				$transient = get_transient ( "ga_dash_refresh_token" );
+				if (is_multisite() && $GADASH_Config->options['ga_dash_network']){
+					$transient = get_site_transient ( "ga_dash_refresh_token" );
+				}else{
+					$transient = get_transient ( "ga_dash_refresh_token" );
+				}	
 				if (empty ( $transient )) {
 					
 					if (! $GADASH_Config->options ['ga_dash_refresh_token']) {
@@ -143,7 +147,11 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					
 					$token = $this->client->getAccessToken ();
 					$google_token = json_decode ( $token );
-					set_transient ( "ga_dash_refresh_token", $token, $google_token->expires_in );
+					if (is_multisite() && $GADASH_Config->options['ga_dash_network']){
+						set_site_transient ( "ga_dash_refresh_token", $token, $google_token->expires_in );
+					}else{
+						set_transient ( "ga_dash_refresh_token", $token, $google_token->expires_in );
+					}	
 					$GADASH_Config->options ['ga_dash_token'] = $token;
 					$GADASH_Config->set_plugin_options ();
 					return $token;
@@ -162,7 +170,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 		function ga_dash_reset_token($all = true) {
 			global $GADASH_Config;
 			
-			delete_transient ( 'ga_dash_refresh_token' );
+			delete_site_transient ( 'ga_dash_refresh_token' );
 			$GADASH_Config->options ['ga_dash_token'] = "";
 			$GADASH_Config->options ['ga_dash_refresh_token'] = "";
 						
@@ -206,8 +214,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$transient = get_transient ( $serial );
 				if (empty ( $transient )) {
 					$data = $this->service->data_ga->get ( 'ga:' . $projectId, $from, $to, $metrics, array (
-							'dimensions' => $dimensions,
-							'userIp' => $_SERVER ['SERVER_ADDR'] 
+							'dimensions' => $dimensions 
 					) );
 					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
@@ -229,9 +236,8 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$ga_dash_statsdata .= "['" . $data ['rows'] [$i] [0] . "-" . $data ['rows'] [$i] [1] . "-" . $data ['rows'] [$i] [2] . "'," . round ( $data ['rows'] [$i] [3], 2 ) . "],";
 				}
 			}
-			$ga_dash_statsdata = rtrim ( $ga_dash_statsdata, ',' );
 			
-			return $ga_dash_statsdata;
+			return wp_kses(rtrim ( $ga_dash_statsdata, ',' ),$GADASH_Config->allowed_html);
 		}
 		
 		// Get bottom Stats
@@ -251,8 +257,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$transient = get_transient ( $serial );
 				if (empty ( $transient )) {
 					$data = $this->service->data_ga->get ( 'ga:' . $projectId, $from, $to, $metrics, array (
-							'dimensions' => $dimensions,
-							'userIp' => $_SERVER ['SERVER_ADDR'] 
+							'dimensions' => $dimensions
 					) );
 					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
@@ -295,8 +300,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$data = $this->service->data_ga->get ( 'ga:' . $projectId, $from, $to, $metrics, array (
 							'dimensions' => $dimensions,
 							'sort' => '-ga:pageviews',
-							'max-results' => '24',
-							'userIp' => $_SERVER ['SERVER_ADDR'] 
+							'max-results' => '24'
 					) ); // 'filters' => 'ga:pagePath!=/'
 					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
@@ -317,8 +321,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$ga_dash_data .= "['<a href=\"http://".addslashes($data ['rows'] [$i] [1].$data ['rows'] [$i] [2])."\" target=\"_blank\">" . addslashes( $data ['rows'] [$i] [0] ) . "</a>'," . $data ['rows'] [$i] [3] . "],";
 				$i ++;
 			}
-			
-			return rtrim ( $ga_dash_data, ',' );
+			return wp_kses(rtrim ( $ga_dash_data, ',' ),$GADASH_Config->allowed_html);
 		}
 		
 		// Get Top referrers
@@ -342,8 +345,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 							'dimensions' => $dimensions,
 							'sort' => '-ga:visits',
 							'max-results' => '24',
-							'filters' => 'ga:medium==referral',
-							'userIp' => $_SERVER ['SERVER_ADDR'] 
+							'filters' => 'ga:medium==referral'
 					) );
 					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
@@ -364,7 +366,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$i ++;
 			}
 			
-			return rtrim ( $ga_dash_data, ',' );
+			return wp_kses(rtrim ( $ga_dash_data, ',' ),$GADASH_Config->allowed_html);
 		}
 		
 		// Get Top searches
@@ -387,8 +389,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					$data = $this->service->data_ga->get ( 'ga:' . $projectId, $from, $to, $metrics, array (
 							'dimensions' => $dimensions,
 							'sort' => '-ga:visits',
-							'max-results' => '24',
-							'userIp' => $_SERVER ['SERVER_ADDR'] 
+							'max-results' => '24'
 					) );
 					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
@@ -411,7 +412,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$i ++;
 			}
 			
-			return rtrim ( $ga_dash_data, ',' );
+			return wp_kses(rtrim ( $ga_dash_data, ',' ),$GADASH_Config->allowed_html);
 		}
 		// Get Visits by Country
 		function ga_dash_visits_country($projectId, $from, $to) {
@@ -447,13 +448,11 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 								'dimensions' => $dimensions,
 								'filters' => $filters,
 								'sort' => '-ga:visits',
-								'max-results' => $GADASH_Config->options ['ga_target_number'],
-								'userIp' => $_SERVER ['SERVER_ADDR'] 
+								'max-results' => $GADASH_Config->options ['ga_target_number']
 						) );
 					else
 						$data = $this->service->data_ga->get ( 'ga:' . $projectId, $from, $to, $metrics, array (
-								'dimensions' => $dimensions,
-								'userIp' => $_SERVER ['SERVER_ADDR'] 
+								'dimensions' => $dimensions
 						) );
 					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
@@ -494,8 +493,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$transient = get_transient ( $serial );
 				if (empty ( $transient )) {
 					$data = $this->service->data_ga->get ( 'ga:' . $projectId, $from, $to, $metrics, array (
-							'dimensions' => $dimensions,
-							'userIp' => $_SERVER ['SERVER_ADDR'] 
+							'dimensions' => $dimensions
 					) );
 					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
@@ -514,7 +512,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$ga_dash_data .= "['" . str_replace ( "(none)", "direct", $data ['rows'] [$i] [0] ) . "'," . $data ['rows'] [$i] [1] . "],";
 			}
 			
-			return rtrim ( $ga_dash_data, ',' );
+			return wp_kses(rtrim ( $ga_dash_data, ',' ),$GADASH_Config->allowed_html);
 		}
 		
 		// Get New vs. Returning
@@ -535,8 +533,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$transient = get_transient ( $serial );
 				if (empty ( $transient )) {
 					$data = $this->service->data_ga->get ( 'ga:' . $projectId, $from, $to, $metrics, array (
-							'dimensions' => $dimensions,
-							'userIp' => $_SERVER ['SERVER_ADDR'] 
+							'dimensions' => $dimensions
 					) );
 					set_transient ( $serial, $data, $this->get_timeouts ( $timeouts ) );
 				} else {
@@ -555,7 +552,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				$ga_dash_data .= "['" . addslashes( $data ['rows'] [$i] [0] ) . "'," . $data ['rows'] [$i] [1] . "],";
 			}
 			
-			return rtrim ( $ga_dash_data, ',' );
+			return wp_kses(rtrim ( $ga_dash_data, ',' ),$GADASH_Config->allowed_html);
 		}
 		
 		// Frontend Widget Stats
@@ -595,7 +592,6 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				if (empty ( $transient )) {
 					$data = $this->service->data_ga->get ( 'ga:' . $projectId, $from, $to, $metrics, array (
 							'dimensions' => $dimensions,
-							'userIp' => $_SERVER ['SERVER_ADDR'] 
 					) );
 					set_transient ( $serial, $data, $this->get_timeouts ( 1 ) );
 				} else {
@@ -621,7 +617,8 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			for($i = 0; $i < $data ['totalResults']; $i ++) {
 				$ga_dash_statsdata .= "['" . $data ['rows'] [$i] [0] . "-" . $data ['rows'] [$i] [1] . "-" . $data ['rows'] [$i] [2] . "'," . ($anonim ? str_replace(',','.',round ( $data ['rows'] [$i] [3] * 100 / $max, 2 )) : $data ['rows'] [$i] [3]) . "],";
 			}
-			$ga_dash_statsdata = rtrim ( $ga_dash_statsdata, ',' );
+
+			$ga_dash_statsdata = wp_kses(rtrim ( $ga_dash_statsdata, ',' ),$GADASH_Config->allowed_html);
 			
 			if ($ga_dash_statsdata) {
 				if ($display != 3){				
@@ -660,7 +657,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 					  pointSize: 3," . $css . "
 					  title: '" . $title . "',
 					  titlePosition: 'in',
-					  chartArea: {width: '100%',height:'85%'},
+					  chartArea: {width: '95%',height:'75%'},
 					  hAxis: { textPosition: 'none' },
 					  vAxis: { textPosition: 'none', minValue: 0},
 				 	};
@@ -724,8 +721,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				if (empty ( $transient )) {
 					$data = $this->service->data_ga->get ( 'ga:' . $projectId, $from, $to, $metrics, array (
 							'dimensions' => $dimensions,
-							'filters' => 'ga:pagePath==' . $page_url,
-							'userIp' => $_SERVER ['SERVER_ADDR'] 
+							'filters' => 'ga:pagePath==' . $page_url
 					) );
 					set_transient ( $serial, $data, $this->get_timeouts ( 1 ) );
 				} else {
@@ -743,7 +739,8 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			for($i = 0; $i < $data ['totalResults']; $i ++) {
 				$ga_dash_statsdata .= "['" . $data ['rows'] [$i] [0] . "-" . $data ['rows'] [$i] [1] . "-" . $data ['rows'] [$i] [2] . "'," . round ( $data ['rows'] [$i] [3], 2 ) . "," . round ( $data ['rows'] [$i] [4], 2 ) . "],";
 			}
-			$ga_dash_statsdata = rtrim ( $ga_dash_statsdata, ',' );
+
+			$ga_dash_statsdata = wp_kses(rtrim ( $ga_dash_statsdata, ',' ),$GADASH_Config->allowed_html);
 			
 			if ($ga_dash_statsdata) {
 				$content .= '
@@ -786,8 +783,7 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 							'dimensions' => $dimensions,
 							'sort' => '-ga:visits',
 							'max-results' => '24',
-							'filters' => 'ga:pagePath==' . $page_url,
-							'userIp' => $_SERVER ['SERVER_ADDR'] 
+							'filters' => 'ga:pagePath==' . $page_url
 					) );
 					set_transient ( $serial, $data, $this->get_timeouts ( 1 ) );
 				} else {
@@ -809,7 +805,8 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				}
 				$i ++;
 			}
-			$ga_dash_organicdata = rtrim ( $ga_dash_organicdata, ',' );
+			
+			$ga_dash_organicdata = wp_kses(rtrim ( $ga_dash_organicdata, ',' ),$GADASH_Config->allowed_html);
 			
 			if ($ga_dash_organicdata) {
 				$content .= '
@@ -854,7 +851,8 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 				update_option ( 'gadash_lasterror', date('Y-m-d H:i:s').': '.esc_html($e));
 				return '';
 			}
-			return $data;			
+			
+			return $data;
 		}		
 		
 		// Realtime Stats
