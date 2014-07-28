@@ -80,6 +80,10 @@ A tutorial and a short demo is available here: [Google Analytics Dashboard video
 
 == Frequently Asked Questions == 
 
+=  Google Analytics -> General Settings is empty or a fatal error is displayed =
+
+That's because there is a conflict with another plugin (usually other analytics plugins). To solve this issue you need to disable the plugin that conflicts with GADWP. Most common conflicts are occurring because: the plugins have different versions of same library or just because some plugins don't load the libraries properly.
+
 = I have several wordpress websites do I need an API Project for each one? =
 
 No, you don't. You can use the same API Project (same API Key, Client Secret and Client ID) for all your websites.
