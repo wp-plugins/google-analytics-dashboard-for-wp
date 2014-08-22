@@ -123,6 +123,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - feature: exclude event tracking from bounce-rate calculation for downloads and mailto
 - tweak: reset downloads filters to default when empty
 - deprecate: classic analytics
+- added a plugin logo
 
 = v4.3.1 =
 - bugfix: link on top referrers list not working
