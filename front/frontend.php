@@ -1,7 +1,7 @@
 <?php
 /**
  * Author: Alin Marcu
- * Author URI: http://deconf.com
+ * Author URI: https://deconf.com
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
@@ -28,8 +28,10 @@ if (! class_exists ( 'GADASH_Frontend' )) {
 			}
 			
 			if ((is_page () || is_single ()) && ! is_preview ()) {
-
-				wp_enqueue_script ( 'gadash-general-settings', plugins_url ( 'admin/js/admin.js', dirname( __FILE__ ) ), array('jquery') );
+				
+				wp_enqueue_script ( 'gadash-general-settings', plugins_url ( 'admin/js/admin.js', dirname ( __FILE__ ) ), array (
+						'jquery' 
+				) );
 				
 				/*
 				 * Include GAPI
