@@ -4,7 +4,7 @@ Donate link: https://deconf.com/donate/
 Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking,realtime,wpmu,multisite
 Requires at least: 2.8
 Tested up to: 4.0
-Stable tag: 4.3.4
+Stable tag: 4.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,20 +61,21 @@ Using this WordPress plugin, your analytics data is collected in a fast and secu
 
 Google Analytics Dashboard for WP has been translated into the following languages:
 
-1. English
-2. French
-3. German
-4. Hungarian
-5. Italian
-6. Polish
-7. Portuguese
-8. Spanish
+1. Arabic
+2. English
+3. French
+4. German
+5. Hungarian
+6. Italian
+7. Polish
+8. Portuguese
+9. Spanish
 
 = Further reading and info =
 
 * Homepage of [Google Analytics Dashboard](https://deconf.com/google-analytics-dashboard-wordpress/) for WordPress
 * Other [WordPress Plugins](https://deconf.com/wordpress/) by same author
-* [Google Analytics Dashboard](https://deconf.com/ask/) translations and support 
+* To submit new translation use [this forum](https://deconf.com/ask/) 
 
 == Installation ==
 
@@ -118,6 +119,16 @@ A dedicated section for Wordpress Plugins is available here: [Wordpress Plugins 
 This plugin it's released under the GPLv2, you can use it free of charge on your personal or commercial website.
 
 == Changelog ==
+
+= 4.3.5 =
+- bugfix: authors custom dimension not working for pages, reported by [tylerarnold23](https://wordpress.org/support/profile/tylerarnold23)
+- bugfix: outbound detection
+- bugfix: fixed unicode issue, reported by [Haruka_Suzuki](https://wordpress.org/support/profile/haruka_suzuki)
+- bugfix: properly display cities with same name from different regions, reported by [matt6303](https://wordpress.org/support/profile/matt6303)
+- tweak: removed image extensions from default download filter
+- tweak: add day of week to dashboard dates, suggested by [nethrs](https://deconf.com/ask/author/timnethers/)
+- feature: Arabic translation, translated by [Ahmed Majed](https://deconf.com/ask/author/almobdaa/)
+- bugfix: multiple fixes for real time reports
 
 = 4.3.4 =
 - feature: ga_dash_addtrackingcode action hook
