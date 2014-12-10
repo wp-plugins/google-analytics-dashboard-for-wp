@@ -15,8 +15,8 @@ Using a widget, [Google Analytics Dashboard](https://deconf.com/google-analytics
 
 Authorized users can also view statistics like Views, UniqueViews and top searches, on frontend, at the end of each article.
 
-> <strong>GADWP on GitHub</strong><br>
-> You can submit pull requests, bugs or features on [Google Analytics Dashboard for WP](https://github.com/Yoast/google-analytics-for-wordpress) repository.
+> <strong>Google Analytics Dashboard on GitHub</strong><br>
+> You can submit pull requests, feature requests or bugs on [Google Analytics Dashboard](https://github.com/deconf/Google-Analytics-Dashboard-for-WP) repository.
 
 = Google Analytics Real-Time =
 
@@ -68,14 +68,14 @@ Install the Google Analytics tracking code in less than a minute and customize i
 = WodrPress Multisite features =
 
 * option to choose between three working modes:
-** Mode 1: network activated while allowing each site administrator to authorize the plugin using a different Google Analytics account
-** Mode 2: network activated while authorizing an entire WordPress Network using a single Google Analytics account. You'll be able to assign a property/view to each site, from your Network Admin screen
-** Mode 3: network deactivated allowing each site owner to activate and authorize the plugin
+	* <em>Mode 1:</em> network activated while allowing each site administrator to authorize the plugin using a different Google Analytics account
+	* <em>Mode 2:</em> network activated while authorizing an entire WordPress Network using a single Google Analytics account. You'll be able to assign a property/view to each site, from your Network Admin screen
+	* <em>Mode 3:</em> network deactivated allowing each site owner to activate and authorize the plugin
 * option to exclude Super Admins from tracking 
 
 = Translations =
 
-Google Analytics Dashboard for WP has been translated into the following languages: Arabic, English, French, German, Hungarian, Italian, Polish, Portuguese, Spanish
+Google Analytics Dashboard has been translated into the following languages: Arabic, English, French, German, Hungarian, Italian, Polish, Portuguese, Spanish
 
 = Further reading and info =
 
@@ -125,6 +125,9 @@ A dedicated section for WordPress Plugins is available here: [Wordpress Plugins 
 This plugin it's released under the GPLv2, you can use it free of charge on your personal or commercial website.
 
 == Changelog ==
+
+= 4.3.9 =
+- switch map resolution to metro areas
 
 = 4.3.8 =
 - feature: frontend component redesign
