@@ -67,10 +67,11 @@ Install the Google Analytics tracking code in less than a minute and customize i
 
 = WodrPress Multisite features =
 
-On Multisite installs you can choose between three working modes:
-- <em>Mode 1:</em> network activated while allowing each site administrator to authorize the plugin using a different Google Analytics account
-- <em>Mode 2:</em> network activated while authorizing an entire WordPress Network using a single Google Analytics account. You'll be able to assign a property/view to each site, from your Network Admin screen
-- <em>Mode 3:</em> network deactivated allowing each site owner to activate and authorize the plugin
+* option to choose between three working modes:
+** Mode 1: network activated while allowing each site administrator to authorize the plugin using a different Google Analytics account
+** Mode 2: network activated while authorizing an entire WordPress Network using a single Google Analytics account. You'll be able to assign a property/view to each site, from your Network Admin screen
+** Mode 3: network deactivated allowing each site owner to activate and authorize the plugin
+* option to exclude Super Admins from tracking 
 
 = Translations =
 
