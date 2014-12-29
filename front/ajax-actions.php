@@ -7,38 +7,61 @@
  */
 if (! class_exists('GADASH_Frontend_Ajax')) {
 
-    class GADASH_Frontend_Ajax
+    final class GADASH_Frontend_Ajax
     {
 
         function __construct()
         {
-            // Frontend Visits action
-            add_action('wp_ajax_gadash_get_frontendvisits_data', array(
+            // Frontend Sessions action
+            add_action('wp_ajax_gadash_get_frontendsessions_data', array(
                 $this,
-                'ajax_afterpost_visits'
+                'ajax_afterpost_sessions'
             ));
             // Frontend Seraches action
             add_action('wp_ajax_gadash_get_frontendsearches_data', array(
                 $this,
                 'ajax_afterpost_searches'
             ));
+            // Frontend Widget actions
+            add_action('wp_ajax_gadash_get_frontendwidget_data', array(
+                $this,
+                'ajax_frontend_widget'
+            ));
+            
+            add_action('wp_ajax_nopriv_gadash_get_frontendwidget_data', array(
+                $this,
+                'ajax_frontend_widget'
+            ));
         }
         
-        // Frontend Visits Request
+        // Frontend Sessions Request
         /**
          * Ajax handler for getting analytics data for frontend Views vs UniqueViews
-         * @return string|0
+         *
+         * @return string|int
          */
-        function ajax_afterpost_visits()
+        function ajax_afterpost_sessions()
         {
             global $GADASH_Config;
             
             $page_url = $_REQUEST['gadash_pageurl'];
             $post_id = $_REQUEST['gadash_postid'];
             
-            if (! isset($_REQUEST['gadash_security_aaf']) or ! wp_verify_nonce($_REQUEST['gadash_security_aaf'], 'gadash_get_frontendvisits_data')) {
-                return;
+            if (! isset($_REQUEST['gadash_security_aaf']) or ! wp_verify_nonce($_REQUEST['gadash_security_aaf'], 'gadash_get_frontendsessions_data')) {
+                print(json_encode(- 30));
+                die();
             }
+
+            /*
+             * Include Tools
+             */
+            include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
+            $tools = new GADASH_Tools();            
+            
+            if (! $tools->check_roles($GADASH_Config->options['ga_dash_access_front']) or ! ($GADASH_Config->options['ga_dash_frontend_stats'] or $GADASH_Config->options['ga_dash_frontend_keywords'])) {
+                print(json_encode(- 31));
+                die();
+            }            
             
             if ($GADASH_Config->options['ga_dash_token'] and function_exists('curl_version') and $GADASH_Config->options['ga_dash_tableid_jail']) {
                 include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
@@ -46,35 +69,34 @@ if (! class_exists('GADASH_Frontend_Ajax')) {
                 include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
                 $tools = new GADASH_Tools();
             } else {
+                print(json_encode(- 24));
                 die();
+            }
+            
+            $projectId = $GADASH_Config->options['ga_dash_tableid_jail'];
+            $profile_info = $tools->get_selected_profile($GADASH_Config->options['ga_dash_profile_list'], $projectId);
+            if (isset($profile_info[4])) {
+                $GADASH_GAPI->timeshift = $profile_info[4];
+            } else {
+                $GADASH_GAPI->timeshift = (int) current_time('timestamp') - time();
             }
             
             if (! $GADASH_GAPI->client->getAccessToken()) {
+                print(json_encode(- 25));
                 die();
             }
             
-            if (isset($GADASH_Config->options['ga_dash_tableid_jail'])) {
-                $projectId = $GADASH_Config->options['ga_dash_tableid_jail'];
-                $profile_info = $tools->get_selected_profile($GADASH_Config->options['ga_dash_profile_list'], $projectId);
-                if (isset($profile_info[4])) {
-                    $GADASH_GAPI->timeshift = $profile_info[4];
-                } else {
-                    $GADASH_GAPI->timeshift = (int) current_time('timestamp') - time();
-                }
-            } else {
-                die();
-            }
+            $data_sessions = $GADASH_GAPI->frontend_afterpost_sessions($projectId, $page_url, $post_id);
             
-            $data_visits = $GADASH_GAPI->frontend_afterpost_visits($projectId, $page_url, $post_id);
-            
-            print($data_visits);
+            print($data_sessions);
             
             die();
         }
-        
+
         /**
          * Ajax handler for getting analytics data for frontend searches
-         * @return string|0
+         *
+         * @return string|int
          */
         function ajax_afterpost_searches()
         {
@@ -84,7 +106,67 @@ if (! class_exists('GADASH_Frontend_Ajax')) {
             $post_id = $_REQUEST['gadash_postid'];
             
             if (! isset($_REQUEST['gadash_security_aas']) or ! wp_verify_nonce($_REQUEST['gadash_security_aas'], 'gadash_get_frontendsearches_data')) {
-                return;
+                print(json_encode(- 30));
+                die();
+            }
+            
+            /*
+             * Include Tools
+             */
+            include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
+            $tools = new GADASH_Tools();            
+            
+            if (! $tools->check_roles($GADASH_Config->options['ga_dash_access_front']) or ! ($GADASH_Config->options['ga_dash_frontend_stats'] or $GADASH_Config->options['ga_dash_frontend_keywords'])) {
+                print(json_encode(- 31));
+                die();
+            }            
+            
+            if ($GADASH_Config->options['ga_dash_token'] and function_exists('curl_version') and $GADASH_Config->options['ga_dash_tableid_jail']) {
+                include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
+                global $GADASH_GAPI;
+                include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
+                $tools = new GADASH_Tools();
+            } else {
+                print(json_encode(- 24));
+                die();
+            }
+            
+            $projectId = $GADASH_Config->options['ga_dash_tableid_jail'];
+            $profile_info = $tools->get_selected_profile($GADASH_Config->options['ga_dash_profile_list'], $projectId);
+            if (isset($profile_info[4])) {
+                $GADASH_GAPI->timeshift = $profile_info[4];
+            } else {
+                $GADASH_GAPI->timeshift = (int) current_time('timestamp') - time();
+            }
+            
+            if (! $GADASH_GAPI->client->getAccessToken()) {
+                print(json_encode(- 25));
+                die();
+            }
+            
+            $data_keywords = $GADASH_GAPI->frontend_afterpost_searches($projectId, $page_url, $post_id);
+            
+            print($data_keywords);
+            
+            die();
+        }
+        // Frontend Sessions Request
+        /**
+         * Ajax handler for getting analytics data for frontend Widget
+         *
+         * @return string|int
+         */
+        function ajax_frontend_widget()
+        {
+            global $GADASH_Config;
+            
+            $anonim = $_REQUEST['gadash_anonim'];
+            $period = $_REQUEST['gadash_period'];
+            $display = $_REQUEST['gadash_display'];
+            
+            if (! isset($_REQUEST['gadash_security_afw']) or ! wp_verify_nonce($_REQUEST['gadash_security_afw'], 'gadash_get_frontendwidget_data')) {
+                print(json_encode(- 30));
+                die();
             }
             
             if ($GADASH_Config->options['ga_dash_token'] and function_exists('curl_version') and $GADASH_Config->options['ga_dash_tableid_jail']) {
@@ -93,28 +175,26 @@ if (! class_exists('GADASH_Frontend_Ajax')) {
                 include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
                 $tools = new GADASH_Tools();
             } else {
+                print(json_encode(- 24));
                 die();
+            }
+            
+            $projectId = $GADASH_Config->options['ga_dash_tableid_jail'];
+            $profile_info = $tools->get_selected_profile($GADASH_Config->options['ga_dash_profile_list'], $projectId);
+            if (isset($profile_info[4])) {
+                $GADASH_GAPI->timeshift = $profile_info[4];
+            } else {
+                $GADASH_GAPI->timeshift = (int) current_time('timestamp') - time();
             }
             
             if (! $GADASH_GAPI->client->getAccessToken()) {
+                print(json_encode(- 25));
                 die();
             }
             
-            if (isset($GADASH_Config->options['ga_dash_tableid_jail'])) {
-                $projectId = $GADASH_Config->options['ga_dash_tableid_jail'];
-                $profile_info = $tools->get_selected_profile($GADASH_Config->options['ga_dash_profile_list'], $projectId);
-                if (isset($profile_info[4])) {
-                    $GADASH_GAPI->timeshift = $profile_info[4];
-                } else {
-                    $GADASH_GAPI->timeshift = (int) current_time('timestamp') - time();
-                }
-            } else {
-                die();
-            }
+            $data_widget = $GADASH_GAPI->frontend_widget_stats($projectId, $period, $anonim);
             
-            $data_keywords = $GADASH_GAPI->frontend_afterpost_searches($projectId, $page_url, $post_id);
-
-            print($data_keywords);
+            print(json_encode($data_widget));
             
             die();
         }
