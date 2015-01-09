@@ -16,25 +16,12 @@ if (! class_exists('GADASH_Config')) {
 
         public $plugin_path, $plugin_url;
 
-        public $allowed_html;
-
         public function __construct()
         {
             $this->getPluginPath();
             
             // get plugin options
             $this->get_plugin_options();
-            
-            // init security
-            $allowed_html = array(
-                'a' => array(
-                    'href' => array(),
-                    'title' => array()
-                ),
-                'br' => array(),
-                'em' => array(),
-                'strong' => array()
-            );
         }
         
         // Validates data before storing
@@ -67,10 +54,6 @@ if (! class_exists('GADASH_Config')) {
                 }
                 $options['ga_event_downloads'] = sanitize_text_field($options['ga_event_downloads']);
             }
-            if (isset($options['ga_target_number'])) {
-                $options['ga_target_number'] = (int) $options['ga_target_number'];
-            }
-            
             if (isset($options['ga_speed_samplerate']) && ($options['ga_speed_samplerate'] < 1 || $options['ga_speed_samplerate'] > 100)) {
                 $options['ga_speed_samplerate'] = 1;
             }
