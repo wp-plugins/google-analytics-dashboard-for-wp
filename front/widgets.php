@@ -6,6 +6,7 @@
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
+
 class GADSH_Frontend_Widget extends WP_Widget
 {
 
@@ -140,6 +141,9 @@ class GADSH_Frontend_Widget extends WP_Widget
     					chart.draw(data, options);
 				   }
     			   function ga_dash_drawtotalsstats(response) {
+    					if (response == null){
+    					    response = 0;
+                        }    
                         jQuery("#gadash-widgettotals").html("<div class=\"gadash-left\">' . __("Period:", 'ga-dash') . '</div> <div class=\"gadash-right\">' . $periodtext . '</div><div class=\"gadash-left\">' . __("Sessions:", 'ga-dash') . '</div> <div class=\"gadash-right\">"+response+"</div>");
                    }';
         
