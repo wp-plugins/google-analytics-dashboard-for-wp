@@ -60,7 +60,7 @@ Install the Google Analytics tracking code in less than a minute and customize i
 - exclude traffic based on user roles
 - option to exclude event tracking from bounce-rate calculation
 - multiple domains / cross domain tracking
-- action hook for code customization
+- action hook for tracking code customization
 - track authors, publication year, categories and user engagement using Google Analytics custom dimensions
 - affiliate links tracking using Google Analytics events
 - track fragment identifiers, hash marks (#) in URI links
