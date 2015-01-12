@@ -6,7 +6,7 @@
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
-class GADASH_Settings
+final class GADASH_Settings
 {
 
     private static function set_get_options($who)
@@ -15,9 +15,7 @@ class GADASH_Settings
         $network_settings = false;
         $options = $GADASH_Config->options; // Get current options
         if (isset($_POST['options']['ga_dash_hidden']) and isset($_POST['options']) and (isset($_POST['gadash_security']) && wp_verify_nonce($_POST['gadash_security'], 'gadash_form')) and $who != 'Reset') {
-            
             $new_options = $_POST['options'];
-            
             if ($who == 'tracking') {
                 $options['ga_dash_anonim'] = 0;
                 $options['ga_event_tracking'] = 0;
@@ -28,7 +26,6 @@ class GADASH_Settings
                 $options['ga_crossdomain_tracking'] = 0;
                 $options['ga_aff_tracking'] = 0;
                 $options['ga_hash_tracking'] = 0;
-                
                 if (isset($_POST['options']['ga_tracking_code'])) {
                     $new_options['ga_tracking_code'] = trim($new_options['ga_tracking_code'], "\t");
                 }
@@ -38,11 +35,6 @@ class GADASH_Settings
             } else 
                 if ($who == 'backend') {
                     $options['ga_dash_jailadmins'] = 0;
-                    $options['ga_dash_map'] = 0;
-                    $options['ga_dash_traffic'] = 0;
-                    $options['ga_dash_pgd'] = 0;
-                    $options['ga_dash_rd'] = 0;
-                    $options['ga_dash_sd'] = 0;
                     if (empty($new_options['ga_dash_access_back'])) {
                         $new_options['ga_dash_access_back'][] = 'administrator';
                     }
@@ -67,35 +59,28 @@ class GADASH_Settings
             $GADASH_Config->options = $options;
             $GADASH_Config->set_plugin_options($network_settings);
         }
-        
         return $options;
     }
 
     public static function frontend_settings()
     {
         global $GADASH_Config;
-        
         if (! current_user_can('manage_options')) {
             return;
         }
-        
         $options = self::set_get_options('frontend');
-        
         if (isset($_POST['options']['ga_dash_hidden'])) {
-            $message = "<div class='updated'><p><strong>" . __("Options saved.", 'ga-dash') . "</strong></p></div>";
+            $message = "<div class='updated'><p><strong>" . __("Settings saved.", 'ga-dash') . "</strong></p></div>";
             if (! (isset($_POST['gadash_security']) && wp_verify_nonce($_POST['gadash_security'], 'gadash_form'))) {
                 $message = "<div class='error'><p><strong>" . __("Cheating Huh?", 'ga-dash') . "</strong></p></div>";
             }
         }
-        
         if (! $GADASH_Config->options['ga_dash_tableid_jail'] or ! $GADASH_Config->options['ga_dash_token']) {
             $message = "<div class='error'><p><strong>" . __("Something went wrong, you need to", 'ga-dash') . "</strong> <a href='" . menu_page_url('gadash_settings', false) . "'>" . __('auhorize the plugin', 'ga-dash') . "</a><strong> " . __("or properly configure your", 'ga-dash') . '</strong> <a href="https://deconf.com/how-to-set-up-google-analytics-on-your-website/" target="_blank">' . __('Google Analytics account', 'ga-dash') . "</a>" . "<stong>!</strong></p></div>";
         }
-        
         ?>
 <form name="ga_dash_form" method="post"
 	action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>">
-
 	<div class="wrap">
 	<?php echo "<h2>" . __( "Google Analytics Frontend Settings", 'ga-dash' ) . "</h2>"; ?><hr>
 	</div>
@@ -141,7 +126,7 @@ class GADASH_Settings
             }
         }
         ?>
-							
+        																		
 									
 									
 									
@@ -150,7 +135,6 @@ class GADASH_Settings
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_frontend_stats]"
 											value="1" class="onoffswitch-checkbox"
@@ -161,13 +145,11 @@ class GADASH_Settings
 											<div class="onoffswitch-switch"></div>
 										</label>
 									</div>
-									<div class="switch-desc"><?php _e ( " show page visits and visitors in frontend (after each article)", 'ga-dash' );?></div>
-
+									<div class="switch-desc"><?php _e ( " show page sessions and users in frontend (after each article)", 'ga-dash' );?></div>
 								</td>
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox"
 											name="options[ga_dash_frontend_keywords]" value="1"
@@ -180,22 +162,20 @@ class GADASH_Settings
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " show page searches (after each article)", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>
 							<tr>
 								<td colspan="2" class="submit"><input type="submit"
 									name="Submit" class="button button-primary"
-									value="<?php _e('Update Options', 'ga-dash' ) ?>" /></td>
+									value="<?php _e('Save Changes', 'ga-dash' ) ?>" /></td>
 							</tr>
 						</table>
 						<input type="hidden" name="options[ga_dash_hidden]" value="Y">
 						<?php wp_nonce_field('gadash_form','gadash_security'); ?>
-
+
 
 
 
@@ -207,28 +187,22 @@ class GADASH_Settings
     public static function backend_settings()
     {
         global $GADASH_Config;
-        
         if (! current_user_can('manage_options')) {
             return;
         }
-        
         $options = self::set_get_options('backend');
-        
         if (isset($_POST['options']['ga_dash_hidden'])) {
-            $message = "<div class='updated'><p><strong>" . __("Options saved.", 'ga-dash') . "</strong></p></div>";
+            $message = "<div class='updated'><p><strong>" . __("Settings saved.", 'ga-dash') . "</strong></p></div>";
             if (! (isset($_POST['gadash_security']) && wp_verify_nonce($_POST['gadash_security'], 'gadash_form'))) {
                 $message = "<div class='error'><p><strong>" . __("Cheating Huh?", 'ga-dash') . "</strong></p></div>";
             }
         }
-        
         if (! $GADASH_Config->options['ga_dash_tableid_jail'] or ! $GADASH_Config->options['ga_dash_token']) {
             $message = "<div class='error'><p><strong>" . __("Something went wrong, you need to", 'ga-dash') . "</strong> <a href='" . menu_page_url('gadash_settings', false) . "'>" . __('auhorize the plugin', 'ga-dash') . "</a><strong> " . __("or properly configure your", 'ga-dash') . '</strong> <a href="https://deconf.com/how-to-set-up-google-analytics-on-your-website/" target="_blank">' . __('Google Analytics account', 'ga-dash') . "</a>" . "<stong>!</strong></p></div>";
         }
-        
         ?>
 <form name="ga_dash_form" method="post"
 	action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>">
-
 	<div class="wrap">
 			<?php echo "<h2>" . __( "Google Analytics Dashboard Settings", 'ga-dash' ) . "</h2>"; ?><hr>
 	</div>
@@ -274,17 +248,15 @@ class GADASH_Settings
             }
         }
         ?>
-						
+        																		
 									
 									
 									
 									</table>
 								</td>
 							</tr>
-
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_jailadmins]"
 											value="1" class="onoffswitch-checkbox"
@@ -296,7 +268,6 @@ class GADASH_Settings
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( "disable Switch Profile/View functionality", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
@@ -308,130 +279,41 @@ class GADASH_Settings
 									id="ga_realtime_pages"
 									value="<?php echo (int)$options['ga_realtime_pages']; ?>"
 									size="3">
-								<?php _e("(find out more", 'ga-dash')?>	<a
+								<?php echo '('.__("find out more", 'ga-dash')?>	<a
 									href="https://deconf.com/google-analytics-dashboard-real-time-reports/"
 									target="_blank"><?php _e("about this feature", 'ga-dash') ?></a>
-								<?php _e(")", 'ga-dash')?></td>
-							</tr>
-							<tr>
-								<td colspan="2"><hr><?php echo "<h2>" . __( "Additional Stats & Charts", 'ga-dash' ) . "</h2>"; ?></td>
-							</tr>
-							<tr>
-								<td colspan="2" class="title">
-
-									<div class="onoffswitch">
-										<input type="checkbox" name="options[ga_dash_map]" value="1"
-											class="onoffswitch-checkbox" id="ga_dash_map"
-											<?php checked( $options['ga_dash_map'], 1 ); ?>> <label
-											class="onoffswitch-label" for="ga_dash_map">
-											<div class="onoffswitch-inner"></div>
-											<div class="onoffswitch-switch"></div>
-										</label>
-									</div>
-									<div class="switch-desc"><?php _e ( " show Geo Map chart for visits", 'ga-dash' );?></div>
-
+								    )
 								</td>
 							</tr>
 							<tr>
+								<td colspan="2"><hr><?php echo "<h2>" . __( "Location Settings", 'ga-dash' ) . "</h2>"; ?></td>
+							</tr>
+							<tr>
 								<td colspan="2" class="title">
-									<?php echo __("Target Geo Map to region:", 'ga-dash'); ?>
+									<?php echo __("Target Geo Map to country:", 'ga-dash'); ?>
 									<input type="text" style="text-align: center;"
 									name="options[ga_target_geomap]"
 									value="<?php echo esc_attr($options['ga_target_geomap']); ?>"
 									size="3">
-									<?php _e("and render top",'ga-dash'); ?>
-									<input type="number" id="ga_target_number"
-									name="options[ga_target_number]"
-									value="<?php echo (int)$options['ga_target_number']; ?>"
-									size="3">
-									<?php _e("cities (find out more", 'ga-dash')?>
+									<?php echo '('.__("find out more", 'ga-dash')?>
 									<a
 									href="https://deconf.com/country-codes-for-google-analytics-dashboard/"
 									target="_blank"><?php _e("about this feature", 'ga-dash') ?></a>
-									<?php _e(")", 'ga-dash')?>
+									)
 								</td>
 							</tr>
-							<tr>
-								<td colspan="2" class="title">
-
-									<div class="onoffswitch">
-										<input type="checkbox" name="options[ga_dash_traffic]"
-											value="1" class="onoffswitch-checkbox" id="ga_dash_traffic"
-											<?php checked( $options['ga_dash_traffic'], 1 ); ?>> <label
-											class="onoffswitch-label" for="ga_dash_traffic">
-											<div class="onoffswitch-inner"></div>
-											<div class="onoffswitch-switch"></div>
-										</label>
-									</div>
-									<div class="switch-desc"><?php _e ( " show traffic overview", 'ga-dash' );?></div>
-
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2" class="title">
-
-									<div class="onoffswitch">
-										<input type="checkbox" name="options[ga_dash_pgd]" value="1"
-											class="onoffswitch-checkbox" id="ga_dash_pgd"
-											<?php checked( $options['ga_dash_pgd'], 1 ); ?>> <label
-											class="onoffswitch-label" for="ga_dash_pgd">
-											<div class="onoffswitch-inner"></div>
-											<div class="onoffswitch-switch"></div>
-										</label>
-									</div>
-									<div class="switch-desc"><?php _e ( " show top pages", 'ga-dash' );?></div>
-
-								</td>
-							</tr>
-
-							<tr>
-								<td colspan="2" class="title">
-
-									<div class="onoffswitch">
-										<input type="checkbox" name="options[ga_dash_rd]" value="1"
-											class="onoffswitch-checkbox" id="ga_dash_rd"
-											<?php checked( $options['ga_dash_rd'], 1 ); ?>> <label
-											class="onoffswitch-label" for="ga_dash_rd">
-											<div class="onoffswitch-inner"></div>
-											<div class="onoffswitch-switch"></div>
-										</label>
-									</div>
-									<div class="switch-desc"><?php _e ( " show top referrers", 'ga-dash' );?></div>
-
-								</td>
-							</tr>
-
-							<tr>
-								<td colspan="2" class="title">
-
-									<div class="onoffswitch">
-										<input type="checkbox" name="options[ga_dash_sd]" value="1"
-											class="onoffswitch-checkbox" id="ga_dash_sd"
-											<?php checked( $options['ga_dash_sd'], 1 ); ?>> <label
-											class="onoffswitch-label" for="ga_dash_sd">
-											<div class="onoffswitch-inner"></div>
-											<div class="onoffswitch-switch"></div>
-										</label>
-									</div>
-									<div class="switch-desc"><?php _e ( " show top searches", 'ga-dash' );?></div>
-
-								</td>
-							</tr>
-
-
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>
 							<tr>
 								<td colspan="2" class="submit"><input type="submit"
 									name="Submit" class="button button-primary"
-									value="<?php _e('Update Options', 'ga-dash' ) ?>" /></td>
+									value="<?php _e('Save Changes', 'ga-dash' ) ?>" /></td>
 							</tr>
 						</table>
 						<input type="hidden" name="options[ga_dash_hidden]" value="Y">
 						<?php wp_nonce_field('gadash_form','gadash_security'); ?>
-
+						
 
 
 
@@ -443,34 +325,27 @@ class GADASH_Settings
     public static function tracking_settings()
     {
         global $GADASH_Config;
-        
         /*
          * Include Tools
          */
         include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
         $tools = new GADASH_Tools();
-        
         if (! current_user_can('manage_options')) {
             return;
         }
-        
         $options = self::set_get_options('tracking');
-        
         if (isset($_POST['options']['ga_dash_hidden'])) {
-            $message = "<div class='updated'><p><strong>" . __("Options saved.", 'ga-dash') . "</strong></p></div>";
+            $message = "<div class='updated'><p><strong>" . __("Settings saved.", 'ga-dash') . "</strong></p></div>";
             if (! (isset($_POST['gadash_security']) && wp_verify_nonce($_POST['gadash_security'], 'gadash_form'))) {
                 $message = "<div class='error'><p><strong>" . __("Cheating Huh?", 'ga-dash') . "</strong></p></div>";
             }
         }
-        
         if (! $GADASH_Config->options['ga_dash_tableid_jail'] or ! $GADASH_Config->options['ga_dash_token']) {
             $message = "<div class='error'><p><strong>" . __("Something went wrong, you need to", 'ga-dash') . "</strong> <a href='" . menu_page_url('gadash_settings', false) . "'>" . __('auhorize the plugin', 'ga-dash') . "</a><strong> " . __("or properly configure your", 'ga-dash') . '</strong> <a href="https://deconf.com/how-to-set-up-google-analytics-on-your-website/" target="_blank">' . __('Google Analytics account', 'ga-dash') . "</a>" . "<stong>!</strong></p></div>";
         }
-        
         ?>
 <form name="ga_dash_form" method="post"
 	action="<?php  esc_url($_SERVER['REQUEST_URI']); ?>">
-
 	<div class="wrap">
 			<?php echo "<h2>" . __( "Google Analytics Tracking Code", 'ga-dash' ) . "</h2>"; ?><hr>
 	</div>
@@ -524,10 +399,8 @@ class GADASH_Settings
 											<?php selected( $options['ga_dash_tracking_type'], 'universal' ); ?>><?php _e("Universal Analytics", 'ga-dash');?></option>
 								</select></td>
 							</tr>
-
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_anonim]"
 											value="1" class="onoffswitch-checkbox" id="ga_dash_anonim"
@@ -538,12 +411,10 @@ class GADASH_Settings
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " anonymize IPs while tracking", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_remarketing]"
 											value="1" class="onoffswitch-checkbox"
@@ -555,7 +426,6 @@ class GADASH_Settings
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " enable remarketing, demographics and interests reports", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
@@ -563,7 +433,6 @@ class GADASH_Settings
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_event_tracking]"
 											value="1" class="onoffswitch-checkbox" id="ga_event_tracking"
@@ -574,7 +443,6 @@ class GADASH_Settings
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e(" track downloads, mailto and outbound links", 'ga-dash' ); ?></div>
-
 								</td>
 							</tr>
 							<tr>
@@ -586,7 +454,6 @@ class GADASH_Settings
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_aff_tracking]"
 											value="1" class="onoffswitch-checkbox" id="ga_aff_tracking"
@@ -597,7 +464,6 @@ class GADASH_Settings
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e(" track affiliate links matching this regex", 'ga-dash' ); ?></div>
-
 								</td>
 							</tr>
 							<tr>
@@ -609,7 +475,6 @@ class GADASH_Settings
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_hash_tracking]"
 											value="1" class="onoffswitch-checkbox" id="ga_hash_tracking"
@@ -620,7 +485,6 @@ class GADASH_Settings
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e(" track fragment identifiers, hashmarks (#) in URI links", 'ga-dash' ); ?></div>
-
 								</td>
 							</tr>
 							<tr>
@@ -678,7 +542,6 @@ class GADASH_Settings
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_event_bouncerate]"
 											value="1" class="onoffswitch-checkbox"
@@ -690,12 +553,10 @@ class GADASH_Settings
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " exclude events from bounce-rate calculation", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_enhanced_links]"
 											value="1" class="onoffswitch-checkbox" id="ga_enhanced_links"
@@ -706,12 +567,10 @@ class GADASH_Settings
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " enable enhanced link attribution", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_adsense]"
 											value="1" class="onoffswitch-checkbox" id="ga_dash_adsense"
@@ -722,12 +581,10 @@ class GADASH_Settings
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " enable AdSense account linking", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_crossdomain_tracking]"
 											value="1" class="onoffswitch-checkbox"
@@ -739,7 +596,6 @@ class GADASH_Settings
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e(" enable cross domain tracking", 'ga-dash' ); ?></div>
-
 								</td>
 							</tr>
 							<tr>
@@ -784,7 +640,7 @@ class GADASH_Settings
                 }
             }
             ?>
-									
+            																		
 									
 									
 									
@@ -796,17 +652,16 @@ class GADASH_Settings
         ?>
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>
 							<tr>
 								<td colspan="2" class="submit"><input type="submit"
 									name="Submit" class="button button-primary"
-									value="<?php _e('Update Options', 'ga-dash' ) ?>" /></td>
+									value="<?php _e('Save Changes', 'ga-dash' ) ?>" /></td>
 							</tr>
 						</table>
 						<input type="hidden" name="options[ga_dash_hidden]" value="Y">
 						<?php wp_nonce_field('gadash_form','gadash_security'); ?>
-
+						
 
 
 
@@ -819,40 +674,46 @@ class GADASH_Settings
     {
         global $GADASH_Config;
         global $wp_version;
-        
         /*
          * Include Tools
          */
         include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
         $tools = new GADASH_Tools();
-        
         if (! current_user_can('manage_options')) {
             return;
         }
-        
         $options = self::set_get_options('general');
-        
         /*
          * Include GAPI
          */
+        echo '<div id="gapi-warning" class="updated"><p><strong>' . __('Loading the required libraries. If this results in a blank screen or a fatal error, try this solution:', "ga-dash") . ' </strong><a href="https://deconf.com/ask/question/ga-dashboard-absolutely-empty-general-settings#answer-770">Library conflicts between WordPress plugins</a></p></div>';
         include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
         global $GADASH_GAPI;
-        
+        echo '<script type="text/javascript">jQuery("#gapi-warning").hide()</script>';
         if (isset($_POST['ga_dash_code'])) {
-            try {
-                $GADASH_GAPI->client->authenticate($_POST['ga_dash_code']);
-                $GADASH_Config->options['ga_dash_token'] = $GADASH_GAPI->client->getAccessToken();
-                $google_token = json_decode($GADASH_GAPI->client->getAccessToken());
-                $GADASH_Config->options['ga_dash_refresh_token'] = $google_token->refresh_token;
-                $GADASH_Config->set_plugin_options();
-                $message = "<div class='updated'><p><strong>" . __("Plugin authorization succeeded.", 'ga-dash') . "</strong></p></div>";
-                $options = self::set_get_options('general');
-            } catch (Google_IO_Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return false;
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e) . "\nResponseHttpCode:" . $e->getCode());
-                $GADASH_GAPI->ga_dash_reset_token(false);
+            if (! stripos('x' . $_POST['ga_dash_code'], 'UA-', 1) == 1) {
+                try {
+                    $GADASH_GAPI->client->authenticate($_POST['ga_dash_code']);
+                    $GADASH_Config->options['ga_dash_token'] = $GADASH_GAPI->client->getAccessToken();
+                    $google_token = json_decode($GADASH_GAPI->client->getAccessToken());
+                    $GADASH_Config->options['ga_dash_refresh_token'] = $google_token->refresh_token;
+                    $GADASH_Config->set_plugin_options();
+                    $message = "<div class='updated'><p><strong>" . __("Plugin authorization succeeded.", 'ga-dash') . "</strong></p></div>";
+                    $options = self::set_get_options('general');
+                    delete_transient('ga_dash_gapi_errors');
+                } catch (Google_IO_Exception $e) {
+                    update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
+                    return false;
+                } catch (Google_Service_Exception $e) {
+                    update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html("(" . $e->getCode() . ") " . $e->getMessage()));
+                    set_transient('ga_dash_gapi_errors', $e->getErrors(), $this->error_timeout);
+                    return $e->getCode();
+                } catch (Exception $e) {
+                    update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e) . "\nResponseHttpCode:" . $e->getCode());
+                    $GADASH_GAPI->ga_dash_reset_token(false);
+                }
+            } else {
+                $message = "<div class='error'><p>" . __("The access code is <strong>NOT</strong> your <strong>Tracking ID</strong> (UA-XXXXX-X). Try again, and use the red link to get your access code", 'ga-dash') . ".</p></div>";
             }
         }
         
@@ -875,7 +736,6 @@ class GADASH_Settings
                 }
             }
         }
-        
         if (isset($_POST['Clear'])) {
             if (isset($_POST['gadash_security']) && wp_verify_nonce($_POST['gadash_security'], 'gadash_form')) {
                 $tools->ga_dash_clear_cache();
@@ -884,7 +744,6 @@ class GADASH_Settings
                 $message = "<div class='error'><p><strong>" . __("Cheating Huh?", 'ga-dash') . "</strong></p></div>";
             }
         }
-        
         if (isset($_POST['Reset'])) {
             if (isset($_POST['gadash_security']) && wp_verify_nonce($_POST['gadash_security'], 'gadash_form')) {
                 $GADASH_GAPI->ga_dash_reset_token(true);
@@ -895,18 +754,15 @@ class GADASH_Settings
                 $message = "<div class='error'><p><strong>" . __("Cheating Huh?", 'ga-dash') . "</strong></p></div>";
             }
         }
-        
         if (isset($_POST['Log'])) {
             $message = "<div class='updated'><p><strong>" . __("Dumping log data.", 'ga-dash') . "</strong></p></div>";
         }
-        
         if (isset($_POST['options']['ga_dash_hidden']) and ! isset($_POST['Clear']) and ! isset($_POST['Reset']) and ! isset($_POST['Log'])) {
-            $message = "<div class='updated'><p><strong>" . __("Options saved.", 'ga-dash') . "</strong></p></div>";
+            $message = "<div class='updated'><p><strong>" . __("Settings saved.", 'ga-dash') . "</strong></p></div>";
             if (! (isset($_POST['gadash_security']) && wp_verify_nonce($_POST['gadash_security'], 'gadash_form'))) {
                 $message = "<div class='error'><p><strong>" . __("Cheating Huh?", 'ga-dash') . "</strong></p></div>";
             }
         }
-        
         if (isset($_POST['Hide'])) {
             if (isset($_POST['gadash_security']) && wp_verify_nonce($_POST['gadash_security'], 'gadash_form')) {
                 $message = "<div class='updated'><p><strong>" . __("All other domains/properties were removed.", 'ga-dash') . "</strong></p></div>";
@@ -919,31 +775,30 @@ class GADASH_Settings
                 $message = "<div class='error'><p><strong>" . __("Cheating Huh?", 'ga-dash') . "</strong></p></div>";
             }
         }
-        
         if (! function_exists('curl_version')) {
-            $message = "<div class='error'><p><strong>" . __("PHP CURL is required. Please install/enable PHP CURL!", 'ga-dash') . "</strong></p></div>";
+            $message = "<div class='error'><p><strong>" . __("PHP CURL is required. Ask your hosting provider to install/enable PHP CURL!", 'ga-dash') . "</strong></p></div>";
         }
-        
         ?>
 <div class="wrap">
 	<?php echo "<h2>" . __( "Google Analytics Settings", 'ga-dash' ) . "</h2>"; ?><hr>
 </div>
-
 <div id="poststuff">
 	<div id="post-body" class="metabox-holder columns-2">
 		<div id="post-body-content">
 			<div class="settings-wrapper">
-				<div class="inside">
-
-					<?php
+				<div class="inside">					<?php
+        
+        if ($GADASH_GAPI->gapi_errors_handler()) {
+            $message = "<div class='error'><p><strong>" . __("Something went wrong. Please check the Debugging Data section for possible errors", 'ga-dash') . ".</strong></p></div>";
+        }
         
         if (isset($_POST['Authorize'])) {
             $tools->ga_dash_clear_cache();
             $GADASH_GAPI->token_request();
+            echo "<div class='updated'><p>" . __("Use the red link (see below) to generate and get your access code!", 'ga-dash') . "</p></div>";
         } else {
             if (isset($message))
                 echo $message;
-            
             ?>
 					<form name="ga_dash_form" method="post"
 						action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>">
@@ -969,9 +824,7 @@ class GADASH_Settings
 									onchange="this.form.submit()"
 									<?php echo ($options['ga_dash_network'])?'disabled="disabled"':''; ?> /><?php _e ( " use your own API Project credentials", 'ga-dash' );?>
 							</td>
-							</tr>
-
-						<?php
+							</tr>						<?php
             }
             if ($options['ga_dash_userapi']) {
                 ?>
@@ -980,22 +833,22 @@ class GADASH_Settings
 								</td>
 								<td><input type="text" name="options[ga_dash_apikey]"
 									value="<?php echo esc_attr($options['ga_dash_apikey']); ?>"
-									size="40"></td>
+									size="40" required="required"></td>
 							</tr>
 							<tr>
 								<td class="title"><label for="options[ga_dash_clientid]"><?php _e("Client ID:", 'ga-dash'); ?></label>
 								</td>
 								<td><input type="text" name="options[ga_dash_clientid]"
 									value="<?php echo esc_attr($options['ga_dash_clientid']); ?>"
-									size="40"></td>
+									size="40" required="required"></td>
 							</tr>
 							<tr>
 								<td class="title"><label for="options[ga_dash_clientsecret]"><?php _e("Client Secret:", 'ga-dash'); ?></label>
 								</td>
 								<td><input type="text" name="options[ga_dash_clientsecret]"
 									value="<?php echo esc_attr($options['ga_dash_clientsecret']); ?>"
-									size="40"> <input type="hidden" name="options[ga_dash_hidden]"
-									value="Y">
+									size="40" required="required"> <input type="hidden"
+									name="options[ga_dash_hidden]" value="Y">
 									<?php wp_nonce_field('gadash_form','gadash_security'); ?>
 								</td>
 							</tr>
@@ -1016,27 +869,28 @@ class GADASH_Settings
 							</tr>
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>
 							<tr>
 								<td colspan="2"><?php echo "<h2>" . __( "General Settings", 'ga-dash' ) . "</h2>"; ?></td>
 							</tr>
-
 							<tr>
 								<td class="title"><label for="ga_dash_tableid_jail"><?php _e("Select Domain:", 'ga-dash' ); ?></label></td>
 								<td><select id="ga_dash_tableid_jail"
+									<?php disabled(is_array($options['ga_dash_profile_list']), false); ?>
 									name="options[ga_dash_tableid_jail]">
 								<?php
-                foreach ($options['ga_dash_profile_list'] as $items) {
-                    if ($items[3]) {
-                        echo '<option value="' . esc_attr($items[1]) . '" ' . selected($items[1], $options['ga_dash_tableid_jail']);
-                        echo ' title="' . __("View Name:", 'ga-dash') . ' ' . esc_attr($items[0]) . '">' . esc_html($tools->ga_dash_get_profile_domain($items[3])) . ' &#8658; ' . esc_attr($items[0]) . '</option>';
+                if (is_array($options['ga_dash_profile_list'])) {
+                    foreach ($options['ga_dash_profile_list'] as $items) {
+                        if ($items[3]) {
+                            echo '<option value="' . esc_attr($items[1]) . '" ' . selected($items[1], $options['ga_dash_tableid_jail']);
+                            echo ' title="' . __("View Name:", 'ga-dash') . ' ' . esc_attr($items[0]) . '">' . esc_html($tools->ga_dash_get_profile_domain($items[3])) . ' &#8658; ' . esc_attr($items[0]) . '</option>';
+                        }
                     }
+                } else {
+                    echo '<option value="">' . __("Property not found", 'ga-dash') . '</option>';
                 }
                 ?>
-							</select>
-
-							<?php
+							</select>							<?php
                 if (count($options['ga_dash_profile_list']) > 1) {
                     _e("and/or hide all other domains", 'ga-dash');
                     ?>
@@ -1059,9 +913,7 @@ class GADASH_Settings
 							</tr>
 							<?php
                 }
-                ?>
-
-							<tr>
+                ?>							<tr>
 								<td class="title"><label for="ga_dash_style"><?php _e("Theme Color:", 'ga-dash' ); ?></label></td>
 								<td><input type="text" id="ga_dash_style" class="ga_dash_style"
 									name="options[ga_dash_style]"
@@ -1076,7 +928,6 @@ class GADASH_Settings
 							</tr>
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>
 							<tr>
 								<td class="debugging"><?php echo "<h2>" . __( "Debugging Data", 'ga-dash' ) . "</h2></td>".'<td><a href="#" id="show_hide" class="show_hide">Show Log</a>'; ?></td>
@@ -1107,6 +958,7 @@ class GADASH_Settings
                 echo esc_html(print_r($anonim, true));
                 echo '<br/>Last Error: ';
                 echo esc_html(print_r(get_option('gadash_lasterror', 'N/A'), true));
+                echo "\n" . esc_html(print_r(get_transient('ga_dash_gapi_errors'), true));
                 echo '<br/><br/>************************************* End Log *************************************</pre>';
                 ?>
 								</div>
@@ -1118,15 +970,12 @@ class GADASH_Settings
 							<tr>
 								<td colspan="2" class="submit"><input type="submit"
 									name="Submit" class="button button-primary"
-									value="<?php _e('Update Options', 'ga-dash' ) ?>" /></td>
-							</tr>
-
-		<?php
+									value="<?php _e('Save Changes', 'ga-dash' ) ?>" /></td>
+							</tr>		<?php
             } else {
                 ?>
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>
 							<tr>
 								<td colspan="2"><input type="submit" name="Authorize"
@@ -1139,7 +988,6 @@ class GADASH_Settings
 							</tr>
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>
 							<tr>
 								<td class="debugging"><?php echo "<h2>" . __( "Debugging Data", 'ga-dash' ) . "</h2></td>".'<td><a href="#" id="show_hide" class="show_hide">Show Log</a>'; ?></td>
@@ -1167,9 +1015,10 @@ class GADASH_Settings
                 if ($anonim['ga_dash_apikey']) {
                     $anonim['ga_dash_apikey'] = 'HIDDEN';
                 }
-                print_r($anonim);
+                echo esc_html(print_r($anonim, true));
                 echo '<br/>Last Error: ';
                 echo esc_html(print_r(get_option('gadash_lasterror', 'N/A'), true));
+                echo "\n" . esc_html(print_r(get_transient('ga_dash_gapi_errors'), true));
                 echo '<br/><br/>************************************* End Log *************************************</pre>';
                 ?>
 								</div>
@@ -1177,7 +1026,6 @@ class GADASH_Settings
 							</tr>
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>
 						</table>
 					</form>
@@ -1185,16 +1033,11 @@ class GADASH_Settings
                 self::output_sidebar();
                 return;
             }
-            ?>
-
-					</table>
-					</form>
-
-<?php
+            ?>					</table>
+					</form><?php
         }
         self::output_sidebar();
     }
-    
     // Network Settings
     public static function general_settings_network()
     {
@@ -1205,34 +1048,49 @@ class GADASH_Settings
          */
         include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
         $tools = new GADASH_Tools();
-        
         if (! current_user_can('manage_network_options')) {
             return;
         }
-        
         $options = self::set_get_options('network');
-        
         /*
          * Include GAPI
          */
+        echo '<div id="gapi-warning" class="updated"><p><strong>' . __('Loading the required libraries. If this results in a blank screen or a fatal error, try this solution:', "ga-dash") . ' </strong><a href="https://deconf.com/ask/question/ga-dashboard-absolutely-empty-general-settings#answer-770">Library conflicts between WordPress plugins</a></p></div>';
         include_once ($GADASH_Config->plugin_path . '/tools/gapi.php');
         global $GADASH_GAPI;
-        
+        echo '<script type="text/javascript">jQuery("#gapi-warning").hide()</script>';
         if (isset($_POST['ga_dash_code'])) {
-            try {
-                $GADASH_GAPI->client->authenticate($_POST['ga_dash_code']);
-                $GADASH_Config->options['ga_dash_token'] = $GADASH_GAPI->client->getAccessToken();
-                $google_token = json_decode($GADASH_GAPI->client->getAccessToken());
-                $GADASH_Config->options['ga_dash_refresh_token'] = $google_token->refresh_token;
-                $GADASH_Config->set_plugin_options(true);
-                $message = "<div class='updated'><p><strong>" . __("Plugin authorization succeeded.", 'ga-dash') . "</strong></p></div>";
-                $options = self::set_get_options('network');
-            } catch (Google_IO_Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return false;
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e) . "\nResponseHttpCode:" . $e->getCode());
-                $GADASH_GAPI->ga_dash_reset_token(false);
+            if (! stripos('x' . $_POST['ga_dash_code'], 'UA-', 1) == 1) {
+                try {
+                    $GADASH_GAPI->client->authenticate($_POST['ga_dash_code']);
+                    $GADASH_Config->options['ga_dash_token'] = $GADASH_GAPI->client->getAccessToken();
+                    $google_token = json_decode($GADASH_GAPI->client->getAccessToken());
+                    $GADASH_Config->options['ga_dash_refresh_token'] = $google_token->refresh_token;
+                    $GADASH_Config->set_plugin_options(true);
+                    $message = "<div class='updated'><p><strong>" . __("Plugin authorization succeeded.", 'ga-dash') . "</strong></p></div>";
+                    $options = self::set_get_options('network');
+                    if (is_multisite()) { // Cleanup errors on the entire network
+                        foreach (wp_get_sites() as $blog) {
+                            switch_to_blog($blog['blog_id']);
+                            delete_transient('ga_dash_gapi_errors');
+                            restore_current_blog();
+                        }
+                    } else {
+                        delete_transient('ga_dash_gapi_errors');
+                    }
+                } catch (Google_IO_Exception $e) {
+                    update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
+                    return false;
+                } catch (Google_Service_Exception $e) {
+                    update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html("(" . $e->getCode() . ") " . $e->getMessage()));
+                    set_transient('ga_dash_gapi_errors', $e->getErrors(), $this->error_timeout);
+                    return $e->getCode();
+                } catch (Exception $e) {
+                    update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e) . "\nResponseHttpCode:" . $e->getCode());
+                    $GADASH_GAPI->ga_dash_reset_token(false);
+                }
+            } else {
+                $message = "<div class='error'><p>" . __("The access code is <strong>NOT</strong> your <strong>Tracking ID</strong> (UA-XXXXX-X). Try again, and use the red link to get your access code", 'ga-dash') . ".</p></div>";
             }
         }
         
@@ -1245,7 +1103,7 @@ class GADASH_Settings
                 $message = "<div class='error'><p><strong>" . __("Cheating Huh?", 'ga-dash') . "</strong></p></div>";
             }
         }
-        
+
         if (function_exists('curl_version')) {
             if ($GADASH_GAPI->client->getAccessToken()) {
                 if ($GADASH_Config->options['ga_dash_profile_list']) {
@@ -1265,7 +1123,6 @@ class GADASH_Settings
                 }
             }
         }
-        
         if (isset($_POST['Clear'])) {
             if (isset($_POST['gadash_security']) && wp_verify_nonce($_POST['gadash_security'], 'gadash_form')) {
                 $tools->ga_dash_clear_cache();
@@ -1274,7 +1131,6 @@ class GADASH_Settings
                 $message = "<div class='error'><p><strong>" . __("Cheating Huh?", 'ga-dash') . "</strong></p></div>";
             }
         }
-        
         if (isset($_POST['Reset'])) {
             if (isset($_POST['gadash_security']) && wp_verify_nonce($_POST['gadash_security'], 'gadash_form')) {
                 $GADASH_GAPI->ga_dash_reset_token(true);
@@ -1285,18 +1141,15 @@ class GADASH_Settings
                 $message = "<div class='error'><p><strong>" . __("Cheating Huh?", 'ga-dash') . "</strong></p></div>";
             }
         }
-        
         if (isset($_POST['Log'])) {
             $message = "<div class='updated'><p><strong>" . __("Dumping log data.", 'ga-dash') . "</strong></p></div>";
         }
-        
         if (isset($_POST['options']['ga_dash_hidden']) and ! isset($_POST['Clear']) and ! isset($_POST['Reset']) and ! isset($_POST['Log']) and ! isset($_POST['Refresh'])) {
-            $message = "<div class='updated'><p><strong>" . __("Options saved.", 'ga-dash') . "</strong></p></div>";
+            $message = "<div class='updated'><p><strong>" . __("Settings saved.", 'ga-dash') . "</strong></p></div>";
             if (! (isset($_POST['gadash_security']) && wp_verify_nonce($_POST['gadash_security'], 'gadash_form'))) {
                 $message = "<div class='error'><p><strong>" . __("Cheating Huh?", 'ga-dash') . "</strong></p></div>";
             }
         }
-        
         if (isset($_POST['Hide'])) {
             if (isset($_POST['gadash_security']) && wp_verify_nonce($_POST['gadash_security'], 'gadash_form')) {
                 $message = "<div class='updated'><p><strong>" . __("All other domains/properties were removed.", 'ga-dash') . "</strong></p></div>";
@@ -1309,31 +1162,28 @@ class GADASH_Settings
                 $message = "<div class='error'><p><strong>" . __("Cheating Huh?", 'ga-dash') . "</strong></p></div>";
             }
         }
-        
         if (! function_exists('curl_version')) {
-            $message = "<div class='error'><p><strong>" . __("PHP CURL is required. Please install/enable PHP CURL!", 'ga-dash') . "</strong></p></div>";
+            $message = "<div class='error'><p><strong>" . __("PHP CURL is required. Ask your hosting provider to install/enable PHP CURL!", 'ga-dash') . "</strong></p></div>";
         }
-        
         ?>
 	<div class="wrap">
 		<?php echo "<h2>" . __( "Google Analytics Settings", 'ga-dash' ) . "</h2>"; ?><hr>
 					</div>
-
 					<div id="poststuff">
 						<div id="post-body" class="metabox-holder columns-2">
 							<div id="post-body-content">
 								<div class="settings-wrapper">
-									<div class="inside">
-
-						<?php
-        
+									<div class="inside">						<?php
+        if ($GADASH_GAPI->gapi_errors_handler()) {
+            $message = "<div class='error'><p><strong>" . __("Something went wrong. Please check the Debugging Data section for possible errors", 'ga-dash') . ".</strong></p></div>";
+        }
         if (isset($_POST['Authorize'])) {
             $tools->ga_dash_clear_cache();
             $GADASH_GAPI->token_request();
+            echo "<div class='updated'><p>" . __("Use the red link (see below) to generate and get your access code!", 'ga-dash') . "</p></div>";
         } else {
             if (isset($message))
                 echo $message;
-            
             ?>
 						<form name="ga_dash_form" method="post"
 											action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>">
@@ -1345,7 +1195,6 @@ class GADASH_Settings
 												</tr>
 												<tr>
 													<td colspan="2" class="title">
-
 														<div class="onoffswitch">
 															<input type="checkbox" name="options[ga_dash_network]"
 																value="1" class="onoffswitch-checkbox"
@@ -1358,15 +1207,12 @@ class GADASH_Settings
 															</label>
 														</div>
 														<div class="switch-desc"><?php _e ( " use a single Google Analytics account for the entire network", 'ga-dash' );?></div>
-
 													</td>
 												</tr>
 								<?php if ($options['ga_dash_network']){  //Network Mode check?>
 								<tr>
 													<td colspan="2"><hr></td>
-
 												</tr>
-
 												<tr>
 													<td colspan="2"><?php echo "<h2>" . __( "Plugin Authorization", 'ga-dash' ) . "</h2>"; ?></td>
 												</tr>
@@ -1385,9 +1231,7 @@ class GADASH_Settings
 														<?php checked( $options['ga_dash_userapi'], 1 ); ?>
 														onchange="this.form.submit()" /><?php _e ( " use your own API Project credentials", 'ga-dash' );?>
 								</td>
-												</tr>
-
-							<?php
+												</tr>							<?php
                 }
                 if ($options['ga_dash_userapi']) {
                     ?>
@@ -1396,14 +1240,14 @@ class GADASH_Settings
 													</td>
 													<td><input type="text" name="options[ga_dash_apikey]"
 														value="<?php echo esc_attr($options['ga_dash_apikey']); ?>"
-														size="40"></td>
+														size="40" required="required"></td>
 												</tr>
 												<tr>
 													<td class="title"><label for="options[ga_dash_clientid]"><?php _e("Client ID:", 'ga-dash'); ?></label>
 													</td>
 													<td><input type="text" name="options[ga_dash_clientid]"
 														value="<?php echo esc_attr($options['ga_dash_clientid']); ?>"
-														size="40"></td>
+														size="40" required="required"></td>
 												</tr>
 												<tr>
 													<td class="title"><label
@@ -1411,7 +1255,7 @@ class GADASH_Settings
 													</td>
 													<td><input type="text" name="options[ga_dash_clientsecret]"
 														value="<?php echo esc_attr($options['ga_dash_clientsecret']); ?>"
-														size="40"> <input type="hidden"
+														size="40" required="required"> <input type="hidden"
 														name="options[ga_dash_hidden]" value="Y">
 										<?php wp_nonce_field('gadash_form','gadash_security'); ?>
 									</td>
@@ -1433,10 +1277,8 @@ class GADASH_Settings
 														class="button button-secondary"
 														value="<?php _e( "Refresh Properties", 'ga-dash' ); ?>" /></td>
 												</tr>
-
 												<tr>
 													<td colspan="2"><hr></td>
-
 												</tr>
 												<tr>
 													<td colspan="2"><?php echo "<h2>" . __( "Properties/Views Settings", 'ga-dash' ) . "</h2>"; ?></td>
@@ -1451,13 +1293,18 @@ class GADASH_Settings
 													<td class="title-select"><label
 														for="ga_dash_tableid_network"><?php echo '<strong>'.$blog['domain'].$blog['path'].'</strong>: ';?></label></td>
 													<td><select id="ga_dash_tableid_network"
+														<?php disabled(is_array($options['ga_dash_profile_list']),false);?>
 														name="options[ga_dash_tableid_network][<?php echo $blog['blog_id'];?>]">
 									<?php
-                        foreach ($options['ga_dash_profile_list'] as $items) {
-                            if ($items[3]) {
-                                echo '<option value="' . esc_attr($items[1]) . '" ' . selected($items[1], isset($options['ga_dash_tableid_network']->$blog['blog_id']) ? $options['ga_dash_tableid_network']->$blog['blog_id'] : '');
-                                echo ' title="' . __("View Name:", 'ga-dash') . ' ' . esc_attr($items[0]) . '">' . $tools->ga_dash_get_profile_domain($items[3]) . ' &#8658; ' . esc_attr($items[0]) . '</option>';
+                        if (is_array($options['ga_dash_profile_list'])) {
+                            foreach ($options['ga_dash_profile_list'] as $items) {
+                                if ($items[3]) {
+                                    echo '<option value="' . esc_attr($items[1]) . '" ' . selected($items[1], isset($options['ga_dash_tableid_network']->$blog['blog_id']) ? $options['ga_dash_tableid_network']->$blog['blog_id'] : '');
+                                    echo ' title="' . __("View Name:", 'ga-dash') . ' ' . esc_attr($items[0]) . '">' . $tools->ga_dash_get_profile_domain($items[3]) . ' &#8658; ' . esc_attr($items[0]) . '</option>';
+                                }
                             }
+                        } else {
+                            echo '<option value="">' . __("Property not found", 'ga-dash') . '</option>';
                         }
                         ?>
 								</select><br /></td>
@@ -1468,10 +1315,8 @@ class GADASH_Settings
 							<tr>
 													<td colspan="2"><hr><?php echo "<h2>" . __( "Exclude Tracking", 'ga-dash' ) . "</h2>"; ?></td>
 												</tr>
-
 												<tr>
 													<td colspan="2" class="title">
-
 														<div class="onoffswitch">
 															<input type="checkbox" name="options[ga_dash_excludesa]"
 																value="1" class="onoffswitch-checkbox"
@@ -1482,78 +1327,10 @@ class GADASH_Settings
 															</label>
 														</div>
 														<div class="switch-desc"><?php _e ( " exclude Super Admin tracking for the entire network", 'ga-dash' );?></div>
-
-													</td>
-												</tr>
-
-												<tr>
-													<td colspan="2"><hr></td>
-
-												</tr>
-												<tr>
-													<td class="debugging"><?php echo "<h2>" . __( "Debugging Data", 'ga-dash' ) . "</h2></td>".'<td><a href="#" id="show_hide" class="show_hide">Show Log</a>'; ?></td>
-												</tr>
-												<tr>
-													<td colspan="2">
-														<div class="log_data">
-									<?php
-                    echo '<pre class="log_data">************************************* Start Log *************************************<br/><br/>';
-                    $anonim = $GADASH_Config->options;
-                    $anonim['wp_version'] = $wp_version;
-                    $anonim['gadwp_version'] = GADWP_CURRENT_VERSION;
-                    if ($anonim['ga_dash_token']) {
-                        $anonim['ga_dash_token'] = 'HIDDEN';
-                    }
-                    if ($anonim['ga_dash_refresh_token']) {
-                        $anonim['ga_dash_refresh_token'] = 'HIDDEN';
-                    }
-                    if ($anonim['ga_dash_clientid']) {
-                        $anonim['ga_dash_clientid'] = 'HIDDEN';
-                    }
-                    if ($anonim['ga_dash_clientsecret']) {
-                        $anonim['ga_dash_clientsecret'] = 'HIDDEN';
-                    }
-                    if ($anonim['ga_dash_apikey']) {
-                        $anonim['ga_dash_apikey'] = 'HIDDEN';
-                    }
-                    print_r($anonim);
-                    echo '<br/>Last Error: ';
-                    echo esc_html(print_r(get_option('gadash_lasterror', 'N/A'), true));
-                    echo '<br/><br/>************************************* End Log *************************************</pre>';
-                    ?>
-									</div>
 													</td>
 												</tr>
 												<tr>
 													<td colspan="2"><hr></td>
-												</tr>
-												<tr>
-													<td colspan="2" class="submit"><input type="submit"
-														name="Submit" class="button button-primary"
-														value="<?php _e('Update Options', 'ga-dash' ) ?>" /></td>
-												</tr>
-
-			<?php
-                } else {
-                    ?>
-
-								<tr>
-													<td colspan="2"><hr></td>
-
-												</tr>
-
-												<tr>
-													<td colspan="2"><input type="submit" name="Authorize"
-														class="button button-secondary" id="authorize"
-														value="<?php _e( "Authorize Plugin", 'ga-dash' ); ?>"
-														<?php echo (!function_exists('curl_version')?'disabled="disabled"':''); ?> />
-														<input type="submit" name="Clear"
-														class="button button-secondary"
-														value="<?php _e( "Clear Cache", 'ga-dash' ); ?>" /></td>
-												</tr>
-												<tr>
-													<td colspan="2"><hr></td>
-
 												</tr>
 												<tr>
 													<td class="debugging"><?php echo "<h2>" . __( "Debugging Data", 'ga-dash' ) . "</h2></td>".'<td><a href="#" id="show_hide" class="show_hide">Show Log</a>'; ?></td>
@@ -1584,6 +1361,66 @@ class GADASH_Settings
                     echo esc_html(print_r($anonim, true));
                     echo '<br/>Last Error: ';
                     echo esc_html(print_r(get_option('gadash_lasterror', 'N/A'), true));
+                    echo "\n" . esc_html(print_r(get_transient('ga_dash_gapi_errors'), true));
+                    echo '<br/><br/>************************************* End Log *************************************</pre>';
+                    ?>
+									</div>
+													</td>
+												</tr>
+												<tr>
+													<td colspan="2"><hr></td>
+												</tr>
+												<tr>
+													<td colspan="2" class="submit"><input type="submit"
+														name="Submit" class="button button-primary"
+														value="<?php _e('Save Changes', 'ga-dash' ) ?>" /></td>
+												</tr>			<?php
+                } else {
+                    ?>								<tr>
+													<td colspan="2"><hr></td>
+												</tr>
+												<tr>
+													<td colspan="2"><input type="submit" name="Authorize"
+														class="button button-secondary" id="authorize"
+														value="<?php _e( "Authorize Plugin", 'ga-dash' ); ?>"
+														<?php echo (!function_exists('curl_version')?'disabled="disabled"':''); ?> />
+														<input type="submit" name="Clear"
+														class="button button-secondary"
+														value="<?php _e( "Clear Cache", 'ga-dash' ); ?>" /></td>
+												</tr>
+												<tr>
+													<td colspan="2"><hr></td>
+												</tr>
+												<tr>
+													<td class="debugging"><?php echo "<h2>" . __( "Debugging Data", 'ga-dash' ) . "</h2></td>".'<td><a href="#" id="show_hide" class="show_hide">Show Log</a>'; ?></td>
+												</tr>
+												<tr>
+													<td colspan="2">
+														<div class="log_data">
+									<?php
+                    echo '<pre class="log_data">************************************* Start Log *************************************<br/><br/>';
+                    $anonim = $GADASH_Config->options;
+                    $anonim['wp_version'] = $wp_version;
+                    $anonim['gadwp_version'] = GADWP_CURRENT_VERSION;
+                    if ($anonim['ga_dash_token']) {
+                        $anonim['ga_dash_token'] = 'HIDDEN';
+                    }
+                    if ($anonim['ga_dash_refresh_token']) {
+                        $anonim['ga_dash_refresh_token'] = 'HIDDEN';
+                    }
+                    if ($anonim['ga_dash_clientid']) {
+                        $anonim['ga_dash_clientid'] = 'HIDDEN';
+                    }
+                    if ($anonim['ga_dash_clientsecret']) {
+                        $anonim['ga_dash_clientsecret'] = 'HIDDEN';
+                    }
+                    if ($anonim['ga_dash_apikey']) {
+                        $anonim['ga_dash_apikey'] = 'HIDDEN';
+                    }
+                    echo esc_html(print_r($anonim, true));
+                    echo '<br/>Last Error: ';
+                    echo esc_html(print_r(get_option('gadash_lasterror', 'N/A'), true));
+                    echo "\n" . esc_html(print_r(get_transient('ga_dash_gapi_errors'), true));
                     echo '<br/><br/>************************************* End Log *************************************</pre>';
                     ?>
 									</div>
@@ -1592,7 +1429,6 @@ class GADASH_Settings
 								   <?php }  //Network Mode check?>
 									<tr>
 													<td colspan="2"><hr></td>
-
 												</tr>
 											</table>
 										</form>
@@ -1614,7 +1450,6 @@ class GADASH_Settings
 </div>
 								</div>
 							</div>
-
 							<div id="postbox-container-1" class="postbox-container">
 								<div class="meta-box-sortables">
 									<div class="postbox">
@@ -1636,10 +1471,10 @@ class GADASH_Settings
 										<div class="inside">
 											<div class="gadash-title">
 												<a
-													href="https://deconf.com/google-analytics-dashboard-wordpress/"><img
+													href="https://deconf.com/google-analytics-dashboard-wordpress/?utm_source=gadwp_config&utm_medium=link&utm_content=support&utm_campaign=gadwp"><img
 													src="<?php echo plugins_url( 'images/help.png' , __FILE__ ); ?>" /></a>
 											</div>
-											<div class="gadash-desc"><?php echo  __('You can find support on', 'ga-dash') . ' <a href="https://deconf.com/google-analytics-dashboard-wordpress/?utm_source=gadwp_config&utm_medium=link&utm_content=support&utm_campaign=gadwp">'.__('DeConf.com', 'ga-dash').'</a>.'; ?></div>
+											<div class="gadash-desc"><?php echo  __('Plugin documentation and support on', 'ga-dash') . ' <a href="https://deconf.com/google-analytics-dashboard-wordpress/?utm_source=gadwp_config&utm_medium=link&utm_content=support&utm_campaign=gadwp">deconf.com</a>.'; ?></div>
 											<br />
 											<div class="gadash-title">
 												<a
@@ -1655,28 +1490,40 @@ class GADASH_Settings
 										</h3>
 										<div class="inside">
 											<div class="gadash-title">
-												<a href="https://deconf.com/move-website-https-ssl/"><img
+												<a href="https://deconf.com/move-website-https-ssl/?utm_source=gadwp_config&utm_medium=link&utm_content=ssl&utm_campaign=gadwp"><img
 													src="<?php echo plugins_url( 'images/ssl.png' , __FILE__ ); ?>" /></a>
 											</div>
 											<div class="gadash-desc"><?php echo  '<a href="https://deconf.com/move-website-https-ssl/?utm_source=gadwp_config&utm_medium=link&utm_content=ssl&utm_campaign=gadwp">'.__('Improve search rankings', 'ga-dash').'</a> '.__('by moving your website to HTTPS/SSL.', 'ga-dash'); ?></div>
 											<br />
 											<div class="gadash-title">
-												<a href="https://deconf.com/wordpress/"><img
+												<a href="https://deconf.com/wordpress/?utm_source=gadwp_config&utm_medium=link&utm_content=plugins&utm_campaign=gadwp"><img
 													src="<?php echo plugins_url( 'images/wp.png' , __FILE__ ); ?>" /></a>
 											</div>
 											<div class="gadash-desc"><?php echo  __('Other', 'ga-dash').' <a href="https://deconf.com/wordpress/?utm_source=gadwp_config&utm_medium=link&utm_content=plugins&utm_campaign=gadwp">'.__('WordPress Plugins', 'ga-dash').'</a> '.__('written by the same author', 'ga-dash').'.'; ?></div>
-											<br />
-											<div class="gadash-title">
-												<a href="https://deconf.com/clicky-web-analytics-review/"><img
-													src="<?php echo plugins_url( 'images/clicky.png' , __FILE__ ); ?>" /></a>
-											</div>
-											<div class="gadash-desc"><?php echo  '<a href="https://deconf.com/clicky-web-analytics-review/?utm_source=gadwp_config&utm_medium=link&utm_content=clicky&utm_campaign=gadwp">'.__('Web Analytics', 'ga-dash').'</a> '.__('service with visitors tracking at IP level.', 'ga-dash'); ?></div>
 										</div>
 									</div>
+									<div class="postbox">
+										<h3>
+											<span><?php _e("Other Services",'ga-dash')?></span>
+										</h3>
+										<div class="inside">
+											<div class="gadash-title">
+												<a href="http://tracking.maxcdn.com/c/94142/36539/378"><img
+													src="<?php echo plugins_url( 'images/mcdn.png' , __FILE__ ); ?>" /></a>
+											</div>
+											<div class="gadash-desc"><?php echo  __('Speed up your website and plug into a whole', 'ga-dash').' <a href="http://tracking.maxcdn.com/c/94142/36539/378">'.__('new level of site speed', 'ga-dash').'</a>.'; ?></div>
+											<br />
+											<div class="gadash-title">
+												<a href="https://deconf.com/clicky-web-analytics-review/?utm_source=gadwp_config&utm_medium=link&utm_content=clicky&utm_campaign=gadwp"><img
+													src="<?php echo plugins_url( 'images/clicky.png' , __FILE__ ); ?>" /></a>
+											</div>
+											<div class="gadash-desc"><?php echo  '<a href="https://deconf.com/clicky-web-analytics-review/?utm_source=gadwp_config&utm_medium=link&utm_content=clicky&utm_campaign=gadwp">'.__('Web Analytics', 'ga-dash').'</a> '.__('service with users tracking at IP level.', 'ga-dash'); ?></div>
+										</div>
+									</div>									
 								</div>
 							</div>
 						</div>
 					</div>
 <?php
-	}
+    }
 }
