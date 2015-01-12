@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Google Analytics Dashboard for WP\n"
-"POT-Creation-Date: 2015-01-07 20:24+0200\n"
-"PO-Revision-Date: 2015-01-07 20:24+0200\n"
+"POT-Creation-Date: 2015-01-07 20:25+0200\n"
+"PO-Revision-Date: 2015-01-07 20:25+0200\n"
 "Last-Translator: Alin Marcu <admin@deconf.com>\n"
-"Language-Team: Deconf <admin@deconf.com>\n"
-"Language: en\n"
+"Language-Team: Ahmed Majed <admin@almobdaa.com>\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,110 +13,113 @@ msgstr ""
 "X-Poedit-KeywordsList: _e;__\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
 "X-Poedit-SearchPath-0: ../.\n"
 
 #: .././admin/dashboard_widgets.php:50 .././admin/dashboard_widgets.php:81
 msgid "Google Analytics"
-msgstr ""
+msgstr "أحصائيات كوكل"
 
 #: .././admin/dashboard_widgets.php:54 .././admin/dashboard_widgets.php:85
 #: .././admin/ga_dash_settings.php:100 .././admin/ga_dash_settings.php:222
 #: .././admin/ga_dash_settings.php:954
 msgid "General Settings"
-msgstr ""
+msgstr "الأعدادات العامة"
 
 #: .././admin/dashboard_widgets.php:58
 msgid "Backend Settings"
-msgstr ""
+msgstr "أعدادات العمل"
 
 #: .././admin/dashboard_widgets.php:62
 msgid "Frontend Settings"
-msgstr ""
+msgstr "اعدادات الظهور"
 
 #: .././admin/dashboard_widgets.php:66
 msgid "Tracking Code"
-msgstr ""
+msgstr "كود التعقب"
 
 #: .././admin/dashboard_widgets.php:132
 msgid "Settings"
-msgstr ""
+msgstr "الاعدادات"
 
 #: .././admin/dashboard_widgets.php:148 .././front/widgets.php:15
 msgid "Google Analytics Dashboard"
-msgstr ""
+msgstr "لوحة أحصائيات كوكل"
 
 #: .././admin/dashboard_widgets.php:166
 msgid "This plugin needs an authorization:"
-msgstr ""
+msgstr "هذه الاضافة تحتاج الى تصريح:"
 
 #: .././admin/dashboard_widgets.php:166 .././admin/ga_dash_settings.php:1063
 #: .././admin/ga_dash_settings.php:1465
 msgid "Authorize Plugin"
-msgstr ""
+msgstr "صرح الأضافة "
 
 #: .././admin/dashboard_widgets.php:207 .././admin/ga_dash_settings.php:459
 #: .././admin/ga_dash_settings.php:966 .././admin/ga_dash_settings.php:991
 #: .././admin/ga_dash_settings.php:1383
 msgid "View Name:"
-msgstr ""
+msgstr "شاهد الاسم:"
 
 #: .././admin/dashboard_widgets.php:212
 msgid "Something went wrong while retrieving profiles list."
-msgstr ""
+msgstr "حدث خطأ ما اثناء استرجاع قائمة البروفايلات."
 
 #: .././admin/dashboard_widgets.php:212
 msgid "More details"
-msgstr ""
+msgstr "المزيد من التفاصيل"
 
 #: .././admin/dashboard_widgets.php:228 .././admin/dashboard_widgets.php:239
 msgid "An admin should asign a default Google Analytics Profile."
-msgstr ""
+msgstr "المدير يجب ان يحصل على حساب احصائيات كوكل رئيسي."
 
 #: .././admin/dashboard_widgets.php:228 .././admin/dashboard_widgets.php:239
 msgid "Select Domain"
-msgstr ""
+msgstr "حدد النطاق"
 
 #: .././admin/dashboard_widgets.php:245
 msgid ""
 "Something went wrong while retrieving property data. You need to create and "
 "properly configure a Google Analytics account:"
 msgstr ""
+"حدث خطأ ما اثناء استرجاع بيانات الملكية. تحتاج الى انشاء واعداد حساب كوكل "
+"للأحصائيات بصورة صحيحة:"
 
 #: .././admin/dashboard_widgets.php:245
 msgid "Find out more!"
-msgstr ""
+msgstr "اعرف أكثر!"
 
 #: .././admin/dashboard_widgets.php:276
 msgid "Real-Time"
-msgstr ""
+msgstr "الوقت الحقيقي"
 
 #: .././admin/dashboard_widgets.php:277
 msgid "Today"
-msgstr ""
+msgstr "اليوم"
 
 #: .././admin/dashboard_widgets.php:279
 msgid "Yesterday"
-msgstr ""
+msgstr "البارحة"
 
 #: .././admin/dashboard_widgets.php:281 .././front/widgets.php:83
 #: .././front/widgets.php:199
 msgid "Last 7 Days"
-msgstr ""
+msgstr "اخر ٧ ايام"
 
 #: .././admin/dashboard_widgets.php:283 .././front/widgets.php:86
 #: .././front/widgets.php:200
 msgid "Last 14 Days"
-msgstr ""
+msgstr "أخر ١٤ يوم"
 
 #: .././admin/dashboard_widgets.php:285 .././front/widgets.php:89
 #: .././front/widgets.php:201
 msgid "Last 30 Days"
-msgstr ""
+msgstr "اخر ٣٠ يوم"
 
 #: .././admin/dashboard_widgets.php:287
 msgid "Last 90 Days"
-msgstr ""
+msgstr "أخر ٩٠ يوم"
 
 #: .././admin/dashboard_widgets.php:293 .././admin/dashboard_widgets.php:952
 #: .././front/widgets.php:44 .././tools/gapi.php:384 .././tools/gapi.php:543
@@ -132,17 +135,17 @@ msgstr ""
 
 #: .././admin/dashboard_widgets.php:296
 msgid "Organic"
-msgstr ""
+msgstr "عضوي"
 
 #: .././admin/dashboard_widgets.php:298 .././admin/dashboard_widgets.php:960
 #: .././tools/gapi.php:372
 msgid "Page Views"
-msgstr ""
+msgstr "مشاهدات الصفحة"
 
 #: .././admin/dashboard_widgets.php:300 .././admin/dashboard_widgets.php:964
 #: .././tools/gapi.php:376
 msgid "Bounce Rate"
-msgstr ""
+msgstr "نسبة القفز"
 
 #: .././admin/dashboard_widgets.php:302
 msgid "Location"
@@ -166,16 +169,16 @@ msgstr ""
 
 #: .././admin/dashboard_widgets.php:416 .././admin/dashboard_widgets.php:657
 msgid "REFERRAL"
-msgstr ""
+msgstr "المصدر"
 
 #: .././admin/dashboard_widgets.php:420 .././admin/dashboard_widgets.php:658
 msgid "ORGANIC"
-msgstr ""
+msgstr "عضوي"
 
 #: .././admin/dashboard_widgets.php:424 .././admin/dashboard_widgets.php:544
 #: .././admin/dashboard_widgets.php:659
 msgid "SOCIAL"
-msgstr ""
+msgstr "اجتماعي"
 
 #: .././admin/dashboard_widgets.php:428 .././admin/dashboard_widgets.php:547
 #: .././admin/dashboard_widgets.php:660
@@ -185,19 +188,19 @@ msgstr ""
 #: .././admin/dashboard_widgets.php:432 .././admin/dashboard_widgets.php:550
 #: .././admin/dashboard_widgets.php:663
 msgid "DIRECT"
-msgstr ""
+msgstr "مباشر"
 
 #: .././admin/dashboard_widgets.php:436 .././admin/dashboard_widgets.php:664
 msgid "NEW"
-msgstr ""
+msgstr "جديد"
 
 #: .././admin/dashboard_widgets.php:538
 msgid "REFERRALS"
-msgstr ""
+msgstr "المصادر"
 
 #: .././admin/dashboard_widgets.php:541
 msgid "KEYWORDS"
-msgstr ""
+msgstr "الكلمات المفتاحية"
 
 #: .././admin/dashboard_widgets.php:690 .././admin/dashboard_widgets.php:702
 #: .././admin/dashboard_widgets.php:757 .././admin/dashboard_widgets.php:769
@@ -246,31 +249,31 @@ msgstr ""
 #: .././admin/ga_dash_settings.php:1211 .././admin/ga_dash_settings.php:1221
 #: .././admin/ga_dash_settings.php:1230 .././admin/ga_dash_settings.php:1242
 msgid "Cheating Huh?"
-msgstr ""
+msgstr "تغش ها؟"
 
 #: .././admin/ga_dash_settings.php:84 .././admin/ga_dash_settings.php:206
 #: .././admin/ga_dash_settings.php:424
 msgid "Something went wrong, you need to"
-msgstr ""
+msgstr "حدث خطأ ما, تحتاج الى"
 
 #: .././admin/ga_dash_settings.php:84 .././admin/ga_dash_settings.php:206
 #: .././admin/ga_dash_settings.php:424
 msgid "auhorize the plugin"
-msgstr ""
+msgstr "صرح بالدخول للأضافة"
 
 #: .././admin/ga_dash_settings.php:84 .././admin/ga_dash_settings.php:206
 #: .././admin/ga_dash_settings.php:424
 msgid "or properly configure your"
-msgstr ""
+msgstr "أو عدل اعداداتك بصورة صحيحة"
 
 #: .././admin/ga_dash_settings.php:84 .././admin/ga_dash_settings.php:206
 #: .././admin/ga_dash_settings.php:424
 msgid "Google Analytics account"
-msgstr ""
+msgstr "حساب أحصائيات كوكل"
 
 #: .././admin/ga_dash_settings.php:90
 msgid "Google Analytics Frontend Settings"
-msgstr ""
+msgstr "اعدادات الظهور الامامي لأحصائيات كوكل"
 
 #: .././admin/ga_dash_settings.php:103 .././admin/ga_dash_settings.php:225
 msgid "Show stats to:"
@@ -282,7 +285,7 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:169
 msgid " show page searches (after each article)"
-msgstr ""
+msgstr "اظهر بحوث الصفحة (بعد كل مقالة)"
 
 #: .././admin/ga_dash_settings.php:178 .././admin/ga_dash_settings.php:391
 #: .././admin/ga_dash_settings.php:739 .././admin/ga_dash_settings.php:1053
@@ -292,35 +295,35 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:212
 msgid "Google Analytics Dashboard Settings"
-msgstr ""
+msgstr "اعدادات الاضافة"
 
 #: .././admin/ga_dash_settings.php:275
 msgid "disable Switch Profile/View functionality"
-msgstr ""
+msgstr "عطل امكانية تغيير اعدادات الحساب/المشاهدة"
 
 #: .././admin/ga_dash_settings.php:279
 msgid "Real-Time Settings"
-msgstr ""
+msgstr "اعدادات الوقت الحقيقي"
 
 #: .././admin/ga_dash_settings.php:282
 msgid "Maximum number of pages to display on real-time tab:"
-msgstr ""
+msgstr "اكثر عدد صفحات يتم اظهارها في قسم الوقت الحقيقي:"
 
 #: .././admin/ga_dash_settings.php:287
 msgid "(find out more"
-msgstr ""
+msgstr "(اعرف المزيد"
 
 #: .././admin/ga_dash_settings.php:289 .././admin/ga_dash_settings.php:324
 msgid "about this feature"
-msgstr ""
+msgstr "حول هذه الميزة"
 
 #: .././admin/ga_dash_settings.php:290 .././admin/ga_dash_settings.php:325
 msgid ")"
-msgstr ""
+msgstr "("
 
 #: .././admin/ga_dash_settings.php:293
 msgid "Additional Stats & Charts"
-msgstr ""
+msgstr "المزيد من الاحصائيات والاشكال"
 
 #: .././admin/ga_dash_settings.php:306
 msgid " show Geo Map chart for sessions"
@@ -328,39 +331,39 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:311
 msgid "Target Geo Map to region:"
-msgstr ""
+msgstr "حدد الخريطة الجغرافية لمنطقة معينة:"
 
 #: .././admin/ga_dash_settings.php:316
 msgid "and render top"
-msgstr ""
+msgstr "واظهر الاعلى"
 
 #: .././admin/ga_dash_settings.php:321
 msgid "cities (find out more"
-msgstr ""
+msgstr "المدن (اعرف المزيد"
 
 #: .././admin/ga_dash_settings.php:339
 msgid " show traffic overview"
-msgstr ""
+msgstr "اظهر المرور بصورة عامة"
 
 #: .././admin/ga_dash_settings.php:353
 msgid " show top pages"
-msgstr ""
+msgstr "اظهر الصفحات الاكثر شعبية"
 
 #: .././admin/ga_dash_settings.php:367
 msgid " show top referrers"
-msgstr ""
+msgstr "اظهر المصادر الاكثر شعبية"
 
 #: .././admin/ga_dash_settings.php:381
 msgid " show top searches"
-msgstr ""
+msgstr "اظهر كلمات البحث الاكثر شعبية"
 
 #: .././admin/ga_dash_settings.php:430
 msgid "Google Analytics Tracking Code"
-msgstr ""
+msgstr "كود تعقب احصائيات كوكل"
 
 #: .././admin/ga_dash_settings.php:440
 msgid "Tracking Settings"
-msgstr ""
+msgstr "اعدادات التعقب"
 
 #: .././admin/ga_dash_settings.php:443
 msgid "Tracking Options:"
@@ -368,27 +371,27 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:447
 msgid "Disabled"
-msgstr ""
+msgstr "تعطيل"
 
 #: .././admin/ga_dash_settings.php:449
 msgid "Enabled"
-msgstr ""
+msgstr "تفعيل"
 
 #: .././admin/ga_dash_settings.php:459 .././admin/ga_dash_settings.php:991
 msgid "Tracking ID:"
-msgstr ""
+msgstr "معرف التعقب:"
 
 #: .././admin/ga_dash_settings.php:459 .././admin/ga_dash_settings.php:991
 msgid "Default URL:"
-msgstr ""
+msgstr "الرابط الرئيسي:"
 
 #: .././admin/ga_dash_settings.php:459 .././admin/ga_dash_settings.php:991
 msgid "Time Zone:"
-msgstr ""
+msgstr "المنطقة الزمنية:"
 
 #: .././admin/ga_dash_settings.php:467
 msgid "Basic Tracking"
-msgstr ""
+msgstr "التعقب الاساسي"
 
 #: .././admin/ga_dash_settings.php:473
 msgid "Tracking Type:"
@@ -396,39 +399,39 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:477
 msgid "Classic Analytics"
-msgstr ""
+msgstr "الاحصائيات الكلاسيكية"
 
 #: .././admin/ga_dash_settings.php:479
 msgid "Universal Analytics"
-msgstr ""
+msgstr "الاحصائيات العالمية"
 
 #: .././admin/ga_dash_settings.php:493
 msgid " anonymize IPs while tracking"
-msgstr ""
+msgstr "تجاهل الاي بي عند التعقب"
 
 #: .././admin/ga_dash_settings.php:508
 msgid " enable remarketing, demographics and interests reports"
-msgstr ""
+msgstr "فعل تقارير اعادة التسويق, الديمغرافي والاهتمام"
 
 #: .././admin/ga_dash_settings.php:512
 msgid "Events Tracking"
-msgstr ""
+msgstr "تعقب الافعال"
 
 #: .././admin/ga_dash_settings.php:525
 msgid " track downloads, mailto and outbound links"
-msgstr ""
+msgstr "تعقب التحميلات, ارسل الى والروابط الخارجية"
 
 #: .././admin/ga_dash_settings.php:529
 msgid "Downloads Regex:"
-msgstr ""
+msgstr "حمل التقارير"
 
 #: .././admin/ga_dash_settings.php:546
 msgid " track affiliate links matching this regex"
-msgstr ""
+msgstr "تتبع روابط  الداعمين التي تطابق هذا الجزء"
 
 #: .././admin/ga_dash_settings.php:550
 msgid "Affiliates Regex:"
-msgstr ""
+msgstr "روابط الداعمين:"
 
 #: .././admin/ga_dash_settings.php:567
 msgid " track fragment identifiers, hashmarks (#) in URI links"
@@ -436,7 +439,7 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:571
 msgid "Custom Definitions"
-msgstr ""
+msgstr "تعاريف مخصصة"
 
 #: .././admin/ga_dash_settings.php:574
 msgid "Authors:"
@@ -456,35 +459,35 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:614
 msgid "Advanced Tracking"
-msgstr ""
+msgstr "تتبع متطور"
 
 #: .././admin/ga_dash_settings.php:617
 msgid "Page Speed SR:"
-msgstr ""
+msgstr "سرعة الصفحة:"
 
 #: .././admin/ga_dash_settings.php:635
 msgid " exclude events from bounce-rate calculation"
-msgstr ""
+msgstr "لا تحسب الافعال من حسابات نسبة القفز"
 
 #: .././admin/ga_dash_settings.php:649
 msgid " enable enhanced link attribution"
-msgstr ""
+msgstr "فعل تعديل الرابط المحسن"
 
 #: .././admin/ga_dash_settings.php:663
 msgid " enable AdSense account linking"
-msgstr ""
+msgstr "فعل ربط حساب ادسينس"
 
 #: .././admin/ga_dash_settings.php:678
 msgid " enable cross domain tracking"
-msgstr ""
+msgstr "فعل التتبع عبر الروابط"
 
 #: .././admin/ga_dash_settings.php:682
 msgid "Cross Domains:"
-msgstr ""
+msgstr "عبر الروابط التالية:"
 
 #: .././admin/ga_dash_settings.php:692 .././admin/ga_dash_settings.php:1396
 msgid "Exclude Tracking"
-msgstr ""
+msgstr "لا تتبع"
 
 #: .././admin/ga_dash_settings.php:695
 msgid "Exclude tracking for:"
@@ -498,7 +501,7 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:781 .././admin/ga_dash_settings.php:1150
 msgid "Plugin authorization succeeded."
-msgstr ""
+msgstr "تم تفعيل تصريح الاضافة بنجاح."
 
 #: .././admin/ga_dash_settings.php:796 .././admin/ga_dash_settings.php:1173
 msgid ""
@@ -508,19 +511,19 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:822 .././admin/ga_dash_settings.php:1209
 msgid "Cleared Cache."
-msgstr ""
+msgstr "الخزن المزال."
 
 #: .././admin/ga_dash_settings.php:831 .././admin/ga_dash_settings.php:1218
 msgid "Token Reseted and Revoked."
-msgstr ""
+msgstr "الجزء المراح والمعدل."
 
 #: .././admin/ga_dash_settings.php:838 .././admin/ga_dash_settings.php:1225
 msgid "Dumping log data."
-msgstr ""
+msgstr "امسح بيانات السجل."
 
 #: .././admin/ga_dash_settings.php:848 .././admin/ga_dash_settings.php:1235
 msgid "All other domains/properties were removed."
-msgstr ""
+msgstr "كل الروابط/والخصائص تم إزالتها."
 
 #: .././admin/ga_dash_settings.php:859 .././admin/ga_dash_settings.php:1246
 msgid ""
@@ -529,13 +532,13 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:863 .././admin/ga_dash_settings.php:1250
 msgid "Google Analytics Settings"
-msgstr ""
+msgstr "إعدادات احصائيات كوكل"
 
 #: .././admin/ga_dash_settings.php:872 .././admin/ga_dash_settings.php:1258
 msgid ""
 "Something went wrong. Please check the Debugging Data section for possible "
 "errors"
-msgstr ""
+msgstr "حدث خطأ ما. الرجاء التأكد من سجل الاصلاحات لرؤية الاخطاء المحتملة"
 
 #: .././admin/ga_dash_settings.php:878 .././admin/ga_dash_settings.php:1263
 msgid "Use the red link (see below) to generate and get your access code!"
@@ -543,54 +546,55 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:889 .././admin/ga_dash_settings.php:1297
 msgid "Plugin Authorization"
-msgstr ""
+msgstr "تصريح الأضافة"
 
 #: .././admin/ga_dash_settings.php:893 .././admin/ga_dash_settings.php:1301
 msgid "You should watch the"
-msgstr ""
+msgstr "يجب ان تشاهد هذا"
 
 #: .././admin/ga_dash_settings.php:893 .././admin/ga_dash_settings.php:1301
 msgid "video"
-msgstr ""
+msgstr "الڤيديو"
 
 #: .././admin/ga_dash_settings.php:893 .././admin/ga_dash_settings.php:1301
 msgid "and read this"
-msgstr ""
+msgstr "وأقرأ هذا"
 
 #: .././admin/ga_dash_settings.php:893 .././admin/ga_dash_settings.php:1301
 msgid "tutorial"
-msgstr ""
+msgstr "الدرس"
 
 #: .././admin/ga_dash_settings.php:893 .././admin/ga_dash_settings.php:1301
 msgid ""
 "before proceeding to authorization. This plugin requires a properly "
 "configured Google Analytics account"
 msgstr ""
+"قبل ان تباشر التصريح. هذه الاضافة تتطلب حساب احصائيات كوكل معد بصورة صحيحة"
 
 #: .././admin/ga_dash_settings.php:905 .././admin/ga_dash_settings.php:1312
 msgid " use your own API Project credentials"
-msgstr ""
+msgstr "أستخدام معرفات مشروع API خاصتك"
 
 #: .././admin/ga_dash_settings.php:912 .././admin/ga_dash_settings.php:1319
 msgid "API Key:"
-msgstr ""
+msgstr "مفتاح API:"
 
 #: .././admin/ga_dash_settings.php:919 .././admin/ga_dash_settings.php:1326
 msgid "Client ID:"
-msgstr ""
+msgstr "معرف الزيون:"
 
 #: .././admin/ga_dash_settings.php:926 .././admin/ga_dash_settings.php:1334
 msgid "Client Secret:"
-msgstr ""
+msgstr "سر الزبون:"
 
 #: .././admin/ga_dash_settings.php:944 .././admin/ga_dash_settings.php:1352
 msgid "Clear Authorization"
-msgstr ""
+msgstr "أزل التصريحات"
 
 #: .././admin/ga_dash_settings.php:948 .././admin/ga_dash_settings.php:1067
 #: .././admin/ga_dash_settings.php:1355 .././admin/ga_dash_settings.php:1469
 msgid "Clear Cache"
-msgstr ""
+msgstr "أزل الخزن"
 
 #: .././admin/ga_dash_settings.php:957
 msgid "Select Domain:"
@@ -602,11 +606,11 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:975
 msgid "and/or hide all other domains"
-msgstr ""
+msgstr "و/أو أخفي كل الروابط الأخرى"
 
 #: .././admin/ga_dash_settings.php:978
 msgid "Hide Now"
-msgstr ""
+msgstr "أخفي الأن"
 
 #: .././admin/ga_dash_settings.php:997
 msgid "Theme Color:"
@@ -614,40 +618,40 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:1007
 msgid "A new frontend widget is available! To enable it, go to"
-msgstr ""
+msgstr "هنالك ودجت أمامي جديدة متوفرة! لتفعلها, أذهب الى"
 
 #: .././admin/ga_dash_settings.php:1007
 msgid "Appearance -> Widgets"
-msgstr ""
+msgstr "المظاهر -< المربعات الجانبية"
 
 #: .././admin/ga_dash_settings.php:1007
 msgid "and look for Google Analytics Dashboard."
-msgstr ""
+msgstr "وابحث عن  المربع الخاص بالأضافة."
 
 #: .././admin/ga_dash_settings.php:1013 .././admin/ga_dash_settings.php:1073
 #: .././admin/ga_dash_settings.php:1416 .././admin/ga_dash_settings.php:1475
 msgid "Debugging Data"
-msgstr ""
+msgstr "بيانات التصليح"
 
 #: .././admin/ga_dash_settings.php:1180
 msgid "Properties refreshed."
-msgstr ""
+msgstr "تم تحديث الخصائص."
 
 #: .././admin/ga_dash_settings.php:1274
 msgid "Network Setup"
-msgstr ""
+msgstr "اعدادات الشبكة"
 
 #: .././admin/ga_dash_settings.php:1289
 msgid " use a single Google Analytics account for the entire network"
-msgstr ""
+msgstr "أستخدم حساب أحصائيات كوكل واحد للشبكة كلها"
 
 #: .././admin/ga_dash_settings.php:1358
 msgid "Refresh Properties"
-msgstr ""
+msgstr "حدث الخصائص"
 
 #: .././admin/ga_dash_settings.php:1364
 msgid "Properties/Views Settings"
-msgstr ""
+msgstr "اعدادات الخصائص/المشاهدة"
 
 #: .././admin/ga_dash_settings.php:1409
 msgid " exclude Super Admin tracking for the entire network"
@@ -655,11 +659,11 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:1537
 msgid "Setup Tutorial & Demo"
-msgstr ""
+msgstr "درس التنصيب"
 
 #: .././admin/ga_dash_settings.php:1549
 msgid "Support & Reviews"
-msgstr ""
+msgstr "الدعم والتقييم"
 
 #: .././admin/ga_dash_settings.php:1557
 msgid "Plugin documentation and support on"
@@ -667,35 +671,35 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:1564
 msgid "Your feedback and review are both important,"
-msgstr ""
+msgstr "رأيك وتقييمك كلاهما مهمان,"
 
 #: .././admin/ga_dash_settings.php:1564
 msgid "rate this plugin"
-msgstr ""
+msgstr "قيم هذه الاضافة"
 
 #: .././admin/ga_dash_settings.php:1569
 msgid "Further Reading"
-msgstr ""
+msgstr "أكمل القراءة"
 
 #: .././admin/ga_dash_settings.php:1576
 msgid "Improve search rankings"
-msgstr ""
+msgstr "حسن ترتيب البحث"
 
 #: .././admin/ga_dash_settings.php:1576
 msgid "by moving your website to HTTPS/SSL."
-msgstr ""
+msgstr "حول موقعك الى بروتوكول HTTPs/SSl"
 
 #: .././admin/ga_dash_settings.php:1582
 msgid "Other"
-msgstr ""
+msgstr "اخرى"
 
 #: .././admin/ga_dash_settings.php:1582
 msgid "WordPress Plugins"
-msgstr ""
+msgstr "اضافات وردبريس"
 
 #: .././admin/ga_dash_settings.php:1582
 msgid "written by the same author"
-msgstr ""
+msgstr "كتبت من قبل نفس صاحب الاضافة"
 
 #: .././admin/ga_dash_settings.php:1587
 msgid "Other Services"
@@ -711,7 +715,7 @@ msgstr ""
 
 #: .././admin/ga_dash_settings.php:1600
 msgid "Web Analytics"
-msgstr ""
+msgstr "احصائيات الويب"
 
 #: .././admin/ga_dash_settings.php:1600
 msgid "service with users tracking at IP level."
@@ -719,7 +723,7 @@ msgstr ""
 
 #: .././front/frontend.php:112
 msgid "Views vs UniqueViews"
-msgstr ""
+msgstr "المشاهدات ضد المشاهدات الحقيقية"
 
 #: .././front/frontend.php:168
 msgid "Google Analytics Reports"
@@ -727,7 +731,7 @@ msgstr ""
 
 #: .././front/widgets.php:16
 msgid "Will display your google analytics stats in a widget"
-msgstr ""
+msgstr "ستظهر احصائيات حسابك في مربع جانبي"
 
 #: .././front/widgets.php:44 .././tools/gapi.php:808
 msgid "trend"
@@ -735,7 +739,7 @@ msgstr ""
 
 #: .././front/widgets.php:144
 msgid "Period:"
-msgstr ""
+msgstr "الفترة:"
 
 #: .././front/widgets.php:144
 msgid "Sessions:"
@@ -743,51 +747,51 @@ msgstr ""
 
 #: .././front/widgets.php:150
 msgid "generated by"
-msgstr ""
+msgstr "اظهرت بواسطة"
 
 #: .././front/widgets.php:164
 msgid "Google Analytics Stats"
-msgstr ""
+msgstr "احصائيات كوكل"
 
 #: .././front/widgets.php:171
 msgid "Title:"
-msgstr ""
+msgstr "العنوان:"
 
 #: .././front/widgets.php:178
 msgid "Display:"
-msgstr ""
+msgstr "اظهر:"
 
 #: .././front/widgets.php:182
 msgid "Chart & Totals"
-msgstr ""
+msgstr "الاحصائيات والكل"
 
 #: .././front/widgets.php:183
 msgid "Chart"
-msgstr ""
+msgstr "الاحصائيات"
 
 #: .././front/widgets.php:184
 msgid "Totals"
-msgstr ""
+msgstr "الكل"
 
 #: .././front/widgets.php:188
 msgid "Anonimize chart&#39;s stats:"
-msgstr ""
+msgstr "عمم الاحصائيات:"
 
 #: .././front/widgets.php:195
 msgid "Stats for:"
-msgstr ""
+msgstr "الاحصائيات لـ:"
 
 #: .././front/widgets.php:205
 msgid "Give credits:"
-msgstr ""
+msgstr "أعطي الفضل:"
 
 #: .././tools/gapi.php:140
 msgid "Use this link to get your access code:"
-msgstr ""
+msgstr "أستخدم هذا الرابط للحصول على كود التعقب الخاص بك:"
 
 #: .././tools/gapi.php:140
 msgid "Get Access Code"
-msgstr ""
+msgstr "احصل على كود الدخول"
 
 #: .././tools/gapi.php:145 .././tools/gapi.php:149
 msgid "Use the red link to get your access code!"
@@ -795,27 +799,27 @@ msgstr ""
 
 #: .././tools/gapi.php:145
 msgid "Access Code:"
-msgstr ""
+msgstr "كود الدخول:"
 
 #: .././tools/gapi.php:157
 msgid "Save Access Code"
-msgstr ""
+msgstr "أحفظ كود الدخول"
 
 #: .././tools/gapi.php:380
 msgid "Organic Searches"
-msgstr ""
+msgstr "البحث العضوي"
 
 #: .././tools/gapi.php:391
 msgid "Hour"
-msgstr ""
+msgstr "الساعة"
 
 #: .././tools/gapi.php:394 .././tools/gapi.php:808 .././tools/gapi.php:852
 msgid "Date"
-msgstr ""
+msgstr "التاريخ"
 
 #: .././tools/gapi.php:500 .././tools/gapi.php:852
 msgid "Views"
-msgstr ""
+msgstr "المشاهدات"
 
 #: .././tools/gapi.php:611
 msgid "Countries"
@@ -831,19 +835,153 @@ msgstr ""
 
 #: .././tools/gapi.php:754
 msgid "Type"
-msgstr ""
+msgstr "النوع"
 
 #: .././tools/gapi.php:852
 msgid "UniqueViews"
-msgstr ""
+msgstr "المشاهدات الخاصة"
 
 #: .././tools/gapi.php:899
 msgid "Top Searches"
-msgstr ""
+msgstr "البحث الاكثر شعبية"
+
+#~ msgid "Error Log"
+#~ msgstr "سجل الاخطاء"
+
+#~ msgid "Visits"
+#~ msgstr "الزيارات"
+
+#~ msgid "Visitors"
+#~ msgstr "الزائرين"
+
+#~ msgid ""
+#~ "No stats available. Please check the Debugging Data section for possible "
+#~ "errors"
+#~ msgstr ""
+#~ "لا يوجد أحصائيات. الرجاء التأكد من بيانات الاخطاء لوجود أخطاء محتملة"
+
+#~ msgid "Country/City"
+#~ msgstr "الدولة/لمدينة"
+
+#~ msgid "Source"
+#~ msgstr "المصدر"
+
+#~ msgid "Traffic Sources"
+#~ msgstr "مصادر المرور"
+
+#~ msgid "New vs. Returning"
+#~ msgstr "الجديد ضد العائد"
+
+#~ msgid "Top Pages"
+#~ msgstr "الصفحات الأكثر شعبية"
+
+#~ msgid "Top Referrers"
+#~ msgstr "المشيرين الاكثر شعبية"
+
+#~ msgid "Visits:"
+#~ msgstr "الزيارات:"
+
+#~ msgid "Visitors:"
+#~ msgstr "الزوار:"
+
+#~ msgid "Page Views:"
+#~ msgstr "مشاهدات الصفحة:"
+
+#~ msgid "Bounce Rate:"
+#~ msgstr "نسبة القفز:"
+
+#~ msgid "Organic Search:"
+#~ msgstr "البحث العضوي:"
+
+#~ msgid "Pages per Visit:"
+#~ msgstr "الصفحات بالزيارة الواحدة:"
+
+#~ msgid ""
+#~ "This is a beta feature and is only available when using my Developer Key! "
+#~ "("
+#~ msgstr "هذه ميزة تجريبية وهي متوفرة فقط عند استخدام مفتاح التطوير خاصتي! ("
+
+#~ msgid "more about this feature"
+#~ msgstr "المزيد حول هذه الميزة"
+
+#~ msgid "RETURN"
+#~ msgstr "عائد"
+
+#~ msgid "Visits from "
+#~ msgstr "يزور من"
+
+#~ msgid "Visits by Country"
+#~ msgstr "الزيارات حسب البلد "
+
+#~ msgid "Traffic Overview"
+#~ msgstr "مشاهدة عامة للزيارات"
+
+#~ msgid " show page visits and visitors in frontend (after each article)"
+#~ msgstr "اظهر زيارات الصفحة والزوار في الواجهة (بعد كل مقالة)"
+
+#~ msgid " show Geo Map chart for visits"
+#~ msgstr "اظهر شكل خريطة جغرافي للزيارات"
+
+#~ msgid "You can find support on"
+#~ msgstr "يمكنك ايجاد الدعم في"
+
+#~ msgid "DeConf.com"
+#~ msgstr "DeConf.com"
+
+#~ msgid "service with visitors tracking at IP level."
+#~ msgstr "خدمة تتبع الزوار على مستوى الاي بي"
+
+#~ msgid "Total Visits:"
+#~ msgstr "الزيارات الكلية:"
+
+#~ msgid "PHP CURL is required. Please install/enable PHP CURL!"
+#~ msgstr "PHP CURL مطلوب. الرجاء فعل/نصب PHP CURL!"
+
+#~ msgid "Options saved."
+#~ msgstr "تم حفظ الاعدادات."
+
+#~ msgid "Show stats to: "
+#~ msgstr "اظهر البيانات لـ:"
+
+#~ msgid "Update Options"
+#~ msgstr "حدث الاعدادات"
+
+#~ msgid "Tracking Options: "
+#~ msgstr "خيارات التعقب:"
+
+#~ msgid "Tracking Type: "
+#~ msgstr "نوع التعقب:"
+
+#~ msgid "Authors: "
+#~ msgstr "الكتاب:"
+
+#~ msgid "Publication Year: "
+#~ msgstr "سنة النشر:"
+
+#~ msgid "Categories: "
+#~ msgstr "التصنيفات:"
+
+#~ msgid "User Type: "
+#~ msgstr "نوع المستخدم:"
+
+#~ msgid "Exclude tracking for: "
+#~ msgstr "لا تتبع لـ:"
+
+#~ msgid "Select Domain: "
+#~ msgstr "حدد الرابط:"
+
+#~ msgid "Theme Color: "
+#~ msgstr "لون القالب:"
+
+#~ msgid "&#39; trend"
+#~ msgstr "&#39; النزعة"
+
+#~ msgid "DeConf Help Center"
+#~ msgstr "مركز المساعدة"
 
 #~ msgid ""
 #~ " (watch this <a href='http://deconf.com/projects/google-analytics-"
 #~ "dashboard-for-wordpress/' target='_blank'>Step by step video tutorial</a>)"
 #~ msgstr ""
-#~ " (watch this <a href='http://deconf.com/projects/google-analytics-"
-#~ "dashboard-for-wordpress/' target='_blank'>Step by step video tutorial</a>)"
+#~ " (شاهد هذا <a href='http://deconf.com/projects/google-analytics-dashboard-"
+#~ "for-wordpress/' target='_blank'>الفيديو الذي يعلمك خطوة بخطوة</a>)"
