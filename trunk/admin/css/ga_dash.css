@@ -1,3 +1,9 @@
+/* Tab navigation */
+
+#gadwp-events, #gadwp-custom, #gadwp-advanced, #gadwp-exclude, #gadwp-config{
+	display:none;
+}
+
 /* Options pages */
 table.options {
 	padding-left: 10px;
@@ -18,7 +24,7 @@ td.title-select {
 }
 
 td.debugging {
-	width: 150px;
+	width: 300px;
 }
 
 td.info {
@@ -45,10 +51,6 @@ td.title label {
 }
 
 pre.gadash {
-}
-
-.show_hide, .log_data {
-	display: none;
 }
 
 pre.log_data {
