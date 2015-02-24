@@ -2,18 +2,18 @@
 Contributors: deconf
 Donate link: https://deconf.com/donate/
 Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking,realtime,wpmu,multisite
-Requires at least: 2.8
-Tested up to: 4.1
-Stable tag: 4.3.8
+Requires at least: 3.0
+Tested up to: 4.1.1
+Stable tag: 4.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Displays Google Analytics reports and real-time statistics in your WordPress Dashboard. Inserts the latest tracking code in every page of your site.
 
 == Description ==
-Using a widget, [Google Analytics Dashboard](https://deconf.com/google-analytics-dashboard-wordpress/) displays detailed analytics info and statistics about: number of visits, number of visitors, bounce rates, organic searches, pages per visit directly on your WordPress Dashboard.
+Using a widget, [Google Analytics Dashboard](https://deconf.com/google-analytics-dashboard-wordpress/) displays detailed analytics info and statistics about: number of visits (sessions), number of visitors (users), bounce rates, organic searches, pages per visit directly on your WordPress Dashboard.
 
-Authorized users can also view statistics like Views, UniqueViews and top searches, on frontend, at the end of each article.
+Authorized users can also view statistics like views, unique views and searches, on frontend, at the end of each article.
 
 > <strong>Google Analytics Dashboard on GitHub</strong><br>
 > You can submit pull requests, feature requests or bugs on [Google Analytics Dashboard](https://github.com/deconf/Google-Analytics-Dashboard-for-WP) repository.
@@ -24,7 +24,7 @@ Google Analytics reports, in real-time, on your dashboard screen:
 
 - displays the total number of visitors in real-time 
 - real-time statistics about your acquisition channels
-- per page real-time reports
+- per page real-time reports with traffic sources details 
 
 = Google Analytics Reports =
 
@@ -32,10 +32,10 @@ The reports you need, in your dashboard and on site's frontend:
 
 - you can access all websites statistics in a single widget (websites within same Google Account)
 - option to choose a default color for your charts, graphs and maps
-- option to display top 24 pages, referrers and searches (sortable by columns)
-- option to display Visitors by Country on Geo Map
-- local websites and business have an option to display cities, instead of countries, on a regional map
-- option to display Traffic Overview in Pie Charts
+- visitors by pages, referrers and searches reports
+- location reports, displaying visitors by country on a Geo Map and in a table chart
+- local websites and business have an option to display cities, instead of countries, on a regional map and in a table chart
+- traffic overview reports with details about acquisition channels, social networks, search engines, traffic mediums and visitor type 
 - user access level settings for Backend statistics and analytics reports
 - user access level settings for Frontend analytics data and reports
 - option to display Google Analytics statistics on frontend, at the end of each article
@@ -126,70 +126,165 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
+= 4.4.7 =
+- Bugfix: fatal error in plugin settings screen, under certain circumstances
+- Bugfix: fix refresh interval for backend stats
+
+= 4.4.6 =
+- Bugfix: maintain compatibility with WordPress 3.0+
+
+= 4.4.5 =
+- Enhancement: GAPI requests optimization 
+- Enhancement: server responses improvements
+- Enhancement: filter data through query options
+- Bugfix: additional checks before displaying an error
+- Bugfix: wrong error displayed on IE
+- Bugfix: set correct Content-Type before sending responses
+
+= 4.4.4 =
+- Bug Fix: end tag missing on error message
+- Bug Fix: additional checks before making a View list request
+- Bug Fix: avoid deleting errors while clearing the cache
+- Bug Fix: PHP notices fix for some requests
+- Bug Fix: PHP notices fix when calling ob_clean on an empty buffer
+- Bug Fix: frontend stats not responsive 
+- Enhancement: handle some additional API errors
+- Enhancement: set totals to zero when anonymize stats is enabled
+- Enhancement: auto-cleanup removed; all transients have static identifiers now
+- Enhancement: dump error details to JavaScript Console and throw an alert on invalid responses
+- Enhancement: Italian translation, updated by [Leo](https://www.facebook.com/leo.thestrategist)
+
+= 4.4.3 =
+- Enhancement: further optimization on queries
+- Enhancement: less error prone while running JavaScript
+- Enhancement: GAPI errors handling improvement
+- Enhancement: added GADWP_IP_VERSION constant to force a particular Internet Protocol version when needed  
+- Enhancement: run the clean-up method only in settings screen
+- Enhancement: added tabs to Tracking Code page
+- Enhancement: added a new menu item for errors and debugging
+- Enhancement: error alerts for Error & Debug sub-menu
+- Enhancement: disable file cache functionality in GAPI library
+- Enhancement: if cURL is not available fall-back to HTTP streams; cURL is no longer a requirement
+- Enhancement: wp_get_sites limit can now be adjusted through gadwp_sites_limit filter
+
+= 4.4.2 =
+- Bug Fix: additional check for frontend widget
+
+= 4.4.1 =
+- Bug Fix: frontend widget nonce issue while using a cache plugin, reported by [Rick](https://deconf.com/ask/author/rickbates/)
+- Bug Fix: clear the buffer immediately before returning AJAX response
+- Bug Fix: add full-path while loading autoload.php
+
+= 4.4 =
+- Bug Fix: frontend reports and widget are not responsive
+- Bug Fix: random notices for today and yesterday reports
+- Enhancement: Italian translation, updated by [Leo](https://www.facebook.com/leo.thestrategist)
+- Enhancement: admin widget responsive design and optimizations
+- Enhancement: added acquisition channel reports
+- Enhancement: added acquisition social networks reports
+- Enhancement: added acquisition search engines reports
+- Enhancement: new location report and countries/cities list table
+- Enhancement: new pages report (removed top 24 limit)
+- Enhancement: new searches report (removed top 24 limit)
+- Enhancement: new referrers report (removed top 24 limit)
+- Enhancement: frontend, per page reports (removed top 24 limit)
+- Enhancement: added campaigns in real-time report/screen
+- Enhancement: asynchronous reports loading and speed improvements
+- Enhancement: code optimization for all frontend and backend features
+- Enhancement: finished the error standardization process; easier debugging
+- Enhancement: GAPI library update
+
+= 4.3.11 =
+- Bug Fix: improvements on QPS management
+- Bug Fix: fall-back to world map when a wrong country code is entered
+- Bug Fix: removed double transient call on successful authorization
+- Bug Fix: PHP warning when authorizing without a Google Analytics account
+- Bug Fix: switch back to initial blog after completing an error clean up in multisite mode
+- Enhancement: clear all errors on version change
+- Enhancement: grid lines are now transparent
+- Enhancement: responsive design improvements for admin widget
+- Enhancement: add css and js version number
+
+= 4.3.10 =
+- Bug Fix: removed the PHP debugging log for frontend queries
+- Enhancement: adding library conflict notice in General Settings
+- Enhancement: better handling of API errors
+- Enhancement: added an error when user enters the Tracking ID instead of an access code    
+- Enhancement: improved error reporting for frontend stats and widgets
+
 = 4.3.9 =
-- switch map resolution to metro areas
+- Enhancement: marking classes as final
+- Enhancement: re-design the frontend widget
+- Enhancement: responsive design for frontend widget
+- Enhancement: responsive design for page reports
+- Enhancement: error codes standardization
+- Enhancement: frontend stats are now able to display the error number
+- Bug Fix: load jsapi only when the frontend widget is active
+- Bug Fix: javascript errors while resizing window
+- Bug Fix: real-time component not loading properly in certain conditions
+- Bug Fix: stop retrying when a daily limit has exceeded
 
 = 4.3.8 =
-- feature: frontend component redesign
-- tweak: optimizing frontend component to improve page loading speed
-- tweak: optimizing frontend component to minimize GAPI requests  
-- tweak: loading jsapi using wp-enqueue-script
-- tweak: better escaping to avoid javascript errors
+- Enhancement: frontend component re-design
+- Enhancement: optimizing frontend component to improve page loading speed
+- Enhancement: optimizing frontend component to minimize GAPI requests  
+- Enhancement: loading jsapi using wp-enqueue-script
+- Enhancement: better escaping to avoid javascript errors
 
 = 4.3.7 =
-- feature: option to exclude Super Administrator tracking for the entire network, suggested by [Marie](https://wordpress.org/support/profile/yamaryam)
-- bugfix: warning during Network Activate, reported by [JoelStickney](https://wordpress.org/support/profile/joelstickney)
-- bugfix: track affiliates while downloads, mailto and outbound links tracking is disabled
-- bugfix: avoid reload loops for realtime component
-- feature: track fragment identifiers, hashmarks (#) in URI links
-- tweak: improving i18n
-- tweak: moving bounce-rate option to Advanced Tracking 
+- Enhancement: option to exclude Super Administrator tracking for the entire network, suggested by [Marie](https://wordpress.org/support/profile/yamaryam)
+- Bug Fix: warning during Network Activate, reported by [JoelStickney](https://wordpress.org/support/profile/joelstickney)
+- Bug Fix: track affiliates while downloads, mailto and outbound links tracking is disabled
+- Bug Fix: avoid reload loops for realtime component
+- Enhancement: track fragment identifiers, hashmarks (#) in URI links
+- Enhancement: improving i18n
+- Enhancement: moving bounce-rate option to Advanced Tracking 
 
 = 4.3.6 =
-- bugfix: clear cache not working properly
-- bugfix: error correction in Spanish localization file
+- Bug Fix: clear cache not working properly
+- Bug Fix: error correction in Spanish localization file
 
 = 4.3.5 =
-- bugfix: authors custom dimension not working for pages, reported by [tylerarnold23](https://wordpress.org/support/profile/tylerarnold23)
-- bugfix: outbound detection
-- bugfix: fixed unicode issue, reported by [Haruka_Suzuki](https://wordpress.org/support/profile/haruka_suzuki)
-- bugfix: properly display cities with same name from different regions, reported by [matt6303](https://wordpress.org/support/profile/matt6303)
-- tweak: removed image extensions from default download filter
-- tweak: add day of week to dashboard dates, suggested by [nethrs](https://deconf.com/ask/author/timnethers/)
-- feature: Arabic translation, translated by [Ahmed Majed](https://deconf.com/ask/author/almobdaa/)
-- bugfix: multiple fixes for real time reports
+- Bug Fix: authors custom dimension not working for pages, reported by [tylerarnold23](https://wordpress.org/support/profile/tylerarnold23)
+- Bug Fix: outbound detection
+- Bug Fix: fixed unicode issue, reported by [Haruka_Suzuki](https://wordpress.org/support/profile/haruka_suzuki)
+- Bug Fix: properly display cities with same name from different regions, reported by [matt6303](https://wordpress.org/support/profile/matt6303)
+- Enhancement: removed image extensions from default download filter
+- Enhancement: add day of week to dashboard dates, suggested by [nethrs](https://deconf.com/ask/author/timnethers/)
+- Enhancement: Arabic translation, translated by [Ahmed Majed](https://deconf.com/ask/author/almobdaa/)
+- Bug Fix: multiple fixes for real time reports
 
 = 4.3.4 =
-- feature: ga_dash_addtrackingcode action hook
-- feature: French translation
-- feature: cross domain tracking support
-- feature: Google Analytics custom definitions, using custom dimensions to track authors, years, categories and engagement
-- feature: support for affiliate links tracking 
-- tweak: never treat downloads as outbound links
+- Enhancement: ga_dash_addtrackingcode action hook
+- Enhancement: French translation
+- Enhancement: cross domain tracking support
+- Enhancement: Google Analytics custom definitions, using custom dimensions to track authors, years, categories and engagement
+- Enhancement: support for affiliate links tracking 
+- Enhancement: never treat downloads as outbound links
 
 = 4.3.3 =
-- feature: added Polish translation
-- bugfix: missing icon and wrong link in GADWP settings
-- tweak: moving Page Speed SR to top, to avoid some confusions
-- tweak: added plugin version to debugging data
+- Enhancement: added Polish translation
+- Bug Fix: missing icon and wrong link in GADWP settings
+- Enhancement: moving Page Speed SR to top, to avoid some confusions
+- Enhancement: added plugin version to debugging data
 
 = v4.3.2 =
-- bugfix: fixes for multisite with a single Google Account
-- bugfix: notice while displaying searches report
-- bugfix: downloads regex update
-- bugfix: always exclude outbound links from bounce-rate calculation 
-- feature: Adsense account linking
-- feature: adjust page speed sample rate
-- feature: exclude event tracking from bounce-rate calculation for downloads and mailto
-- tweak: reset downloads filters to default when empty
+- Bug Fix: fixes for multisite with a single Google Account
+- Bug Fix: notice while displaying searches report
+- Bug Fix: downloads regex update
+- Bug Fix: always exclude outbound links from bounce-rate calculation 
+- Enhancement: Adsense account linking
+- Enhancement: adjust page speed sample rate
+- Enhancement: exclude event tracking from bounce-rate calculation for downloads and mailto
+- Enhancement: reset downloads filters to default when empty
 - deprecate: classic analytics
 
 = v4.3.1 =
-- bugfix: link on top referrers list not working
+- Bug Fix: link on top referrers list not working
 - allowing today as default stats
-- bugfix: profiles refresh issue
-- tweak: remove table borders on frontend widget
-- bugfix: multiple fixes for network mode
+- Bug Fix: profiles refresh issue
+- Enhancement: remove table borders on frontend widget
+- Bug Fix: multiple fixes for network mode
 - updated GAPI libarry
 - using autloader for PHP 5.3.0 and greater
 - security improvements
@@ -198,27 +293,27 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 = v4.3 =
 - responsive Google Charts
 - single authorization for multisite
-- bugfix: SERVER_ADDR PHP notice
-- bugfix: notices on admin dashboard
+- Bug Fix: SERVER_ADDR PHP notice
+- Bug Fix: notices on admin dashboard
 - additional data validation and sanitizing
-- bugfix: realtime switching profile functionality
+- Bug Fix: realtime switching profile functionality
 - multisite: blog's cleanup on uninstall
 - deprecating custom tracking code
 
 = v4.2.21 =
 - added hungarian translation
 - added italian translation
-- bugfix: escaping characters in google charts
+- Bug Fix: escaping characters in google charts
 - new filter on frontend widget
 - cache timeout adjustments
 - description update
-- bugfix: fatal error on invalid_grant
+- Bug Fix: fatal error on invalid_grant
 - added timestamp on last error  
  
 = v4.2.20 =
-- bugfix: russian country map is not working
-- bugfix: only administrator can see stats while using a cache plugin
-- bugfix: division by zero on frontend widget
+- Bug Fix: russian country map is not working
+- Bug Fix: only administrator can see stats while using a cache plugin
+- Bug Fix: division by zero on frontend widget
 - added german translation
 - added spanish translation
 
