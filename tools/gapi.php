@@ -7,96 +7,134 @@
  */
 if (! class_exists('GADASH_GAPI')) {
 
-    class GADASH_GAPI
+  final class GADASH_GAPI
+  {
+    public $client, $service;
+    public $timeshift;
+    public $error_timeout;
+    private $managequota;
+
+    function __construct()
     {
-
-        public $client, $service;
-
-        public $country_codes;
-
-        public $timeshift;
-
-        function __construct()
-        {
-            global $GADASH_Config;
-            if (! function_exists('curl_version')) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': CURL disabled. Please enable CURL!');
-                return;
-            }
-            // If at least PHP 5.3.2 use the autoloader, if not try to edit the include_path
-            if (version_compare(PHP_VERSION, '5.3.2') >= 0) {
-                require 'vendor/autoload.php';
-            } else {
-                set_include_path($GADASH_Config->plugin_path . '/tools/src/' . PATH_SEPARATOR . get_include_path());
-                // Include GAPI client
-                if (! class_exists('Google_Client')) {
-                    require_once 'Google/Client.php';
-                }
-                // Include GAPI Analytics Service
-                if (! class_exists('Google_Service_Analytics')) {
-                    require_once 'Google/Service/Analytics.php';
-                }
-            }
-            
-            $this->client = new Google_Client();
-            $this->client->setScopes('https://www.googleapis.com/auth/analytics.readonly');
-            $this->client->setAccessType('offline');
-            $this->client->setApplicationName('Google Analytics Dashboard');
-            $this->client->setRedirectUri('urn:ietf:wg:oauth:2.0:oob');
-            
-            if ($GADASH_Config->options['ga_dash_userapi']) {
-                $this->client->setClientId($GADASH_Config->options['ga_dash_clientid']);
-                $this->client->setClientSecret($GADASH_Config->options['ga_dash_clientsecret']);
-                $this->client->setDeveloperKey($GADASH_Config->options['ga_dash_apikey']);
-            } else {
-                $this->client->setClientId('65556128781.apps.googleusercontent.com');
-                $this->client->setClientSecret('Kc7888wgbc_JbeCpbFjnYpwE');
-                $this->client->setDeveloperKey('AIzaSyBG7LlUoHc29ZeC_dsShVaBEX15SfRl_WY');
-            }
-            
-            $this->service = new Google_Service_Analytics($this->client);
-            
-            if ($GADASH_Config->options['ga_dash_token']) {
-                $token = $GADASH_Config->options['ga_dash_token'];
-                $token = $this->ga_dash_refresh_token();
-                if ($token) {
-                    $this->client->setAccessToken($token);
-                }
-            }
+      global $GADASH_Config;
+      include_once ($GADASH_Config->plugin_path . '/tools/autoload.php');
+      ;
+      $config = new Google_Config();
+      $config->setCacheClass('Google_Cache_Null');
+      if (function_exists('curl_version')) {
+        $curlversion = curl_version();
+        if (isset($curlversion['version']) and (version_compare(PHP_VERSION, '5.3.0') >= 0) and version_compare($curlversion['version'], '7.10.8') >= 0 and defined('GADWP_IP_VERSION') and GADWP_IP_VERSION) {
+          $config->setClassConfig('Google_IO_Curl', array(
+            'options' => array(
+              CURLOPT_IPRESOLVE => GADWP_IP_VERSION
+            )
+          )); // Force CURL_IPRESOLVE_V4 or CURL_IPRESOLVE_V6
         }
-
-        function get_timeouts($daily)
-        {
-            $local_time = time() + $this->timeshift;
-            if ($daily) {
-                $nextday = explode('-', date('n-j-Y', strtotime(' +1 day', $local_time)));
-                $midnight = mktime(0, 0, 0, $nextday[0], $nextday[1], $nextday[2]);
-                return $midnight - $local_time;
-            } else {
-                $nexthour = explode('-', date('H-n-j-Y', strtotime(' +1 hour', $local_time)));
-                $newhour = mktime($nexthour[0], 0, 0, $nexthour[1], $nexthour[2], $nexthour[3]);
-                return $newhour - $local_time;
-            }
+      }
+      $this->client = new Google_Client($config);
+      $this->client->setScopes('https://www.googleapis.com/auth/analytics.readonly');
+      $this->client->setAccessType('offline');
+      $this->client->setApplicationName('Google Analytics Dashboard');
+      $this->client->setRedirectUri('urn:ietf:wg:oauth:2.0:oob');
+      $this->set_error_timeout();
+      $this->managequota = 'u' . get_current_user_id() . 's' . get_current_blog_id();
+      if ($GADASH_Config->options['ga_dash_userapi']) {
+        $this->client->setClientId($GADASH_Config->options['ga_dash_clientid']);
+        $this->client->setClientSecret($GADASH_Config->options['ga_dash_clientsecret']);
+        $this->client->setDeveloperKey($GADASH_Config->options['ga_dash_apikey']);
+      } else {
+        $this->client->setClientId($GADASH_Config->access[0]);
+        $this->client->setClientSecret($GADASH_Config->access[1]);
+        $this->client->setDeveloperKey($GADASH_Config->access[2]);
+      }
+      $this->service = new Google_Service_Analytics($this->client);
+      if ($GADASH_Config->options['ga_dash_token']) {
+        $token = $GADASH_Config->options['ga_dash_token'];
+        $token = $this->refresh_token();
+        if ($token) {
+          $this->client->setAccessToken($token);
         }
+      }
+    }
 
-        function token_request()
-        {
-            $authUrl = $this->client->createAuthUrl();
-            
-            ?>
+    private function set_error_timeout()
+    {
+      $midnight = strtotime("tomorrow 00:00:00"); // UTC midnight
+      $midnight = $midnight + 8 * 3600; // UTC 8 AM
+      $this->error_timeout = $midnight - time();
+      return;
+    }
+
+    private function prepare_json($value)
+    {
+      return esc_html(str_replace('\\', '&#92;', stripslashes($value)));
+    }
+
+    /**
+     * Handles errors returned by GAPI and allows exponential backoff
+     *
+     * @return boolean
+     */
+    function gapi_errors_handler()
+    {
+      $errors = get_transient('ga_dash_gapi_errors');
+      if ($errors === false or ! isset($errors[0])) { // invalid error
+        return FALSE;
+      }
+      if (isset($errors[1][0]['reason']) and ($errors[1][0]['reason'] == 'invalidCredentials' or $errors[1][0]['reason'] == 'authError' or $errors[1][0]['reason'] == 'insufficientPermissions' or $errors[1][0]['reason'] == 'required' or $errors[1][0]['reason'] == 'keyExpired')) {
+        $this->reset_token(false);
+        return TRUE;
+      }
+      if (isset($errors[1][0]['reason']) and ($errors[1][0]['reason'] == 'userRateLimitExceeded' or $errors[1][0]['reason'] == 'quotaExceeded')) { // allow retry
+        return FALSE;
+      }
+      if ($errors[0] == 400 or $errors[0] == 401 or $errors[0] == 403) {
+        return TRUE;
+      }
+      return FALSE;
+    }
+
+    /**
+     * Calculates proper timeouts for each GAPI query
+     *
+     * @param
+     *          $daily
+     * @return number
+     */
+    function get_timeouts($daily)
+    {
+      $local_time = time() + $this->timeshift;
+      if ($daily) {
+        $nextday = explode('-', date('n-j-Y', strtotime(' +1 day', $local_time)));
+        $midnight = mktime(0, 0, 0, $nextday[0], $nextday[1], $nextday[2]);
+        return $midnight - $local_time;
+      } else {
+        $nexthour = explode('-', date('H-n-j-Y', strtotime(' +1 hour', $local_time)));
+        $newhour = mktime($nexthour[0], 0, 0, $nexthour[1], $nexthour[2], $nexthour[3]);
+        return $newhour - $local_time;
+      }
+    }
+
+    function token_request()
+    {
+      $authUrl = $this->client->createAuthUrl();
+      ?>
 <form name="input"
 	action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>" method="post">
+
 	<table class="options">
 		<tr>
 			<td colspan="2" class="info">
-						<?php echo __( "Use this link to get your access code:", 'ga-dash' ) . ' <a href="' . $authUrl . '" target="_blank">' . __ ( "Get Access Code", 'ga-dash' ) . '</a>'; ?>
+						<?php echo __( "Use this link to get your access code:", 'ga-dash' ) . ' <a href="' . $authUrl . '" id="gapi-access-code" target="_blank">' . __ ( "Get Access Code", 'ga-dash' ) . '</a>.'; ?>
 					</td>
 		</tr>
 		<tr>
-			<td class="title"><label for="ga_dash_code"><?php echo _e( "Access Code:", 'ga-dash' ); ?></label>
+			<td class="title"><label for="ga_dash_code"
+				title="<?php _e("Use the red link to get your access code!",'ga-dash')?>"><?php echo _e( "Access Code:", 'ga-dash' ); ?></label>
 			</td>
 			<td><input type="text" id="ga_dash_code" name="ga_dash_code" value=""
-				size="61"></td>
+				size="61" required="required"
+				title="<?php _e("Use the red link to get your access code!",'ga-dash')?>"></td>
 		</tr>
 		<tr>
 			<td colspan="2"><hr></td>
@@ -109,989 +147,865 @@ if (! class_exists('GADASH_GAPI')) {
 	</table>
 </form>
 <?php
-        }
-
-        function refresh_profiles()
-        {
-            try {
-                $profiles = $this->service->management_profiles->listManagementProfiles('~all', '~all');
-                $items = $profiles->getItems();
-                if (count($items) != 0) {
-                    $ga_dash_profile_list = array();
-                    foreach ($items as $profile) {
-                        $timetz = new DateTimeZone($profile->getTimezone());
-                        $localtime = new DateTime('now', $timetz);
-                        $timeshift = strtotime($localtime->format('Y-m-d H:i:s')) - time();
-                        $ga_dash_profile_list[] = array(
-                            $profile->getName(),
-                            $profile->getId(),
-                            $profile->getwebPropertyId(),
-                            $profile->getwebsiteUrl(),
-                            $timeshift,
-                            $profile->getTimezone()
-                        );
-                    }
-                    update_option('gadash_lasterror', 'N/A');
-                    return ($ga_dash_profile_list);
-                } else {
-                    update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': No properties were found in this account!');
-                }
-            } catch (Google_IO_Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return false;
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                $this->ga_dash_reset_token(true);
-            }
-        }
-
-        function ga_dash_refresh_token()
-        {
-            global $GADASH_Config;
-            try {
-                if (is_multisite() && $GADASH_Config->options['ga_dash_network']) {
-                    $transient = get_site_transient("ga_dash_refresh_token");
-                } else {
-                    $transient = get_transient("ga_dash_refresh_token");
-                }
-                if (empty($transient)) {
-                    
-                    if (! $GADASH_Config->options['ga_dash_refresh_token']) {
-                        $google_token = json_decode($GADASH_Config->options['ga_dash_token']);
-                        $GADASH_Config->options['ga_dash_refresh_token'] = $google_token->refresh_token;
-                        $this->client->refreshToken($google_token->refresh_token);
-                    } else {
-                        $this->client->refreshToken($GADASH_Config->options['ga_dash_refresh_token']);
-                    }
-                    
-                    $token = $this->client->getAccessToken();
-                    $google_token = json_decode($token);
-                    $GADASH_Config->options['ga_dash_token'] = $token;
-                    if (is_multisite() && $GADASH_Config->options['ga_dash_network']) {
-                        set_site_transient("ga_dash_refresh_token", $token, $google_token->expires_in);
-                        $GADASH_Config->set_plugin_options(true);
-                    } else {
-                        set_transient("ga_dash_refresh_token", $token, $google_token->expires_in);
-                        $GADASH_Config->set_plugin_options();
-                    }
-                    return $token;
-                } else {
-                    return $transient;
-                }
-            } catch (Google_IO_Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return false;
-            } catch (Exception $e) {
-                $this->ga_dash_reset_token(false);
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return false;
-            }
-        }
-
-        function ga_dash_reset_token($all = true)
-        {
-            global $GADASH_Config;
-            if (is_multisite() && $GADASH_Config->options['ga_dash_network']) {
-                delete_site_transient('ga_dash_refresh_token');
-            } else {
-                delete_transient('ga_dash_refresh_token');
-            }
-            $GADASH_Config->options['ga_dash_token'] = "";
-            $GADASH_Config->options['ga_dash_refresh_token'] = "";
-            
-            if ($all) {
-                $GADASH_Config->options['ga_dash_tableid'] = "";
-                $GADASH_Config->options['ga_dash_tableid_jail'] = "";
-                $GADASH_Config->options['ga_dash_profile_list'] = "";
-                try {
-                    $this->client->revokeToken();
-                } catch (Exception $e) {
-                    if (is_multisite() && $GADASH_Config->options['ga_dash_network']) {
-                        $GADASH_Config->set_plugin_options(true);
-                    } else {
-                        $GADASH_Config->set_plugin_options();
-                    }
-                }
-            }
-            
-            if (is_multisite() && $GADASH_Config->options['ga_dash_network']) {
-                $GADASH_Config->set_plugin_options(true);
-            } else {
-                $GADASH_Config->set_plugin_options();
-            }
-        }
-        
-        // Get Main Chart
-        function ga_dash_main_charts($projectId, $period, $from, $to, $query)
-        {
-            global $GADASH_Config;
-            
-            $metrics = 'ga:' . $query;
-            
-            if ($period == "today") {
-                $dimensions = 'ga:hour';
-                $timeouts = 0;
-            } else 
-                if ($period == "yesterday") {
-                    $dimensions = 'ga:hour';
-                    $timeouts = 1;
-                } else {
-                    $dimensions = 'ga:date,ga:dayOfWeekName';
-                    $timeouts = 1;
-                }
-            
-            try {
-                $serial = 'gadash_qr2' . str_replace(array(
-                    'ga:',
-                    ',',
-                    '-'
-                ), "", $projectId . $from . $metrics);
-                $transient = get_transient($serial);
-                if (empty($transient)) {
-                    $data = $this->service->data_ga->get('ga:' . $projectId, $from, $to, $metrics, array(
-                        'dimensions' => $dimensions
-                    ));
-                    set_transient($serial, $data, $this->get_timeouts($timeouts));
-                } else {
-                    $data = $transient;
-                }
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return 0;
-            }
-            
-            $ga_dash_statsdata = "";
-            
-            if ($period == "today" or $period == "yesterday") {
-                for ($i = 0; $i < $data['totalResults']; $i ++) {
-                    $ga_dash_statsdata .= "['" . $data['rows'][$i][0] . ":00'," . round($data['rows'][$i][1], 2) . "],";
-                }
-            } else {
-                for ($i = 0; $i < $data['totalResults']; $i ++) {
-                    $ga_dash_statsdata .= "['" . ucfirst(__($data['rows'][$i][1])) . ', ' . substr_replace(substr_replace($data['rows'][$i][0], '-', 4, 0), '-', 7, 0) . "'," . round($data['rows'][$i][2], 2) . "],";
-                }
-            }
-            
-            return wp_kses(rtrim($ga_dash_statsdata, ','), $GADASH_Config->allowed_html);
-        }
-        
-        // Get bottom Stats
-        function ga_dash_bottom_stats($projectId, $period, $from, $to)
-        {
-            global $GADASH_Config;
-            
-            if ($period == "today") {
-                $timeouts = 0;
-            } else {
-                $timeouts = 1;
-            }
-            
-            $metrics = 'ga:visits,ga:visitors,ga:pageviews,ga:visitBounceRate,ga:organicSearches,ga:timeOnSite';
-            $dimensions = 'ga:year';
-            try {
-                $serial = 'gadash_qr3' . $projectId . $from;
-                $transient = get_transient($serial);
-                if (empty($transient)) {
-                    $data = $this->service->data_ga->get('ga:' . $projectId, $from, $to, $metrics, array(
-                        'dimensions' => $dimensions
-                    ));
-                    set_transient($serial, $data, $this->get_timeouts($timeouts));
-                } else {
-                    $data = $transient;
-                }
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return 0;
-            }
-            
-            if (isset($data['rows'][1][1])) {
-                for ($i = 1; $i < 6; $i ++) {
-                    $data['rows'][0][$i] += $data['rows'][1][$i];
-                    if ($i == 4) {
-                        $data['rows'][0][$i] = $data['rows'][0][$i] / 2;
-                    }
-                }
-            }
-            
-            return $data;
-        }
-        
-        // Get Top Pages
-        function ga_dash_top_pages($projectId, $from, $to)
-        {
-            global $GADASH_Config;
-            
-            $metrics = 'ga:pageviews';
-            $dimensions = 'ga:pageTitle,ga:hostname,ga:pagePath';
-            
-            if ($from == "today") {
-                $timeouts = 0;
-            } else {
-                $timeouts = 1;
-            }
-            
-            try {
-                $serial = 'gadash_qr4' . $projectId . $from;
-                $transient = get_transient($serial);
-                if (empty($transient)) {
-                    $data = $this->service->data_ga->get('ga:' . $projectId, $from, $to, $metrics, array(
-                        'dimensions' => $dimensions,
-                        'sort' => '-ga:pageviews',
-                        'max-results' => '24'
-                    )); // 'filters' => 'ga:pagePath!=/'
-                    set_transient($serial, $data, $this->get_timeouts($timeouts));
-                } else {
-                    $data = $transient;
-                }
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return 0;
-            }
-            if (! isset($data['rows'])) {
-                return 0;
-            }
-            
-            $ga_dash_data = "";
-            $i = 0;
-            // print_r($data ['rows'] );
-            while (isset($data['rows'][$i][0])) {
-                $ga_dash_data .= "['<a href=\"http://" . addslashes($data['rows'][$i][1] . $data['rows'][$i][2]) . "\" target=\"_blank\">" . addslashes($data['rows'][$i][0]) . "</a>'," . $data['rows'][$i][3] . "],";
-                $i ++;
-            }
-            return wp_kses(rtrim($ga_dash_data, ','), $GADASH_Config->allowed_html);
-        }
-        
-        // Get Top referrers
-        function ga_dash_top_referrers($projectId, $from, $to)
-        {
-            global $GADASH_Config;
-            
-            $metrics = 'ga:visits';
-            $dimensions = 'ga:source,ga:fullReferrer,ga:medium';
-            
-            if ($from == "today") {
-                $timeouts = 0;
-            } else {
-                $timeouts = 1;
-            }
-            
-            try {
-                $serial = 'gadash_qr5' . $projectId . $from;
-                $transient = get_transient($serial);
-                if (empty($transient)) {
-                    $data = $this->service->data_ga->get('ga:' . $projectId, $from, $to, $metrics, array(
-                        'dimensions' => $dimensions,
-                        'sort' => '-ga:visits',
-                        'max-results' => '24',
-                        'filters' => 'ga:medium==referral'
-                    ));
-                    set_transient($serial, $data, $this->get_timeouts($timeouts));
-                } else {
-                    $data = $transient;
-                }
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return 0;
-            }
-            if (! isset($data['rows'])) {
-                return 0;
-            }
-            
-            $ga_dash_data = "";
-            $i = 0;
-            while (isset($data['rows'][$i][0])) {
-                $ga_dash_data .= "['<a href=\"http://" . stripslashes(esc_html($data['rows'][$i][1])) . "\" target=\"_blank\">" . addslashes($data['rows'][$i][0]) . "</a>'," . $data['rows'][$i][3] . "],";
-                $i ++;
-            }
-            
-            return wp_kses(rtrim($ga_dash_data, ','), $GADASH_Config->allowed_html);
-        }
-        
-        // Get Top searches
-        function ga_dash_top_searches($projectId, $from, $to)
-        {
-            global $GADASH_Config;
-            
-            $metrics = 'ga:visits';
-            $dimensions = 'ga:keyword';
-            
-            if ($from == "today") {
-                $timeouts = 0;
-            } else {
-                $timeouts = 1;
-            }
-            
-            try {
-                $serial = 'gadash_qr6' . $projectId . $from;
-                $transient = get_transient($serial);
-                if (empty($transient)) {
-                    $data = $this->service->data_ga->get('ga:' . $projectId, $from, $to, $metrics, array(
-                        'dimensions' => $dimensions,
-                        'sort' => '-ga:visits',
-                        'max-results' => '24'
-                    ));
-                    set_transient($serial, $data, $this->get_timeouts($timeouts));
-                } else {
-                    $data = $transient;
-                }
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return 0;
-            }
-            if (! isset($data['rows'])) {
-                return 0;
-            }
-            
-            $ga_dash_data = "";
-            $i = 0;
-            while (isset($data['rows'][$i][0])) {
-                if ($data['rows'][$i][0] != "(not set)") {
-                    $ga_dash_data .= "['" . stripslashes(esc_html($data['rows'][$i][0])) . "'," . $data['rows'][$i][1] . "],";
-                }
-                $i ++;
-            }
-            
-            return wp_kses(rtrim($ga_dash_data, ','), $GADASH_Config->allowed_html);
-        }
-        // Get Visits by Country
-        function ga_dash_visits_country($projectId, $from, $to)
-        {
-            global $GADASH_Config;
-            
-            $metrics = 'ga:visits';
-            $options = "";
-            
-            if ($from == "today") {
-                $timeouts = 0;
-            } else {
-                $timeouts = 1;
-            }
-            
-            if ($GADASH_Config->options['ga_target_geomap']) {
-                $dimensions = 'ga:city, ga:region';
-                $this->getcountrycodes();
-                $filters = 'ga:country==' . ($this->country_codes[$GADASH_Config->options['ga_target_geomap']]);
-            } else {
-                $dimensions = 'ga:country';
-                $filters = "";
-            }
-            try {
-                if ($GADASH_Config->options['ga_target_geomap']) {
-                    $serial = 'gadash_qr7' . $projectId . $from . $GADASH_Config->options['ga_target_geomap'] . $GADASH_Config->options['ga_target_number'];
-                } else {
-                    $serial = 'gadash_qr7' . $projectId . $from;
-                }
-                $transient = get_transient($serial);
-                if (empty($transient)) {
-                    if ($filters) {
-                        $data = $this->service->data_ga->get('ga:' . $projectId, $from, $to, $metrics, array(
-                            'dimensions' => $dimensions,
-                            'filters' => $filters,
-                            'sort' => '-ga:visits',
-                            'max-results' => $GADASH_Config->options['ga_target_number']
-                        ));
-                    } else {
-                        $data = $this->service->data_ga->get('ga:' . $projectId, $from, $to, $metrics, array(
-                            'dimensions' => $dimensions
-                        ));
-                    }
-                    set_transient($serial, $data, $this->get_timeouts($timeouts));
-                } else {
-                    $data = $transient;
-                }
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return 0;
-            }
-            if (! isset($data['rows'])) {
-                return 0;
-            }
-            
-            $ga_dash_data = "";
-            $i = 0;
-            while (isset($data['rows'][$i][1])) {
-                if (isset($data['rows'][$i][2])) {
-                    $ga_dash_data .= "['" . addslashes($data['rows'][$i][0]) . ", " . addslashes($data['rows'][$i][1]) . "'," . $data['rows'][$i][2] . "],";
-                } else {
-                    $ga_dash_data .= "['" . addslashes($data['rows'][$i][0]) . "'," . $data['rows'][$i][1] . "],";
-                }
-                $i ++;
-            }
-            
-			return wp_kses(rtrim($ga_dash_data, ','), $GADASH_Config->allowed_html);
-        }
-        // Get Traffic Sources
-        function ga_dash_traffic_sources($projectId, $from, $to)
-        {
-            global $GADASH_Config;
-            
-            $metrics = 'ga:visits';
-            $dimensions = 'ga:medium';
-            
-            if ($from == "today") {
-                $timeouts = 0;
-            } else {
-                $timeouts = 1;
-            }
-            
-            try {
-                $serial = 'gadash_qr8' . $projectId . $from;
-                $transient = get_transient($serial);
-                if (empty($transient)) {
-                    $data = $this->service->data_ga->get('ga:' . $projectId, $from, $to, $metrics, array(
-                        'dimensions' => $dimensions
-                    ));
-                    set_transient($serial, $data, $this->get_timeouts($timeouts));
-                } else {
-                    $data = $transient;
-                }
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return 0;
-            }
-            if (! isset($data['rows'])) {
-                return 0;
-            }
-            
-            $ga_dash_data = "";
-            for ($i = 0; $i < $data['totalResults']; $i ++) {
-                $ga_dash_data .= "['" . str_replace("(none)", "direct", $data['rows'][$i][0]) . "'," . $data['rows'][$i][1] . "],";
-            }
-            
-            return wp_kses(rtrim($ga_dash_data, ','), $GADASH_Config->allowed_html);
-        }
-        
-        // Get New vs. Returning
-        function ga_dash_new_return($projectId, $from, $to)
-        {
-            global $GADASH_Config;
-            
-            $metrics = 'ga:visits';
-            $dimensions = 'ga:visitorType';
-            
-            if ($from == "today") {
-                $timeouts = 0;
-            } else {
-                $timeouts = 1;
-            }
-            
-            try {
-                $serial = 'gadash_qr9' . $projectId . $from;
-                $transient = get_transient($serial);
-                if (empty($transient)) {
-                    $data = $this->service->data_ga->get('ga:' . $projectId, $from, $to, $metrics, array(
-                        'dimensions' => $dimensions
-                    ));
-                    set_transient($serial, $data, $this->get_timeouts($timeouts));
-                } else {
-                    $data = $transient;
-                }
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return 0;
-            }
-            if (! isset($data['rows'])) {
-                return 0;
-            }
-            
-            $ga_dash_data = "";
-            for ($i = 0; $i < $data['totalResults']; $i ++) {
-                $ga_dash_data .= "['" . addslashes($data['rows'][$i][0]) . "'," . $data['rows'][$i][1] . "],";
-            }
-            
-            return wp_kses(rtrim($ga_dash_data, ','), $GADASH_Config->allowed_html);
-        }
-        
-        // Frontend Widget Stats
-        function frontend_widget_stats($projectId, $period, $anonim, $display)
-        {
-            global $GADASH_Config;
-            
-            $content = '';
-            $from = $period;
-            $to = 'yesterday';
-            $metrics = 'ga:visits';
-            $dimensions = 'ga:date,ga:dayOfWeekName';
-            
-            $title = __("Visits", 'ga-dash') . ($anonim ? __("&#39; trend", 'ga-dash') : '');
-            
-            /*
-             * Include Tools
-             */
-            include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
-            $tools = new GADASH_Tools();
-            
-            if (isset($GADASH_Config->options['ga_dash_style'])) {
-                $css = "colors:['" . $GADASH_Config->options['ga_dash_style'] . "','" . $tools->colourVariator($GADASH_Config->options['ga_dash_style'], - 20) . "'],";
-                $color = $GADASH_Config->options['ga_dash_style'];
-            } else {
-                $css = "";
-                $color = "#3366CC";
-            }
-            
-            try {
-                
-                $serial = 'gadash_qr2' . str_replace(array(
-                    'ga:',
-                    ',',
-                    '-'
-                ), "", $projectId . $from . $metrics);
-                
-                $transient = get_transient($serial);
-                if (empty($transient)) {
-                    $data = $this->service->data_ga->get('ga:' . $projectId, $from, $to, $metrics, array(
-                        'dimensions' => $dimensions
-                    ));
-                    set_transient($serial, $data, $this->get_timeouts(1));
-                } else {
-                    $data = $transient;
-                }
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return '';
-            }
-            if (! isset($data['rows'])) {
-                return '';
-            }
-            
-            $ga_dash_statsdata = "";
-            
-            $max_array = array();
-            foreach ($data['rows'] as $item) {
-                $max_array[] = $item[2];
-            }
-            
-            $max = max($max_array) ? max($max_array) : 1;
-            
-            for ($i = 0; $i < $data['totalResults']; $i ++) {
-                $ga_dash_statsdata .= "['" . ucfirst(__($data['rows'][$i][1])) . ', ' . substr_replace(substr_replace($data['rows'][$i][0], '-', 4, 0), '-', 7, 0) . "'," . ($anonim ? str_replace(',', '.', round($data['rows'][$i][2] * 100 / $max, 2)) : $data['rows'][$i][2]) . "],";
-            }
-            
-            $ga_dash_statsdata = wp_kses(rtrim($ga_dash_statsdata, ','), $GADASH_Config->allowed_html);
-            
-            if ($ga_dash_statsdata) {
-                if ($display != 3) {
-                    if ($anonim) {
-                        $formater = "var formatter = new google.visualization.NumberFormat({
-					  suffix: '%',
-					  fractionDigits: 2
-					});
-
-					formatter.format(data, 1);	";
-                    } else {
-                        $formater = '';
-                    }
-                    
-                    $content = '<script type="text/javascript">
-						  google.setOnLoadCallback(ga_dash_callback);
-
-						  function ga_dash_callback(){
-
-								if(typeof ga_dash_drawwidgetstats == "function"){
-									ga_dash_drawwidgetstats();
-								}
-
-						}';
-                    
-                    $content .= '
-					google.load("visualization", "1", {packages:["corechart"]});
-					function ga_dash_drawwidgetstats() {
-					var data = google.visualization.arrayToDataTable([' . "
-					  ['" . __("Date", 'ga-dash') . "', '" . __("Visits", 'ga-dash') . ($anonim ? __("&#39; trend", 'ga-dash') : '') . "']," . $ga_dash_statsdata . "
-					]);
-
-					var options = {
-					  legend: {position: 'none'},
-					  pointSize: 3," . $css . "
-					  title: '" . $title . "',
-					  titlePosition: 'in',
-					  chartArea: {width: '95%',height:'75%'},
-					  hAxis: { textPosition: 'none'},
-					  vAxis: { textPosition: 'none', minValue: 0}
-				 	};
-
-					var chart = new google.visualization.AreaChart(document.getElementById('ga_dash_widgetstatsdata'));
-
-					" . $formater . "
-
-					chart.draw(data, options);
-
-					}";
-                }
-                
-                $content .= "</script>";
-                
-                $content .= '<div id="ga_dash_widgetstatsdata" style="width:100%;"></div>';
-            }
-            if ($display != 2 and isset($data['totalsForAllResults']['ga:visits'])) {
-                switch ($period) {
-                    case '7daysAgo':
-                        $periodtext = __('Last 7 Days', 'ga-dash');
-                        break;
-                    case '14daysAgo':
-                        $periodtext = __('Last 14 Days', 'ga-dash');
-                        break;
-                    default:
-                        $periodtext = __('Last 30 Days', 'ga-dash');
-                        break;
-                }
-                
-                $content .= '<style>table#gadwp-stats, table#gadwp-stats td{border:none;}</style><table id="gadwp-stats"><tr><td style="font-weight:bold;padding:' . ($display == 3 ? '15px' : '0') . ' 0 10px 0;">' . __("Period:", 'ga-dash') . '</td><td style="padding:' . ($display == 3 ? '15px' : '0') . ' 0 10px 20px;">' . $periodtext . '</td></tr>
-				<tr><td style="font-weight:bold;padding:0 0 15px 0;">' . __('Total Visits:', 'ga-dash') . '</td><td style="padding:0 0 15px 20px;">' . ($data['totalsForAllResults']['ga:visits']) . '</td></tr>
-				</table>';
-            }
-            
-            return apply_filters('gadash_frontend_content', $content);
-        }
-        
-        // Frontend Visists
-        function frontend_afterpost_visits($projectId, $page_url, $post_id)
-        {
-            global $GADASH_Config;
-            
-            $from = '30daysAgo';
-            $to = 'yesterday';
-            $metrics = 'ga:pageviews,ga:uniquePageviews';
-            $dimensions = 'ga:date,ga:dayOfWeekName';
-            
-            try {
-                $serial = 'gadash_qr21' . $post_id . 'stats';
-                $transient = get_transient($serial);
-                if (empty($transient)) {
-                    $data = $this->service->data_ga->get('ga:' . $projectId, $from, $to, $metrics, array(
-                        'dimensions' => $dimensions,
-                        'filters' => 'ga:pagePath==' . $page_url
-                    ));
-                    set_transient($serial, $data, $this->get_timeouts(1));
-                } else {
-                    $data = $transient;
-                }
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return 0;
-            }
-            if (! isset($data['rows'])) {
-                return 0;
-            }
-            
-            $ga_dash_statsdata = "";
-            for ($i = 0; $i < $data['totalResults']; $i ++) {
-                $ga_dash_statsdata .= '["' . ucfirst(__($data['rows'][$i][1])) . ", " . substr_replace(substr_replace($data['rows'][$i][0], "-", 4, 0), "-", 7, 0) . '",' . round($data['rows'][$i][2], 2) . ',' . round($data['rows'][$i][3], 2) . '],';
-            }
-            
-            $ga_dash_statsdata = wp_kses(rtrim($ga_dash_statsdata, ','), $GADASH_Config->allowed_html);
-            
-            if ($ga_dash_statsdata) {
-                
-                $ga_dash_statsdata = '[["' . __('Date', "ga-dash") . '", "' . __('Views', "ga-dash") . '", "' . __('UniqueViews', "ga-dash") . '"],' . $ga_dash_statsdata . ']';
-                
-                return $ga_dash_statsdata;
-				
-            } else {
-                return 0;
-            }
-        }
-        
-        // Frontend searches
-        function frontend_afterpost_searches($projectId, $page_url, $post_id)
-        {
-            global $GADASH_Config;
-            
-            $from = '30daysAgo';
-            $to = 'yesterday';
-            $metrics = 'ga:visits';
-            $dimensions = 'ga:keyword';
-            try {
-                $serial = 'gadash_qr22' . $post_id . 'search';
-                $transient = get_transient($serial);
-                if (empty($transient)) {
-                    $data = $this->service->data_ga->get('ga:' . $projectId, $from, $to, $metrics, array(
-                        'dimensions' => $dimensions,
-                        'sort' => '-ga:visits',
-                        'max-results' => '24',
-                        'filters' => 'ga:pagePath==' . $page_url
-                    ));
-                    set_transient($serial, $data, $this->get_timeouts(1));
-                } else {
-                    $data = $transient;
-                }
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return 0;
-            }
-            
-            $ga_dash_organicdata = "";
-            if (! isset($data['rows'])) {
-                return 0;
-            }
-            $i = 0;
-            while (isset($data['rows'][$i][0])) {
-                if ($data['rows'][$i][0] != "(not set)") {
-                    $ga_dash_organicdata .= '["' . stripslashes(esc_html($data['rows'][$i][0])) . '",' . $data['rows'][$i][1] . '],';
-                }
-                $i ++;
-            }
-            
-            $ga_dash_organicdata = wp_kses(rtrim($ga_dash_organicdata, ','), $GADASH_Config->allowed_html);
-            
-            if ($ga_dash_organicdata) {
-                
-                $ga_dash_organicdata = '[["' . __('Top Searches', "ga-dash") . '", "' . __('Visits', "ga-dash") . '"],' . $ga_dash_organicdata . ' ]';
-                
-                return $ga_dash_organicdata;
-				
-            } else {
-                
-                return 0;
-            }
-        }
-        
-        // Realtime Ajax Response
-        function gadash_realtime_data($projectId)
-        {
-            global $GADASH_Config;
-            $metrics = 'rt:activeVisitors';
-            $dimensions = 'rt:pagePath,rt:source,rt:keyword,rt:trafficType,rt:visitorType,rt:pageTitle';
-            try {
-                $serial = "gadash_realtimecache_" . $projectId;
-                $transient = get_transient($serial);
-                if (empty($transient)) {
-                    $data = $this->service->data_realtime->get('ga:' . $projectId, $metrics, array(
-                        'dimensions' => $dimensions
-                    ));
-                    set_transient($serial, $data, 55);
-                } else {
-                    $data = $transient;
-                }
-            } catch (Exception $e) {
-                update_option('gadash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e));
-                return '';
-            }
-            
-            $i = 0;
-            while (isset($data->rows[$i])) {
-                $data->rows[$i] = wp_kses(str_replace('"', "'", $data->rows[$i]), $GADASH_Config->allowed_html); // remove all double quotes before sending data
-                $i ++;
-            }
-            
-            return $data;
-        }
-        
-        // Realtime Stats
-        function ga_realtime()
-        {
-            global $GADASH_Config;
-            
-            $code = '
-
-				<script type="text/javascript">
-
-				var focusFlag = 1;
-
-				jQuery(document).ready(function(){
-					jQuery(window).bind("focus",function(event){
-						focusFlag = 1;
-					}).bind("blur", function(event){
-						focusFlag = 0;
-					});
-				});
-
-				jQuery(function() {
-					jQuery( document ).tooltip();
-				});
-
-				function onlyUniqueValues(value, index, self) {
-					return self.indexOf(value) === index;
-				 }
-
-				function countvisits(data, searchvalue) {
-					var count = 0;
-					for ( var i = 0; i < data["rows"].length; i = i + 1 ) {
-						if (jQuery.inArray(searchvalue, data["rows"][ i ])>-1){
-							count += parseInt(data["rows"][ i ][6]);
-						}
-		 			}
-					return count;
-				 }
-
-				function gadash_generatetooltip(data) {
-					var count = 0;
-					var table = "";
-					for ( var i = 0; i < data.length; i = i + 1 ) {
-							count += parseInt(data[ i ].count);
-							table += "<tr><td class=\'gadash-pgdetailsl\'>"+data[i].value+"</td><td class=\'gadash-pgdetailsr\'>"+data[ i ].count+"</td></tr>";
-					};
-					if (count){
-						return("<table>"+table+"</table>");
-					}else{
-						return("");
-					}
-				}
-
-				function gadash_pagedetails(data, searchvalue) {
-					var newdata = [];
-					for ( var i = 0; i < data["rows"].length; i = i + 1 ){
-						var sant=1;
-						for ( var j = 0; j < newdata.length; j = j + 1 ){
-							if (data["rows"][i][0]+data["rows"][i][1]+data["rows"][i][2]+data["rows"][i][3]==newdata[j][0]+newdata[j][1]+newdata[j][2]+newdata[j][3]){
-								newdata[j][6] = parseInt(newdata[j][6]) + parseInt(data["rows"][i][6]);
-								sant = 0;
-							}
-						}
-						if (sant){
-							newdata.push(data["rows"][i].slice());
-						}
-					}
-
-					var countrfr = 0;
-					var countkwd = 0;
-					var countdrt = 0;
-					var countscl = 0;
-					var tablerfr = "";
-					var tablekwd = "";
-					var tablescl = "";
-					var tabledrt = "";
-					for ( var i = 0; i < newdata.length; i = i + 1 ) {
-						if (newdata[i][0] == searchvalue){
-							var pagetitle = newdata[i][5];
-							switch (newdata[i][3]){
-								case "REFERRAL": 	countrfr += parseInt(newdata[ i ][6]);
-													tablerfr +=	"<tr><td class=\'gadash-pgdetailsl\'>"+newdata[i][1]+"</td><td class=\'gadash-pgdetailsr\'>"+newdata[ i ][6]+"</td></tr>";
-													break;
-								case "ORGANIC": 	countkwd += parseInt(newdata[ i ][6]);
-													tablekwd +=	"<tr><td class=\'gadash-pgdetailsl\'>"+newdata[i][2]+"</td><td class=\'gadash-pgdetailsr\'>"+newdata[ i ][6]+"</td></tr>";
-													break;
-								case "SOCIAL": 		countscl += parseInt(newdata[ i ][6]);
-													tablescl +=	"<tr><td class=\'gadash-pgdetailsl\'>"+newdata[i][1]+"</td><td class=\'gadash-pgdetailsr\'>"+newdata[ i ][6]+"</td></tr>";
-													break;
-								case "DIRECT": 		countdrt += parseInt(newdata[ i ][6]);
-													break;
-							};
-						};
-		 			};
-					if (countrfr){
-						tablerfr = "<table><tr><td>' . __("REFERRALS", 'ga-dash') . ' ("+countrfr+")</td></tr>"+tablerfr+"</table><br />";
-					}
-					if (countkwd){
-						tablekwd = "<table><tr><td>' . __("KEYWORDS", 'ga-dash') . ' ("+countkwd+")</td></tr>"+tablekwd+"</table><br />";
-					}
-					if (countscl){
-						tablescl = "<table><tr><td>' . __("SOCIAL", 'ga-dash') . ' ("+countscl+")</td></tr>"+tablescl+"</table><br />";
-					}
-					if (countdrt){
-						tabledrt = "<table><tr><td>' . __("DIRECT", 'ga-dash') . ' ("+countdrt+")</td></tr></table><br />";
-					}
-					return ("<p><center><strong>"+pagetitle+"</strong></center></p>"+tablerfr+tablekwd+tablescl+tabledrt);
-				 }
-
-				 function online_refresh(){
-					if (focusFlag){
-
-					jQuery.post(ajaxurl, {action: "gadash_get_online_data", gadash_security: "' . wp_create_nonce('gadash_get_online_data') . '"}, function(response){
-						var data = jQuery.parseJSON(response);
-
-						if (data["totalsForAllResults"]["rt:activeVisitors"]!==document.getElementById("gadash-online").innerHTML){
-							jQuery("#gadash-online").fadeOut("slow");
-							jQuery("#gadash-online").fadeOut(500);
-							jQuery("#gadash-online").fadeOut("slow", function() {
-								if ((parseInt(data["totalsForAllResults"]["rt:activeVisitors"]))<(parseInt(document.getElementById("gadash-online").innerHTML))){
-									jQuery("#gadash-online").css({\'background-color\' : \'#FFE8E8\'});
-								}else{
-									jQuery("#gadash-online").css({\'background-color\' : \'#E0FFEC\'});
-								}
-								document.getElementById("gadash-online").innerHTML = data["totalsForAllResults"]["rt:activeVisitors"];
-							});
-							jQuery("#gadash-online").fadeIn("slow");
-							jQuery("#gadash-online").fadeIn(500);
-							jQuery("#gadash-online").fadeIn("slow", function() {
-								jQuery("#gadash-online").css({\'background-color\' : \'#FFFFFF\'});
-							});
-						};
-
-						if (data["totalsForAllResults"]["rt:activeVisitors"] == 0){
-							data["rows"]= [];
-						};
-
-						var pagepath = [];
-						var referrals = [];
-						var keywords = [];
-						var social = [];
-						var visittype = [];
-						for ( var i = 0; i < data["rows"].length; i = i + 1 ) {
-							pagepath.push( data["rows"][ i ][0] );
-							if (data["rows"][i][3]=="REFERRAL"){
-								referrals.push( data["rows"][ i ][1] );
-							}
-							if (data["rows"][i][3]=="ORGANIC"){
-								keywords.push( data["rows"][ i ][2] );
-							}
-							if (data["rows"][i][3]=="SOCIAL"){
-								social.push( data["rows"][ i ][1] );
-							}
-							visittype.push( data["rows"][ i ][3] );
-		 				}
-
-						var upagepath = pagepath.filter(onlyUniqueValues);
-						var upagepathstats = [];
-						for ( var i = 0; i < upagepath.length; i = i + 1 ) {
-							upagepathstats[i]={"pagepath":upagepath[i],"count":countvisits(data,upagepath[i])};
-		 				}
-						upagepathstats.sort( function(a,b){ return b.count - a.count } );
-
-						var pgstatstable = "";
-						for ( var i = 0; i < upagepathstats.length; i = i + 1 ) {
-							if (i < ' . $GADASH_Config->options['ga_realtime_pages'] . '){
-								pgstatstable += "<tr class=\"gadash-pline\"><td class=\"gadash-pleft\"><a href=\"#\" title=\""+gadash_pagedetails(data, upagepathstats[i].pagepath)+"\">"+upagepathstats[i].pagepath.substring(0,70)+"</a></td><td class=\"gadash-pright\">"+upagepathstats[i].count+"</td></tr>";
-							}
-		 				}
-						document.getElementById("gadash-pages").innerHTML="<br /><table class=\"gadash-pg\">"+pgstatstable+"</table>";
-
-						var ureferralsstats = [];
-						var ureferrals = referrals.filter(onlyUniqueValues);
-						for ( var i = 0; i < ureferrals.length; i = i + 1 ) {
-							ureferralsstats[i]={"value":ureferrals[i],"count":countvisits(data,ureferrals[i])};
-		 				}
-						ureferralsstats.sort( function(a,b){ return b.count - a.count } );
-
-						var ukeywordsstats = [];
-						var ukeywords = keywords.filter(onlyUniqueValues);
-						for ( var i = 0; i < ukeywords.length; i = i + 1 ) {
-							ukeywordsstats[i]={"value":ukeywords[i],"count":countvisits(data,ukeywords[i])};
-		 				}
-						ukeywordsstats.sort( function(a,b){ return b.count - a.count } );
-
-						var usocialstats = [];
-						var usocial = social.filter(onlyUniqueValues);
-						for ( var i = 0; i < usocial.length; i = i + 1 ) {
-							usocialstats[i]={"value":usocial[i],"count":countvisits(data,usocial[i])};
-		 				}
-						usocialstats.sort( function(a,b){ return b.count - a.count } );
-
-						var uvisittype = ["REFERRAL","ORGANIC","SOCIAL"];
-						document.getElementById("gadash-tdo-right").innerHTML = "<span class=\"gadash-bigtext\"><a href=\"#\" title=\""+gadash_generatetooltip(ureferralsstats)+"\">"+\'' . __("REFERRAL", 'ga-dash') . '\'+"</a>: "+countvisits(data,uvisittype[0])+"</span><br /><br />";
-						document.getElementById("gadash-tdo-right").innerHTML += "<span class=\"gadash-bigtext\"><a href=\"#\" title=\""+gadash_generatetooltip(ukeywordsstats)+"\">"+\'' . __("ORGANIC", 'ga-dash') . '\'+"</a>: "+countvisits(data,uvisittype[1])+"</span><br /><br />";
-						document.getElementById("gadash-tdo-right").innerHTML += "<span class=\"gadash-bigtext\"><a href=\"#\" title=\""+gadash_generatetooltip(usocialstats)+"\">"+\'' . __("SOCIAL", 'ga-dash') . '\'+"</a>: "+countvisits(data,uvisittype[2])+"</span><br /><br />";
-
-						var uvisitortype = ["DIRECT","NEW","RETURN"];
-						document.getElementById("gadash-tdo-rights").innerHTML = "<span class=\"gadash-bigtext\">"+\'' . __("DIRECT", 'ga-dash') . '\'+": "+countvisits(data,uvisitortype[0])+"</span><br /><br />";
-						document.getElementById("gadash-tdo-rights").innerHTML += "<span class=\"gadash-bigtext\">"+\'' . __("NEW", 'ga-dash') . '\'+": "+countvisits(data,uvisitortype[1])+"</span><br /><br />";
-						document.getElementById("gadash-tdo-rights").innerHTML += "<span class=\"gadash-bigtext\">"+\'' . __("RETURN", 'ga-dash') . '\'+": "+countvisits(data,uvisitortype[2])+"</span><br /><br />";
-
-					});
-			   };
-			   };
-			   online_refresh();
-			   setInterval(online_refresh, 60000);
-			   </script>';
-            return $code;
-        }
-
-        public function getcountrycodes()
-        {
-            include_once 'iso3166.php';
-        }
     }
+
+    /**
+     * Retrives all Google Analytics Views with details
+     *
+     * @return array|string
+     */
+    function refresh_profiles()
+    {
+      global $GADASH_Config;
+      try {
+        $profiles = $this->service->management_profiles->listManagementProfiles('~all', '~all');
+        $items = $profiles->getItems();
+        if (count($items) != 0) {
+          $ga_dash_profile_list = array();
+          foreach ($items as $profile) {
+            $timetz = new DateTimeZone($profile->getTimezone());
+            $localtime = new DateTime('now', $timetz);
+            $timeshift = strtotime($localtime->format('Y-m-d H:i:s')) - time();
+            $ga_dash_profile_list[] = array(
+              $profile->getName(),
+              $profile->getId(),
+              $profile->getwebPropertyId(),
+              $profile->getwebsiteUrl(),
+              $timeshift,
+              $profile->getTimezone()
+            );
+          }
+          set_transient('ga_dash_lasterror', 'None');
+          return $ga_dash_profile_list;
+        } else {
+          set_transient('ga_dash_lasterror', date('Y-m-d H:i:s') . ': No properties were found in this account!', $this->error_timeout);
+          return '';
+        }
+      } catch (Google_IO_Exception $e) {
+        set_transient('ga_dash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e), $this->error_timeout);
+        return '';
+      } catch (Google_Service_Exception $e) {
+        set_transient('ga_dash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html("(" . $e->getCode() . ") " . $e->getMessage()), $this->error_timeout);
+        set_transient('ga_dash_gapi_errors', array(
+          $e->getCode(),
+          (array) $e->getErrors()
+        ), $this->error_timeout);
+      } catch (Exception $e) {
+        set_transient('ga_dash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e), $this->error_timeout);
+        return '';
+      }
+    }
+
+    /**
+     * Handles the token refresh process
+     *
+     * @return token|boolean
+     */
+    private function refresh_token()
+    {
+      global $GADASH_Config;
+      try {
+        if (is_multisite() && $GADASH_Config->options['ga_dash_network']) {
+          $transient = get_site_transient("ga_dash_refresh_token");
+        } else {
+          $transient = get_transient("ga_dash_refresh_token");
+        }
+        if ($transient === false) {
+          if (! $GADASH_Config->options['ga_dash_refresh_token']) {
+            $google_token = json_decode($GADASH_Config->options['ga_dash_token']);
+            $GADASH_Config->options['ga_dash_refresh_token'] = $google_token->refresh_token;
+            $this->client->refreshToken($google_token->refresh_token);
+          } else {
+            $this->client->refreshToken($GADASH_Config->options['ga_dash_refresh_token']);
+          }
+          $token = $this->client->getAccessToken();
+          $google_token = json_decode($token);
+          $GADASH_Config->options['ga_dash_token'] = $token;
+          if (is_multisite() && $GADASH_Config->options['ga_dash_network']) {
+            set_site_transient("ga_dash_refresh_token", $token, $google_token->expires_in);
+            $GADASH_Config->set_plugin_options(true);
+          } else {
+            set_transient("ga_dash_refresh_token", $token, $google_token->expires_in);
+            $GADASH_Config->set_plugin_options();
+          }
+          return $token;
+        } else {
+          return $transient;
+        }
+      } catch (Google_IO_Exception $e) {
+        set_transient('ga_dash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e), $this->error_timeout);
+        return false;
+      } catch (Google_Service_Exception $e) {
+        set_transient('ga_dash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html("(" . $e->getCode() . ") " . $e->getMessage()), $this->error_timeout);
+        set_transient('ga_dash_gapi_errors', array(
+          $e->getCode(),
+          (array) $e->getErrors()
+        ), $this->error_timeout);
+        return $e->getCode();
+      } catch (Exception $e) {
+        set_transient('ga_dash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e), $this->error_timeout);
+        return false;
+      }
+    }
+
+    /**
+     * Handles the token reset process
+     *
+     * @param
+     *          $all
+     */
+    function reset_token($all = true)
+    {
+      global $GADASH_Config;
+      if (is_multisite() && $GADASH_Config->options['ga_dash_network']) {
+        delete_site_transient('ga_dash_refresh_token');
+      } else {
+        delete_transient('ga_dash_refresh_token');
+      }
+      $GADASH_Config->options['ga_dash_token'] = "";
+      $GADASH_Config->options['ga_dash_refresh_token'] = "";
+      if ($all) {
+        $GADASH_Config->options['ga_dash_tableid'] = "";
+        $GADASH_Config->options['ga_dash_tableid_jail'] = "";
+        $GADASH_Config->options['ga_dash_profile_list'] = "";
+        try {
+          $this->client->revokeToken();
+        } catch (Exception $e) {
+          if (is_multisite() && $GADASH_Config->options['ga_dash_network']) {
+            $GADASH_Config->set_plugin_options(true);
+          } else {
+            $GADASH_Config->set_plugin_options();
+          }
+        }
+      }
+      if (is_multisite() && $GADASH_Config->options['ga_dash_network']) {
+        $GADASH_Config->set_plugin_options(true);
+      } else {
+        $GADASH_Config->set_plugin_options();
+      }
+    }
+
+    /**
+     * Get and cache Core Reports
+     *
+     * @todo implement retries with exponential backoff
+     *      
+     * @param
+     *          $projecId
+     * @param
+     *          $from
+     * @param
+     *          $to
+     * @param
+     *          $metrics
+     * @param
+     *          $options
+     * @param
+     *          $serial
+     * @return int|Google_Service_Analytics_GaData
+     */
+    private function handle_corereports($projectId, $from, $to, $metrics, $options, $serial)
+    {
+      try {
+        if ($from == "today") {
+          $timeouts = 0;
+        } else {
+          $timeouts = 1;
+        }
+        $transient = get_transient($serial);
+        if ($transient === false) {
+          if ($this->gapi_errors_handler()) {
+            return - 23;
+          }
+          $data = $this->service->data_ga->get('ga:' . $projectId, $from, $to, $metrics, $options);
+          set_transient($serial, $data, $this->get_timeouts($timeouts));
+        } else {
+          $data = $transient;
+        }
+      } catch (Google_Service_Exception $e) {
+        set_transient('ga_dash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html("(" . $e->getCode() . ") " . $e->getMessage()), $this->error_timeout);
+        set_transient('ga_dash_gapi_errors', array(
+          $e->getCode(),
+          (array) $e->getErrors()
+        ), $this->error_timeout);
+        return $e->getCode();
+      } catch (Exception $e) {
+        set_transient('ga_dash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e), $this->error_timeout);
+        return $e->getCode();
+      }
+      if ($data->getRows() > 0) {
+        return $data;
+      } else {
+        return - 21;
+      }
+    }
+
+    /**
+     * Generates serials for transients
+     *
+     * @param
+     *          $serial
+     * @return string
+     */
+    function get_serial($serial)
+    {
+      return sprintf("%u", crc32($serial));
+    }
+
+    /**
+     * Analytics data for backend reports (Admin Widget main report)
+     *
+     * @param
+     *          $projectId
+     * @param
+     *          $from
+     * @param
+     *          $to
+     * @param
+     *          $query
+     * @return array|int
+     */
+    function get_mainreport($projectId, $from, $to, $query, $filter = '')
+    {
+      switch ($query) {
+        case 'users':
+          $title = __("Users", 'ga-dash');
+          break;
+        case 'pageviews':
+          $title = __("Page Views", 'ga-dash');
+          break;
+        case 'visitBounceRate':
+          $title = __("Bounce Rate", 'ga-dash');
+          break;
+        case 'organicSearches':
+          $title = __("Organic Searches", 'ga-dash');
+          break;
+        case 'uniquePageviews':
+          $title = __("Unique Page Views", 'ga-dash');
+          break;
+        default:
+          $title = __("Sessions", 'ga-dash');
+      }
+      $metrics = 'ga:' . $query;
+      if ($from == "today" or $from == "yesterday") {
+        $dimensions = 'ga:hour';
+        $dayorhour = __("Hour", 'ga-dash');
+      } else {
+        $dimensions = 'ga:date,ga:dayOfWeekName';
+        $dayorhour = __("Date", 'ga-dash');
+      }
+      $options = array(
+        'dimensions' => $dimensions,
+        'quotaUser' => $this->managequota . 'p' . $projectId
+      );
+      if ($filter) {
+        $options['filters'] = 'ga:pagePath==' . $filter;
+      }
+      $serial = 'gadash_qr2_' . $this->get_serial($projectId . $from . $metrics . $filter);
+      $data = $this->handle_corereports($projectId, $from, $to, $metrics, $options, $serial);
+      if (is_numeric($data)) {
+        return $data;
+      }
+      $ga_dash_data = array(
+        array(
+          $dayorhour,
+          $title
+        )
+      );
+      if ($from == "today" or $from == "yesterday") {
+        foreach ($data->getRows() as $row) {
+          $ga_dash_data[] = array(
+            (int) $row[0] . ':00',
+            round($row[1], 2)
+          );
+        }
+      } else {
+        foreach ($data->getRows() as $row) {
+          $ga_dash_data[] = array(
+            esc_html(ucfirst(__($row[1]))) . ',' . esc_html(substr_replace(substr_replace($row[0], "-", 4, 0), "-", 7, 0)),
+            round($row[2], 2)
+          );
+        }
+      }
+      return $ga_dash_data;
+    }
+
+    /**
+     * Analytics data for backend reports (bottom stats main report)
+     *
+     * @param
+     *          $projectId
+     * @param
+     *          $from
+     * @param
+     *          $to
+     * @return array|int
+     */
+    function get_bottomstats($projectId, $from, $to, $filter = '')
+    {
+      $options = array(
+        'dimensions' => NULL,
+        'quotaUser' => $this->managequota . 'p' . $projectId
+      );
+      if ($filter) {
+        $options['filters'] = 'ga:pagePath==' . $filter;
+        $metrics = 'ga:uniquePageviews,ga:users,ga:pageviews,ga:BounceRate,ga:organicSearches,ga:pageviewsPerSession';
+      } else {
+        $metrics = 'ga:sessions,ga:users,ga:pageviews,ga:BounceRate,ga:organicSearches,ga:pageviewsPerSession';
+      }
+      $serial = 'gadash_qr3_' . $this->get_serial($projectId . $from . $filter);
+      $data = $this->handle_corereports($projectId, $from, $to, $metrics, $options, $serial);
+      if (is_numeric($data)) {
+        if ($data == - 21) {
+          return array_fill(0, 6, 0);
+        } else {
+          return $data;
+        }
+      }
+      $ga_dash_data = array();
+      foreach ($data->getRows() as $row) {
+        $ga_dash_data = array_map('floatval', $row);
+      }
+      return $ga_dash_data;
+    }
+
+    /**
+     * Analytics data for backend reports (contentpages)
+     *
+     * @param
+     *          $projectId
+     * @param
+     *          $from
+     * @param
+     *          $to
+     * @return array|int
+     */
+    function get_contentpages($projectId, $from, $to, $filter = '')
+    {
+      $metrics = 'ga:pageviews';
+      $dimensions = 'ga:pageTitle';
+      $options = array(
+        'dimensions' => $dimensions,
+        'sort' => '-ga:pageviews',
+        'quotaUser' => $this->managequota . 'p' . $projectId
+      );
+      if ($filter) {
+        $options['filters'] = 'ga:pagePath==' . $filter;
+      }
+      $serial = 'gadash_qr4_' . $this->get_serial($projectId . $from . $filter);
+      $data = $this->handle_corereports($projectId, $from, $to, $metrics, $options, $serial);
+      if (is_numeric($data)) {
+        return $data;
+      }
+      $ga_dash_data = array(
+        array(
+          __("Pages", 'ga-dash'),
+          __("Views", 'ga-dash')
+        )
+      );
+      foreach ($data->getRows() as $row) {
+        $ga_dash_data[] = array(
+          $this->prepare_json($row[0]),
+          (int) $row[1]
+        );
+      }
+      return $ga_dash_data;
+    }
+
+    /**
+     * Analytics data for backend reports (referrers)
+     *
+     * @param
+     *          $projectId
+     * @param
+     *          $from
+     * @param
+     *          $to
+     * @return array|int
+     */
+    function get_referrers($projectId, $from, $to, $filter = '')
+    {
+      $metrics = 'ga:sessions';
+      $dimensions = 'ga:source';
+      $options = array(
+        'dimensions' => $dimensions,
+        'sort' => '-ga:sessions',
+        'quotaUser' => $this->managequota . 'p' . $projectId
+      );
+      if ($filter) {
+        $options['filters'] = 'ga:medium==referral;ga:pagePath==' . $filter;
+      } else {
+        $options['filters'] = 'ga:medium==referral';
+      }
+      $serial = 'gadash_qr5_' . $this->get_serial($projectId . $from . $filter);
+      $data = $this->handle_corereports($projectId, $from, $to, $metrics, $options, $serial);
+      if (is_numeric($data)) {
+        return $data;
+      }
+      $ga_dash_data = array(
+        array(
+          __("Referrers", 'ga-dash'),
+          __("Sessions", 'ga-dash')
+        )
+      );
+      foreach ($data->getRows() as $row) {
+        $ga_dash_data[] = array(
+          $this->prepare_json($row[0]),
+          (int) $row[1]
+        );
+      }
+      return $ga_dash_data;
+    }
+
+    /**
+     * Analytics data for backend reports (searches)
+     *
+     * @param
+     *          $projectId
+     * @param
+     *          $from
+     * @param
+     *          $to
+     * @return array|int
+     */
+    function get_searches($projectId, $from, $to, $filter = '')
+    {
+      $metrics = 'ga:sessions';
+      $dimensions = 'ga:keyword';
+      $options = array(
+        'dimensions' => $dimensions,
+        'sort' => '-ga:sessions',
+        'quotaUser' => $this->managequota . 'p' . $projectId
+      );
+      if ($filter) {
+        $options['filters'] = 'ga:keyword!=(not set);ga:pagePath==' . $filter;
+      } else {
+        $options['filters'] = 'ga:keyword!=(not set)';
+      }
+      $serial = 'gadash_qr6_' . $this->get_serial($projectId . $from . $filter);
+      $data = $this->handle_corereports($projectId, $from, $to, $metrics, $options, $serial);
+      if (is_numeric($data)) {
+        return $data;
+      }
+      
+      $ga_dash_data = array(
+        array(
+          __("Searches", 'ga-dash'),
+          __("Sessions", 'ga-dash')
+        )
+      );
+      foreach ($data->getRows() as $row) {
+        $ga_dash_data[] = array(
+          $this->prepare_json($row[0]),
+          (int) $row[1]
+        );
+      }
+      return $ga_dash_data;
+    }
+
+    /**
+     * Analytics data for backend reports (location reports)
+     *
+     * @param
+     *          $projectId
+     * @param
+     *          $from
+     * @param
+     *          $to
+     * @return array|int
+     */
+    function get_locations($projectId, $from, $to, $filter = '')
+    {
+      global $GADASH_Config;
+      $metrics = 'ga:sessions';
+      $options = "";
+      $title = __("Countries", 'ga-dash');
+      $serial = 'gadash_qr7_' . $this->get_serial($projectId . $from . $filter);
+      $dimensions = 'ga:country';
+      $local_filter = '';
+      if ($GADASH_Config->options['ga_target_geomap']) {
+        $dimensions = 'ga:city, ga:region';
+        $tools = new GADASH_Tools();
+        $tools->getcountrycodes();
+        if (isset($tools->country_codes[$GADASH_Config->options['ga_target_geomap']])) {
+          $local_filter = 'ga:country==' . ($tools->country_codes[$GADASH_Config->options['ga_target_geomap']]);
+          $title = __("Cities from", 'ga-dash') . ' ' . __($tools->country_codes[$GADASH_Config->options['ga_target_geomap']]);
+          $serial = 'gadash_qr7_' . $this->get_serial($projectId . $from . $GADASH_Config->options['ga_target_geomap'] . $filter);
+        }
+      }
+      $options = array(
+        'dimensions' => $dimensions,
+        'sort' => '-ga:sessions',
+        'quotaUser' => $this->managequota . 'p' . $projectId
+      );
+      if ($filter) {
+        $options['filters'] = 'ga:pagePath==' . $filter;
+        if ($local_filter) {
+          $options['filters'] .= ';' . $local_filter;
+        }
+      } else {
+        if ($local_filter) {
+          $options['filters'] = $local_filter;
+        }
+      }
+      $data = $this->handle_corereports($projectId, $from, $to, $metrics, $options, $serial);
+      if (is_numeric($data)) {
+        return $data;
+      }
+      $ga_dash_data = array(
+        array(
+          $title,
+          __("Sessions", 'ga-dash')
+        )
+      );
+      foreach ($data->getRows() as $row) {
+        if (isset($row[2])) {
+          $ga_dash_data[] = array(
+            $this->prepare_json($row[0]) . ', ' . $this->prepare_json($row[1]),
+            (int) $row[2]
+          );
+        } else {
+          $ga_dash_data[] = array(
+            $this->prepare_json($row[0]),
+            (int) $row[1]
+          );
+        }
+      }
+      return $ga_dash_data;
+    }
+
+    /**
+     * Analytics data for backend reports (traffic channels)
+     *
+     * @param
+     *          $projectId
+     * @param
+     *          $from
+     * @param
+     *          $to
+     * @return array|int
+     */
+    function get_trafficchannels($projectId, $from, $to, $filter = '')
+    {
+      $metrics = 'ga:sessions';
+      $dimensions = 'ga:channelGrouping';
+      $options = array(
+        'dimensions' => $dimensions,
+        'quotaUser' => $this->managequota . 'p' . $projectId
+      );
+      if ($filter) {
+        $options['filters'] = 'ga:pagePath==' . $filter;
+      }
+      $serial = 'gadash_qr8_' . $this->get_serial($projectId . $from . $filter);
+      $data = $this->handle_corereports($projectId, $from, $to, $metrics, $options, $serial);
+      if (is_numeric($data)) {
+        return $data;
+      }
+      $title = __("Channels", 'ga-dash');
+      $ga_dash_data = array(
+        array(
+          '<div style="color:black; font-size:1.1em">' . $title . '</div><div style="color:darkblue; font-size:1.2em">' . (int) $data['totalsForAllResults']["ga:sessions"] . '</div>',
+          ""
+        )
+      );
+      foreach ($data->getRows() as $row) {
+        $shrink = explode(" ", $row[0]);
+        $ga_dash_data[] = array(
+          '<div style="color:black; font-size:1.1em">' . esc_html($shrink[0]) . '</div><div style="color:darkblue; font-size:1.2em">' . (int) $row[1] . '</div>',
+          '<div style="color:black; font-size:1.1em">' . $title . '</div><div style="color:darkblue; font-size:1.2em">' . (int) $data['totalsForAllResults']["ga:sessions"] . '</div>'
+        );
+      }
+      return $ga_dash_data;
+    }
+
+    /**
+     * Analytics data for backend reports (traffic mediums, type, serach engines, social networks)
+     *
+     * @param
+     *          $projectId
+     * @param
+     *          $from
+     * @param
+     *          $to
+     * @param
+     *          $query
+     * @return array|int
+     */
+    function get_trafficdetails($projectId, $from, $to, $query, $filter = '')
+    {
+      $metrics = 'ga:sessions';
+      $dimensions = 'ga:' . $query;
+      
+      if ($query == 'source') {
+        $options = array(
+          'dimensions' => $dimensions,
+          'quotaUser' => $this->managequota . 'p' . $projectId
+        );
+        if ($filter) {
+          $options['filters'] = 'ga:medium==organic;ga:keyword!=(not set);ga:pagePath==' . $filter;
+        } else {
+          $options['filters'] = 'ga:medium==organic;ga:keyword!=(not set)';
+        }
+      } else {
+        $options = array(
+          'dimensions' => $dimensions,
+          'quotaUser' => $this->managequota . 'p' . $projectId
+        );
+        if ($filter) {
+          $options['filters'] = 'ga:' . $query . '!=(not set);ga:pagePath==' . $filter;
+        } else {
+          $options['filters'] = 'ga:' . $query . '!=(not set)';
+        }
+      }
+      $serial = 'gadash_qr10_' . $this->get_serial($projectId . $from . $query . $filter);
+      $data = $this->handle_corereports($projectId, $from, $to, $metrics, $options, $serial);
+      if (is_numeric($data)) {
+        return $data;
+      }
+      $ga_dash_data = array(
+        array(
+          __("Type", 'ga-dash'),
+          __("Sessions", 'ga-dash')
+        )
+      );
+      foreach ($data->getRows() as $row) {
+        $ga_dash_data[] = array(
+          str_replace("(none)", "direct", esc_html($row[0])),
+          (int) $row[1]
+        );
+      }
+      return $ga_dash_data;
+    }
+
+    /**
+     * Analytics data for frontend Widget (chart data and totals)
+     *
+     * @param
+     *          $projectId
+     * @param
+     *          $period
+     * @param
+     *          $anonim
+     * @return array|int
+     */
+    function frontend_widget_stats($projectId, $from, $anonim)
+    {
+      $content = '';
+      $to = 'yesterday';
+      $metrics = 'ga:sessions';
+      $dimensions = 'ga:date,ga:dayOfWeekName';
+      $options = array(
+        'dimensions' => $dimensions,
+        'quotaUser' => $this->managequota . 'p' . $projectId
+      );
+      $serial = 'gadash_qr2_' . $this->get_serial($projectId . $from . $metrics);
+      $data = $this->handle_corereports($projectId, $from, $to, $metrics, $options, $serial);
+      if (is_numeric($data)) {
+        return $data;
+      }
+      $ga_dash_data = array(
+        array(
+          __("Date", 'ga-dash'),
+          __("Sessions", 'ga-dash') . ($anonim ? "' " . __("trend", 'ga-dash') : '')
+        )
+      );
+      if ($anonim) {
+        $max_array = array();
+        foreach ($data->getRows() as $item) {
+          $max_array[] = $item[2];
+        }
+        $max = max($max_array) ? max($max_array) : 1;
+      }
+      foreach ($data->getRows() as $row) {
+        $ga_dash_data[] = array(
+          ucfirst(esc_html((__($row[1])))) . ', ' . esc_html(substr_replace(substr_replace($row[0], "-", 4, 0), "-", 7, 0)),
+          ($anonim ? round($row[2] * 100 / $max, 2) : (int) $row[2])
+        );
+      }
+      $totals = $data->getTotalsForAllResults();
+      return array(
+        $ga_dash_data,
+        $anonim ? 0 : $totals['ga:sessions']
+      );
+    }
+
+    /**
+     * Analytics data for frontend reports (pagviews and unique pageviews per page)
+     *
+     * @param
+     *          $projectId
+     * @param
+     *          $page_url
+     * @param
+     *          $post_id
+     * @return array|int
+     */
+    function frontend_afterpost_pageviews($projectId, $page_url, $post_id)
+    {
+      $from = '30daysAgo';
+      $to = 'yesterday';
+      $metrics = 'ga:pageviews,ga:uniquePageviews';
+      $dimensions = 'ga:date,ga:dayOfWeekName';
+      $serial = 'gadash_qr21_' . $this->get_serial($post_id . 'stats');
+      $data = $this->handle_corereports($projectId, $from, $to, $metrics, array(
+        'dimensions' => $dimensions,
+        'filters' => 'ga:pagePath==' . $page_url,
+        'quotaUser' => $this->managequota . 'p' . $projectId
+      ), $serial);
+      if (is_numeric($data)) {
+        return $data;
+      }
+      $ga_dash_data = array(
+        array(
+          __("Date", 'ga-dash'),
+          __("Views", 'ga-dash'),
+          __('UniqueViews', "ga-dash")
+        )
+      );
+      foreach ($data->getRows() as $row) {
+        $ga_dash_data[] = array(
+          ucfirst(esc_html(__($row[1]))) . ',' . esc_html(substr_replace(substr_replace($row[0], "-", 4, 0), "-", 7, 0)),
+          round($row[2], 2),
+          round($row[3], 2)
+        );
+      }
+      return $ga_dash_data;
+    }
+
+    /**
+     * Analytics data for frontend reports (searches per page)
+     *
+     * @param
+     *          $projectId
+     * @param
+     *          $page_url
+     * @param
+     *          $post_id
+     * @return array|int
+     */
+    function frontend_afterpost_searches($projectId, $page_url, $post_id)
+    {
+      $from = '30daysAgo';
+      $to = 'yesterday';
+      $metrics = 'ga:sessions';
+      $dimensions = 'ga:keyword';
+      $serial = 'gadash_qr22_' . $this->get_serial($post_id . 'search');
+      $data = $this->handle_corereports($projectId, $from, $to, $metrics, array(
+        'dimensions' => $dimensions,
+        'sort' => '-ga:sessions',
+        'filters' => 'ga:pagePath==' . $page_url . ';ga:keyword!=(not set)',
+        'quotaUser' => $this->managequota . 'p' . $projectId
+      ), $serial);
+      if (is_numeric($data)) {
+        return $data;
+      }
+      $ga_dash_data = array(
+        array(
+          __("Searches", 'ga-dash'),
+          __("Sessions", 'ga-dash')
+        )
+      );
+      foreach ($data->getRows() as $row) {
+        $ga_dash_data[] = array(
+          $this->prepare_json($row[0]),
+          (int) $row[1]
+        );
+      }
+      return $ga_dash_data;
+    }
+
+    /**
+     * Analytics data for backend reports (Real-Time)
+     *
+     * @param
+     *          $projectId
+     * @return array|int
+     */
+    function get_realtime_data($projectId)
+    {
+      $metrics = 'rt:activeUsers';
+      $dimensions = 'rt:pagePath,rt:source,rt:keyword,rt:trafficType,rt:visitorType,rt:pageTitle';
+      try {
+        $serial = 'gadash_realtimecache_' . $this->get_serial($projectId);
+        $transient = get_transient($serial);
+        if ($transient === false) {
+          if ($this->gapi_errors_handler()) {
+            return - 23;
+          }
+          $data = $this->service->data_realtime->get('ga:' . $projectId, $metrics, array(
+            'dimensions' => $dimensions,
+            'quotaUser' => $this->managequota . 'p' . $projectId
+          ));
+          set_transient($serial, $data, 55);
+        } else {
+          $data = $transient;
+        }
+      } catch (Google_Service_Exception $e) {
+        set_transient('ga_dash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html("(" . $e->getCode() . ") " . $e->getMessage()), $this->error_timeout);
+        set_transient('ga_dash_gapi_errors', array(
+          $e->getCode(),
+          (array) $e->getErrors()
+        ), $this->error_timeout);
+        return $e->getCode();
+      } catch (Exception $e) {
+        set_transient('ga_dash_lasterror', date('Y-m-d H:i:s') . ': ' . esc_html($e), $this->error_timeout);
+        return $e->getCode();
+      }
+      if ($data->getRows() < 1) {
+        return - 21;
+      }
+      $i = 0;
+      $ga_dash_data = $data;
+      foreach ($data->getRows() as $row) {
+        $ga_dash_data->rows[$i] = array_map('esc_html', $row);
+        $i ++;
+      }
+      return $ga_dash_data;
+    }
+
+    function get($projectId, $query, $from = false, $to = false, $filter = '')
+    {
+      switch ($query) {
+        case 'referrers':
+          wp_send_json($this->get_referrers($projectId, $from, $to, $filter));
+          break;
+        case 'contentpages':
+          wp_send_json($this->get_contentpages($projectId, $from, $to, $filter));
+          break;
+        case 'locations':
+          wp_send_json($this->get_locations($projectId, $from, $to, $filter));
+          break;
+        case 'bottomstats':
+          wp_send_json($this->get_bottomstats($projectId, $from, $to, $filter));
+          break;
+        case 'trafficchannels':
+          wp_send_json($this->get_trafficchannels($projectId, $from, $to, $filter));
+          break;
+        case 'medium':
+          wp_send_json($this->get_trafficdetails($projectId, $from, $to, 'medium', $filter));
+          break;
+        case 'visitorType':
+          wp_send_json($this->get_trafficdetails($projectId, $from, $to, 'visitorType', $filter));
+          break;
+        case 'socialNetwork':
+          wp_send_json($this->get_trafficdetails($projectId, $from, $to, 'socialNetwork', $filter));
+          break;
+        case 'source':
+          wp_send_json($this->get_trafficdetails($projectId, $from, $to, 'source', $filter));
+          break;
+        case 'searches':
+          wp_send_json($this->get_searches($projectId, $from, $to, $filter));
+          break;
+        case 'realtime':
+          wp_send_json($this->get_realtime_data($projectId));
+          break;
+        default:
+          wp_send_json($this->get_mainreport($projectId, $from, $to, $query, $filter));
+          break;
+      }
+    }
+  }
 }
 if (! isset($GLOBALS['GADASH_GAPI'])) {
-    $GLOBALS['GADASH_GAPI'] = new GADASH_GAPI();
+  $GLOBALS['GADASH_GAPI'] = new GADASH_GAPI();
 }
