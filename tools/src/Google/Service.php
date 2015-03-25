@@ -17,29 +17,24 @@
  */
 class Google_Service
 {
+  public $version;
+  public $servicePath;
+  public $availableScopes;
+  public $resource;
+  private $client;
 
-    public $version;
+  public function __construct(Google_Client $client)
+  {
+    $this->client = $client;
+  }
 
-    public $servicePath;
-
-    public $availableScopes;
-
-    public $resource;
-
-    private $client;
-
-    public function __construct(Google_Client $client)
-    {
-        $this->client = $client;
-    }
-
-    /**
-     * Return the associated Google_Client class.
-     *
-     * @return Google_Client
-     */
-    public function getClient()
-    {
-        return $this->client;
-    }
+  /**
+   * Return the associated Google_Client class.
+   *
+   * @return Google_Client
+   */
+  public function getClient()
+  {
+    return $this->client;
+  }
 }
