@@ -14,12 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require_once 'Google/Client.php';
-require_once 'Google/Exception.php';
-require_once 'Google/Utils.php';
-require_once 'Google/Http/Request.php';
-require_once 'Google/Http/MediaFileUpload.php';
-require_once 'Google/Http/REST.php';
+require_once realpath(dirname(__FILE__) . '/../../../autoload.php');
 
 /**
  * Implements the actual methods/resources of the discovered Google API using magic function
@@ -132,11 +127,15 @@ class Google_Service_Resource
     public function call($name, $arguments, $expected_class = null)
     {
         if (! isset($this->methods[$name])) {
+            $this->client->getLogger()->error('Service method unknown', array(
+                'service' => $this->serviceName,
+                'resource' => $this->resourceName,
+                'method' => $name
+            ));
             throw new Google_Exception("Unknown function: " . "{$this->serviceName}->{$this->resourceName}->{$name}()");
         }
         $method = $this->methods[$name];
         $parameters = $arguments[0];
-        
         // postBody is a special case since it's not defined in the discovery
         // document as parameter, but we abuse the param entry for storing it.
         $postBody = null;
@@ -155,7 +154,6 @@ class Google_Service_Resource
             $postBody = json_encode($parameters['postBody']);
             unset($parameters['postBody']);
         }
-        
         // TODO(ianbarber): optParams here probably should have been
         // handled already - this may well be redundant code.
         if (isset($parameters['optParams'])) {
@@ -163,20 +161,29 @@ class Google_Service_Resource
             unset($parameters['optParams']);
             $parameters = array_merge($parameters, $optParams);
         }
-        
         if (! isset($method['parameters'])) {
             $method['parameters'] = array();
         }
-        
         $method['parameters'] = array_merge($method['parameters'], $this->stackParameters);
         foreach ($parameters as $key => $val) {
             if ($key != 'postBody' && ! isset($method['parameters'][$key])) {
+                $this->client->getLogger()->error('Service parameter unknown', array(
+                    'service' => $this->serviceName,
+                    'resource' => $this->resourceName,
+                    'method' => $name,
+                    'parameter' => $key
+                ));
                 throw new Google_Exception("($name) unknown parameter: '$key'");
             }
         }
-        
         foreach ($method['parameters'] as $paramName => $paramSpec) {
             if (isset($paramSpec['required']) && $paramSpec['required'] && ! isset($parameters[$paramName])) {
+                $this->client->getLogger()->error('Service parameter missing', array(
+                    'service' => $this->serviceName,
+                    'resource' => $this->resourceName,
+                    'method' => $name,
+                    'parameter' => $paramName
+                ));
                 throw new Google_Exception("($name) missing required param: '$paramName'");
             }
             if (isset($parameters[$paramName])) {
@@ -189,33 +196,32 @@ class Google_Service_Resource
                 unset($parameters[$paramName]);
             }
         }
-        
         $servicePath = $this->service->servicePath;
-        
+        $this->client->getLogger()->info('Service Call', array(
+            'service' => $this->serviceName,
+            'resource' => $this->resourceName,
+            'method' => $name,
+            'arguments' => $parameters
+        ));
         $url = Google_Http_REST::createRequestUri($servicePath, $method['path'], $parameters);
         $httpRequest = new Google_Http_Request($url, $method['httpMethod'], null, $postBody);
         $httpRequest->setBaseComponent($this->client->getBasePath());
-        
         if ($postBody) {
             $contentTypeHeader = array();
             $contentTypeHeader['content-type'] = 'application/json; charset=UTF-8';
             $httpRequest->setRequestHeaders($contentTypeHeader);
             $httpRequest->setPostBody($postBody);
         }
-        
         $httpRequest = $this->client->getAuth()->sign($httpRequest);
         $httpRequest->setExpectedClass($expected_class);
-        
         if (isset($parameters['data']) && ($parameters['uploadType']['value'] == 'media' || $parameters['uploadType']['value'] == 'multipart')) {
             // If we are doing a simple media upload, trigger that as a convenience.
             $mfu = new Google_Http_MediaFileUpload($this->client, $httpRequest, isset($parameters['mimeType']) ? $parameters['mimeType']['value'] : 'application/octet-stream', $parameters['data']['value']);
         }
-        
         if ($this->client->shouldDefer()) {
             // If we are in batch or upload mode, return the raw request.
             return $httpRequest;
         }
-        
         return $this->client->execute($httpRequest);
     }
 

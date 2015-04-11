@@ -14,9 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require_once 'Google/Client.php';
-require_once 'Google/Http/Request.php';
-require_once 'Google/Http/REST.php';
+require_once realpath(dirname(__FILE__) . '/../../../autoload.php');
 
 /**
  *
@@ -61,14 +59,12 @@ class Google_Http_Batch
         if (false == $key) {
             $key = mt_rand();
         }
-        
         $this->requests[$key] = $request;
     }
 
     public function execute()
     {
         $body = '';
-        
         /**
          *
          * @var Google_Http_Request $req
@@ -78,19 +74,15 @@ class Google_Http_Batch
             $body .= $req->toBatchString($key) . "\n";
             $this->expected_classes["response-" . $key] = $req->getExpectedClass();
         }
-        
         $body = rtrim($body);
         $body .= "\n--{$this->boundary}--";
-        
         $url = $this->base_path . '/batch';
         $httpRequest = new Google_Http_Request($url, 'POST');
         $httpRequest->setRequestHeaders(array(
             'Content-Type' => 'multipart/mixed; boundary=' . $this->boundary
         ));
-        
         $httpRequest->setPostBody($body);
         $response = $this->client->getIo()->makeRequest($httpRequest);
-        
         return $this->parseResponse($response);
     }
 
@@ -105,51 +97,42 @@ class Google_Http_Batch
                 $boundary = $part[1];
             }
         }
-        
         $body = $response->getResponseBody();
         if ($body) {
             $body = str_replace("--$boundary--", "--$boundary", $body);
             $parts = explode("--$boundary", $body);
             $responses = array();
-            
             foreach ($parts as $part) {
                 $part = trim($part);
                 if (! empty($part)) {
                     list ($metaHeaders, $part) = explode("\r\n\r\n", $part, 2);
                     $metaHeaders = $this->client->getIo()->getHttpResponseHeaders($metaHeaders);
-                    
                     $status = substr($part, 0, strpos($part, "\n"));
                     $status = explode(" ", $status);
                     $status = $status[1];
-                    
                     list ($partHeaders, $partBody) = $this->client->getIo()->ParseHttpResponse($part, false);
                     $response = new Google_Http_Request("");
                     $response->setResponseHttpCode($status);
                     $response->setResponseHeaders($partHeaders);
                     $response->setResponseBody($partBody);
-                    
                     // Need content id.
                     $key = $metaHeaders['content-id'];
-                    
                     if (isset($this->expected_classes[$key]) && strlen($this->expected_classes[$key]) > 0) {
                         $class = $this->expected_classes[$key];
                         $response->setExpectedClass($class);
                     }
-                    
                     try {
-                        $response = Google_Http_REST::decodeHttpResponse($response);
+                        $response = Google_Http_REST::decodeHttpResponse($response, $this->client);
                         $responses[$key] = $response;
                     } catch (Google_Service_Exception $e) {
-                        // Store the exception as the response, so succesful responses
+                        // Store the exception as the response, so successful responses
                         // can be processed.
                         $responses[$key] = $e;
                     }
                 }
             }
-            
             return $responses;
         }
-        
         return null;
     }
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require_once "Google/Auth/Exception.php";
+require_once realpath(dirname(__FILE__) . '/../../../autoload.php');
 
 /**
  * Class to hold information about an authenticated login.
@@ -25,10 +25,8 @@ class Google_Auth_LoginTicket
 {
 
     const USER_ATTR = "sub";
-    
     // Information from id token envelope.
     private $envelope;
-    
     // Information from id token payload.
     private $payload;
 

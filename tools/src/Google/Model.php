@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * This class defines attributes, valid values, and usage which is generated
  * from a given json schema.
@@ -27,6 +26,8 @@
 class Google_Model implements ArrayAccess
 {
 
+    protected $internal_gapi_mappings = array();
+
     protected $modelData = array();
 
     protected $processed = array();
@@ -35,15 +36,23 @@ class Google_Model implements ArrayAccess
      * Polymorphic - accepts a variable number of arguments dependent
      * on the type of the model subclass.
      */
-    public function __construct()
+    final public function __construct()
     {
         if (func_num_args() == 1 && is_array(func_get_arg(0))) {
             // Initialize the model with the array's contents.
             $array = func_get_arg(0);
             $this->mapTypes($array);
         }
+        $this->gapiInit();
     }
 
+    /**
+     * Getter that handles passthrough access to the data array, and lazy object creation.
+     *
+     * @param string $key
+     *            Property name.
+     * @return mixed The value if any, or null.
+     */
     public function __get($key)
     {
         $keyTypeName = $this->keyType($key);
@@ -57,7 +66,6 @@ class Google_Model implements ArrayAccess
                 } else {
                     $val = null;
                 }
-            
             if ($this->isAssociativeArray($val)) {
                 if (isset($this->$keyDataType) && 'map' == $this->$keyDataType) {
                     foreach ($val as $arrayKey => $arrayItem) {
@@ -76,8 +84,7 @@ class Google_Model implements ArrayAccess
                 }
             $this->processed[$key] = true;
         }
-        
-        return $this->modelData[$key];
+        return isset($this->modelData[$key]) ? $this->modelData[$key] : null;
     }
 
     /**
@@ -104,6 +111,16 @@ class Google_Model implements ArrayAccess
     }
 
     /**
+     * Blank initialiser to be used in subclasses to do post-construction initialisation - this
+     * avoids the need for subclasses to have to implement the variadics handling in their
+     * constructors.
+     */
+    protected function gapiInit()
+    {
+        return;
+    }
+
+    /**
      * Create a simplified object suitable for straightforward
      * conversion to JSON.
      * This is relatively expensive
@@ -113,7 +130,6 @@ class Google_Model implements ArrayAccess
     public function toSimpleObject()
     {
         $object = new stdClass();
-        
         // Process all other data.
         foreach ($this->modelData as $key => $val) {
             $result = $this->getSimpleValue($val);
@@ -121,7 +137,6 @@ class Google_Model implements ArrayAccess
                 $object->$key = $result;
             }
         }
-        
         // Process all public properties.
         $reflect = new ReflectionObject($this);
         $props = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
@@ -129,10 +144,10 @@ class Google_Model implements ArrayAccess
             $name = $member->getName();
             $result = $this->getSimpleValue($this->$name);
             if ($result !== null) {
+                $name = $this->getMappedName($name);
                 $object->$name = $result;
             }
         }
-        
         return $object;
     }
 
@@ -150,12 +165,24 @@ class Google_Model implements ArrayAccess
                 foreach ($value as $key => $a_value) {
                     $a_value = $this->getSimpleValue($a_value);
                     if ($a_value !== null) {
+                        $key = $this->getMappedName($key);
                         $return[$key] = $a_value;
                     }
                 }
                 return $return;
             }
         return $value;
+    }
+
+    /**
+     * If there is an internal name mapping, use that.
+     */
+    private function getMappedName($key)
+    {
+        if (isset($this->internal_gapi_mappings) && isset($this->internal_gapi_mappings[$key])) {
+            $key = $this->internal_gapi_mappings[$key];
+        }
+        return $key;
     }
 
     /**

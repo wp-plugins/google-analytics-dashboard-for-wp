@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Collection of static utility methods used for convenience across
  * the client library.
@@ -122,7 +121,6 @@ class Google_Utils
         if (! is_array($arr)) {
             return array();
         }
-        
         $normalized = array();
         foreach ($arr as $key => $val) {
             $normalized[strtolower($key)] = $val;

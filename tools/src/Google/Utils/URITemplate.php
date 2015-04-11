@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Implementation of levels 1-3 of the URI Template spec.
  *
@@ -126,7 +125,6 @@ class Google_Utils_URITemplate
     {
         // We know a data block will have {} round it, so we can strip that.
         $data = substr($string, $start + 1, $end - $start - 1);
-        
         // If the first character is one of the reserved operators, it effects
         // the processing of the stream.
         if (isset($this->operators[$data[0]])) {
@@ -134,7 +132,6 @@ class Google_Utils_URITemplate
             $data = substr($data, 1);
             $prefix = "";
             $prefix_on_missing = false;
-            
             switch ($op) {
                 case "reserved":
                     // Reserved means certain characters should not be URL encoded
@@ -173,7 +170,6 @@ class Google_Utils_URITemplate
                     $data = $this->replaceVars($data, $parameters, "&", "=");
                     break;
             }
-            
             // Add the initial prefix character if data is valid.
             if ($data || ($data !== false && $prefix_on_missing)) {
                 $data = $prefix . $data;
@@ -207,22 +203,18 @@ $combine_on_empty);
         $explode = false;
         $skip_final_combine = false;
         $value = false;
-        
         // Check for length restriction.
         if (strpos($key, ":") !== false) {
             list ($key, $length) = explode(":", $key);
         }
-        
         // Check for explode parameter.
         if ($key[strlen($key) - 1] == "*") {
             $explode = true;
             $key = substr($key, 0, - 1);
             $skip_final_combine = true;
         }
-        
         // Define the list separator.
         $list_sep = $explode ? $sep : ",";
-        
         if (isset($parameters[$key])) {
             $data_type = $this->getDataType($parameters[$key]);
             switch ($data_type) {
@@ -270,17 +262,14 @@ $combine_on_empty);
                 // Otherwise we can skip this variable due to not being defined.
                 return false;
             }
-        
         if ($reserved) {
             $value = str_replace($this->reservedEncoded, $this->reserved, $value);
         }
-        
         // If we do not need to include the key name, we just return the raw
         // value.
         if (! $combine || $skip_final_combine) {
             return $value;
         }
-        
         // Else we combine the key name: foo=bar, if value is not the empty string.
         return $key . ($value != '' || $combine_on_empty ? $combine . $value : '');
     }

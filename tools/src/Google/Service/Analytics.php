@@ -15,13 +15,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 /**
  * Service definition for Analytics (v3).
  *
  * <p>
- * View and manage your Google Analytics data
- * </p>
+ * View and manage your Google Analytics data</p>
  *
  * <p>
  * For more information about this service, see the API
@@ -47,6 +45,11 @@ class Google_Service_Analytics extends Google_Service
      * Manage Google Analytics Account users by email address.
      */
     const ANALYTICS_MANAGE_USERS = "https://www.googleapis.com/auth/analytics.manage.users";
+
+    /**
+     * View Google Analytics user permissions.
+     */
+    const ANALYTICS_MANAGE_USERS_READONLY = "https://www.googleapis.com/auth/analytics.manage.users.readonly";
 
     /**
      * Create a new Google Analytics account along with its default property and view.
@@ -113,7 +116,6 @@ class Google_Service_Analytics extends Google_Service
         $this->servicePath = 'analytics/v3/';
         $this->version = 'v3';
         $this->serviceName = 'analytics';
-        
         $this->data_ga = new Google_Service_Analytics_DataGa_Resource($this, $this->serviceName, 'ga', array(
             'methods' => array(
                 'get' => array(
@@ -1861,39 +1863,36 @@ class Google_Service_Analytics_DataGa_Resource extends Google_Service_Resource
      * (ga.get)
      *
      * @param string $ids
-     *            Unique table ID for retrieving Analytics data. Table ID is of the form ga:XXXX, where XXXX is
-     *            the Analytics view (profile) ID.
+     *            Unique table ID for retrieving Analytics data. Table ID is
+     *            of the form ga:XXXX, where XXXX is the Analytics view (profile) ID.
      * @param string $startDate
-     *            Start date for fetching Analytics data. Requests can specify a start date formatted as YYYY-MM-
-     *            DD, or as a relative date (e.g., today, yesterday, or 7daysAgo). The default value is 7daysAgo.
+     *            Start date for fetching Analytics data. Requests can
+     *            specify a start date formatted as YYYY-MM-DD, or as a relative date (e.g.,
+     *            today, yesterday, or 7daysAgo). The default value is 7daysAgo.
      * @param string $endDate
-     *            End date for fetching Analytics data. Request can should specify an end date formatted as YYYY-
-     *            MM-DD, or as a relative date (e.g., today, yesterday, or 7daysAgo). The default value is
-     *            yesterday.
+     *            End date for fetching Analytics data. Request can
+     *            should specify an end date formatted as YYYY-MM-DD, or as a relative date
+     *            (e.g., today, yesterday, or 7daysAgo). The default value is yesterday.
      * @param string $metrics
-     *            A comma-separated list of Analytics metrics. E.g., 'ga:sessions,ga:pageviews'. At least one
-     *            metric must be specified.
+     *            A comma-separated list of Analytics metrics. E.g.,
+     *            'ga:sessions,ga:pageviews'. At least one metric must be specified.
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of entries to include in this feed.
-     *            @opt_param string sort
-     *            A comma-separated list of dimensions or metrics that determine the sort order for Analytics
-     *            data.
-     *            @opt_param string dimensions
-     *            A comma-separated list of Analytics dimensions. E.g., 'ga:browser,ga:city'.
-     *            @opt_param int start-index
-     *            An index of the first entity to retrieve. Use this parameter as a pagination mechanism along
-     *            with the max-results parameter.
-     *            @opt_param string segment
-     *            An Analytics segment to be applied to data.
-     *            @opt_param string samplingLevel
-     *            The desired sampling level.
-     *            @opt_param string filters
-     *            A comma-separated list of dimension or metric filters to be applied to Analytics data.
-     *            @opt_param string output
-     *            The selected format for the response. Default format is JSON.
+     *            @opt_param int max-results The maximum number of entries to include in this
+     *            feed.
+     *            @opt_param string sort A comma-separated list of dimensions or metrics that
+     *            determine the sort order for Analytics data.
+     *            @opt_param string dimensions A comma-separated list of Analytics dimensions.
+     *            E.g., 'ga:browser,ga:city'.
+     *            @opt_param int start-index An index of the first entity to retrieve. Use this
+     *            parameter as a pagination mechanism along with the max-results parameter.
+     *            @opt_param string segment An Analytics segment to be applied to data.
+     *            @opt_param string samplingLevel The desired sampling level.
+     *            @opt_param string filters A comma-separated list of dimension or metric
+     *            filters to be applied to Analytics data.
+     *            @opt_param string output The selected format for the response. Default format
+     *            is JSON.
      * @return Google_Service_Analytics_GaData
      */
     public function get($ids, $startDate, $endDate, $metrics, $optParams = array())
@@ -1927,34 +1926,34 @@ class Google_Service_Analytics_DataMcf_Resource extends Google_Service_Resource
      * (mcf.get)
      *
      * @param string $ids
-     *            Unique table ID for retrieving Analytics data. Table ID is of the form ga:XXXX, where XXXX is
-     *            the Analytics view (profile) ID.
+     *            Unique table ID for retrieving Analytics data. Table ID is
+     *            of the form ga:XXXX, where XXXX is the Analytics view (profile) ID.
      * @param string $startDate
-     *            Start date for fetching Analytics data. Requests can specify a start date formatted as YYYY-MM-
-     *            DD, or as a relative date (e.g., today, yesterday, or 7daysAgo). The default value is 7daysAgo.
+     *            Start date for fetching Analytics data. Requests can
+     *            specify a start date formatted as YYYY-MM-DD, or as a relative date (e.g.,
+     *            today, yesterday, or 7daysAgo). The default value is 7daysAgo.
      * @param string $endDate
-     *            End date for fetching Analytics data. Requests can specify a start date formatted as YYYY-MM-DD,
-     *            or as a relative date (e.g., today, yesterday, or 7daysAgo). The default value is 7daysAgo.
+     *            End date for fetching Analytics data. Requests can
+     *            specify a start date formatted as YYYY-MM-DD, or as a relative date (e.g.,
+     *            today, yesterday, or 7daysAgo). The default value is 7daysAgo.
      * @param string $metrics
-     *            A comma-separated list of Multi-Channel Funnels metrics. E.g.,
-     *            'mcf:totalConversions,mcf:totalConversionValue'. At least one metric must be specified.
+     *            A comma-separated list of Multi-Channel Funnels
+     *            metrics. E.g., 'mcf:totalConversions,mcf:totalConversionValue'. At least one
+     *            metric must be specified.
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of entries to include in this feed.
-     *            @opt_param string sort
-     *            A comma-separated list of dimensions or metrics that determine the sort order for the Analytics
-     *            data.
-     *            @opt_param string dimensions
-     *            A comma-separated list of Multi-Channel Funnels dimensions. E.g., 'mcf:source,mcf:medium'.
-     *            @opt_param int start-index
-     *            An index of the first entity to retrieve. Use this parameter as a pagination mechanism along
-     *            with the max-results parameter.
-     *            @opt_param string samplingLevel
-     *            The desired sampling level.
-     *            @opt_param string filters
-     *            A comma-separated list of dimension or metric filters to be applied to the Analytics data.
+     *            @opt_param int max-results The maximum number of entries to include in this
+     *            feed.
+     *            @opt_param string sort A comma-separated list of dimensions or metrics that
+     *            determine the sort order for the Analytics data.
+     *            @opt_param string dimensions A comma-separated list of Multi-Channel Funnels
+     *            dimensions. E.g., 'mcf:source,mcf:medium'.
+     *            @opt_param int start-index An index of the first entity to retrieve. Use this
+     *            parameter as a pagination mechanism along with the max-results parameter.
+     *            @opt_param string samplingLevel The desired sampling level.
+     *            @opt_param string filters A comma-separated list of dimension or metric
+     *            filters to be applied to the Analytics data.
      * @return Google_Service_Analytics_McfData
      */
     public function get($ids, $startDate, $endDate, $metrics, $optParams = array())
@@ -1988,23 +1987,22 @@ class Google_Service_Analytics_DataRealtime_Resource extends Google_Service_Reso
      * (realtime.get)
      *
      * @param string $ids
-     *            Unique table ID for retrieving real time data. Table ID is of the form ga:XXXX, where XXXX is
-     *            the Analytics view (profile) ID.
+     *            Unique table ID for retrieving real time data. Table ID is
+     *            of the form ga:XXXX, where XXXX is the Analytics view (profile) ID.
      * @param string $metrics
-     *            A comma-separated list of real time metrics. E.g., 'rt:activeUsers'. At least one metric must be
-     *            specified.
+     *            A comma-separated list of real time metrics. E.g.,
+     *            'rt:activeUsers'. At least one metric must be specified.
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of entries to include in this feed.
-     *            @opt_param string sort
-     *            A comma-separated list of dimensions or metrics that determine the sort order for real time
-     *            data.
-     *            @opt_param string dimensions
-     *            A comma-separated list of real time dimensions. E.g., 'rt:medium,rt:city'.
-     *            @opt_param string filters
-     *            A comma-separated list of dimension or metric filters to be applied to real time data.
+     *            @opt_param int max-results The maximum number of entries to include in this
+     *            feed.
+     *            @opt_param string sort A comma-separated list of dimensions or metrics that
+     *            determine the sort order for real time data.
+     *            @opt_param string dimensions A comma-separated list of real time dimensions.
+     *            E.g., 'rt:medium,rt:city'.
+     *            @opt_param string filters A comma-separated list of dimension or metric
+     *            filters to be applied to real time data.
      * @return Google_Service_Analytics_RealtimeData
      */
     public function get($ids, $metrics, $optParams = array())
@@ -2051,11 +2049,10 @@ class Google_Service_Analytics_ManagementAccountSummaries_Resource extends Googl
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of filters to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first entity to retrieve. Use this parameter as a pagination mechanism along
-     *            with the max-results parameter.
+     *            @opt_param int max-results The maximum number of account summaries to include
+     *            in this response, where the largest acceptable value is 1000.
+     *            @opt_param int start-index An index of the first entity to retrieve. Use this
+     *            parameter as a pagination mechanism along with the max-results parameter.
      * @return Google_Service_Analytics_AccountSummaries
      */
     public function listManagementAccountSummaries($optParams = array())
@@ -2134,11 +2131,11 @@ class Google_Service_Analytics_ManagementAccountUserLinks_Resource extends Googl
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of account-user links to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first account-user link to retrieve. Use this parameter as a pagination
-     *            mechanism along with the max-results parameter.
+     *            @opt_param int max-results The maximum number of account-user links to
+     *            include in this response.
+     *            @opt_param int start-index An index of the first account-user link to
+     *            retrieve. Use this parameter as a pagination mechanism along with the max-
+     *            results parameter.
      * @return Google_Service_Analytics_EntityUserLinks
      */
     public function listManagementAccountUserLinks($accountId, $optParams = array())
@@ -2197,11 +2194,11 @@ class Google_Service_Analytics_ManagementAccounts_Resource extends Google_Servic
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of accounts to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first account to retrieve. Use this parameter as a pagination mechanism along
-     *            with the max-results parameter.
+     *            @opt_param int max-results The maximum number of accounts to include in this
+     *            response.
+     *            @opt_param int start-index An index of the first account to retrieve. Use
+     *            this parameter as a pagination mechanism along with the max-results
+     *            parameter.
      * @return Google_Service_Analytics_Accounts
      */
     public function listManagementAccounts($optParams = array())
@@ -2232,15 +2229,16 @@ class Google_Service_Analytics_ManagementCustomDataSources_Resource extends Goog
      * @param string $accountId
      *            Account Id for the custom data sources to retrieve.
      * @param string $webPropertyId
-     *            Web property Id for the custom data sources to retrieve.
+     *            Web property Id for the custom data sources to
+     *            retrieve.
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of custom data sources to include in this response.
-     *            @opt_param int start-index
-     *            A 1-based index of the first custom data source to retrieve. Use this parameter as a pagination
-     *            mechanism along with the max-results parameter.
+     *            @opt_param int max-results The maximum number of custom data sources to
+     *            include in this response.
+     *            @opt_param int start-index A 1-based index of the first custom data source to
+     *            retrieve. Use this parameter as a pagination mechanism along with the max-
+     *            results parameter.
      * @return Google_Service_Analytics_CustomDataSources
      */
     public function listManagementCustomDataSources($accountId, $webPropertyId, $optParams = array())
@@ -2274,11 +2272,14 @@ class Google_Service_Analytics_ManagementDailyUploads_Resource extends Google_Se
      * @param string $accountId
      *            Account Id associated with daily upload delete.
      * @param string $webPropertyId
-     *            Web property Id associated with daily upload delete.
+     *            Web property Id associated with daily upload
+     *            delete.
      * @param string $customDataSourceId
-     *            Custom data source Id associated with daily upload delete.
+     *            Custom data source Id associated with daily
+     *            upload delete.
      * @param string $date
-     *            Date for which data is to be deleted. Date should be formatted as YYYY-MM-DD.
+     *            Date for which data is to be deleted. Date should be
+     *            formatted as YYYY-MM-DD.
      * @param string $type
      *            Type of data for this delete.
      * @param array $optParams
@@ -2306,9 +2307,11 @@ class Google_Service_Analytics_ManagementDailyUploads_Resource extends Google_Se
      * @param string $accountId
      *            Account Id for the daily uploads to retrieve.
      * @param string $webPropertyId
-     *            Web property Id for the daily uploads to retrieve.
+     *            Web property Id for the daily uploads to
+     *            retrieve.
      * @param string $customDataSourceId
-     *            Custom data source Id for daily uploads to retrieve.
+     *            Custom data source Id for daily uploads to
+     *            retrieve.
      * @param string $startDate
      *            Start date of the form YYYY-MM-DD.
      * @param string $endDate
@@ -2316,11 +2319,11 @@ class Google_Service_Analytics_ManagementDailyUploads_Resource extends Google_Se
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of custom data sources to include in this response.
-     *            @opt_param int start-index
-     *            A 1-based index of the first daily upload to retrieve. Use this parameter as a pagination
-     *            mechanism along with the max-results parameter.
+     *            @opt_param int max-results The maximum number of custom data sources to
+     *            include in this response.
+     *            @opt_param int start-index A 1-based index of the first daily upload to
+     *            retrieve. Use this parameter as a pagination mechanism along with the max-
+     *            results parameter.
      * @return Google_Service_Analytics_DailyUploads
      */
     public function listManagementDailyUploads($accountId, $webPropertyId, $customDataSourceId, $startDate, $endDate, $optParams = array())
@@ -2347,9 +2350,11 @@ class Google_Service_Analytics_ManagementDailyUploads_Resource extends Google_Se
      * @param string $webPropertyId
      *            Web property Id associated with daily upload.
      * @param string $customDataSourceId
-     *            Custom data source Id to which the data being uploaded belongs.
+     *            Custom data source Id to which the data
+     *            being uploaded belongs.
      * @param string $date
-     *            Date for which data is uploaded. Date should be formatted as YYYY-MM-DD.
+     *            Date for which data is uploaded. Date should be formatted
+     *            as YYYY-MM-DD.
      * @param int $appendNumber
      *            Append number for this upload indexed from 1.
      * @param string $type
@@ -2357,9 +2362,8 @@ class Google_Service_Analytics_ManagementDailyUploads_Resource extends Google_Se
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param bool reset
-     *            Reset/Overwrite all previous appends for this date and start over with this file as the first
-     *            upload.
+     *            @opt_param bool reset Reset/Overwrite all previous appends for this date and
+     *            start over with this file as the first upload.
      * @return Google_Service_Analytics_DailyUploadAppend
      */
     public function upload($accountId, $webPropertyId, $customDataSourceId, $date, $appendNumber, $type, $optParams = array())
@@ -2491,11 +2495,11 @@ class Google_Service_Analytics_ManagementExperiments_Resource extends Google_Ser
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of experiments to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first experiment to retrieve. Use this parameter as a pagination mechanism along
-     *            with the max-results parameter.
+     *            @opt_param int max-results The maximum number of experiments to include in
+     *            this response.
+     *            @opt_param int start-index An index of the first experiment to retrieve. Use
+     *            this parameter as a pagination mechanism along with the max-results
+     *            parameter.
      * @return Google_Service_Analytics_Experiments
      */
     public function listManagementExperiments($accountId, $webPropertyId, $profileId, $optParams = array())
@@ -2667,11 +2671,10 @@ class Google_Service_Analytics_ManagementFilters_Resource extends Google_Service
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of filters to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first entity to retrieve. Use this parameter as a pagination mechanism along
-     *            with the max-results parameter.
+     *            @opt_param int max-results The maximum number of filters to include in this
+     *            response.
+     *            @opt_param int start-index An index of the first entity to retrieve. Use this
+     *            parameter as a pagination mechanism along with the max-results parameter.
      * @return Google_Service_Analytics_Filters
      */
     public function listManagementFilters($accountId, $optParams = array())
@@ -2814,22 +2817,24 @@ class Google_Service_Analytics_ManagementGoals_Resource extends Google_Service_R
      * (goals.listManagementGoals)
      *
      * @param string $accountId
-     *            Account ID to retrieve goals for. Can either be a specific account ID or '~all', which refers to
-     *            all the accounts that user has access to.
+     *            Account ID to retrieve goals for. Can either be a
+     *            specific account ID or '~all', which refers to all the accounts that user has
+     *            access to.
      * @param string $webPropertyId
-     *            Web property ID to retrieve goals for. Can either be a specific web property ID or '~all', which
-     *            refers to all the web properties that user has access to.
+     *            Web property ID to retrieve goals for. Can
+     *            either be a specific web property ID or '~all', which refers to all the web
+     *            properties that user has access to.
      * @param string $profileId
-     *            View (Profile) ID to retrieve goals for. Can either be a specific view (profile) ID or '~all',
-     *            which refers to all the views (profiles) that user has access to.
+     *            View (Profile) ID to retrieve goals for. Can either
+     *            be a specific view (profile) ID or '~all', which refers to all the views
+     *            (profiles) that user has access to.
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of goals to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first goal to retrieve. Use this parameter as a pagination mechanism along with
-     *            the max-results parameter.
+     *            @opt_param int max-results The maximum number of goals to include in this
+     *            response.
+     *            @opt_param int start-index An index of the first goal to retrieve. Use this
+     *            parameter as a pagination mechanism along with the max-results parameter.
      * @return Google_Service_Analytics_Goals
      */
     public function listManagementGoals($accountId, $webPropertyId, $profileId, $optParams = array())
@@ -2929,7 +2934,8 @@ class Google_Service_Analytics_ManagementProfileFilterLinks_Resource extends Goo
      * @param string $accountId
      *            Account ID to which the profile filter link belongs.
      * @param string $webPropertyId
-     *            Web property Id to which the profile filter link belongs.
+     *            Web property Id to which the profile filter link
+     *            belongs.
      * @param string $profileId
      *            Profile ID to which the filter link belongs.
      * @param string $linkId
@@ -2958,7 +2964,8 @@ class Google_Service_Analytics_ManagementProfileFilterLinks_Resource extends Goo
      * @param string $accountId
      *            Account ID to retrieve profile filter link for.
      * @param string $webPropertyId
-     *            Web property Id to retrieve profile filter link for.
+     *            Web property Id to retrieve profile filter link
+     *            for.
      * @param string $profileId
      *            Profile ID to retrieve filter link for.
      * @param string $linkId
@@ -2988,7 +2995,8 @@ class Google_Service_Analytics_ManagementProfileFilterLinks_Resource extends Goo
      * @param string $accountId
      *            Account ID to create profile filter link for.
      * @param string $webPropertyId
-     *            Web property Id to create profile filter link for.
+     *            Web property Id to create profile filter link
+     *            for.
      * @param string $profileId
      *            Profile ID to create filter link for.
      * @param Google_ProfileFilterLink $postBody            
@@ -3017,19 +3025,20 @@ class Google_Service_Analytics_ManagementProfileFilterLinks_Resource extends Goo
      * @param string $accountId
      *            Account ID to retrieve profile filter links for.
      * @param string $webPropertyId
-     *            Web property Id for profile filter links for. Can either be a specific web property ID or
-     *            '~all', which refers to all the web properties that user has access to.
+     *            Web property Id for profile filter links for.
+     *            Can either be a specific web property ID or '~all', which refers to all the
+     *            web properties that user has access to.
      * @param string $profileId
-     *            Profile ID to retrieve filter links for. Can either be a specific profile ID or '~all', which
-     *            refers to all the profiles that user has access to.
+     *            Profile ID to retrieve filter links for. Can either
+     *            be a specific profile ID or '~all', which refers to all the profiles that
+     *            user has access to.
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of profile filter links to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first entity to retrieve. Use this parameter as a pagination mechanism along
-     *            with the max-results parameter.
+     *            @opt_param int max-results The maximum number of profile filter links to
+     *            include in this response.
+     *            @opt_param int start-index An index of the first entity to retrieve. Use this
+     *            parameter as a pagination mechanism along with the max-results parameter.
      * @return Google_Service_Analytics_ProfileFilterLinks
      */
     public function listManagementProfileFilterLinks($accountId, $webPropertyId, $profileId, $optParams = array())
@@ -3053,7 +3062,8 @@ class Google_Service_Analytics_ManagementProfileFilterLinks_Resource extends Goo
      * @param string $accountId
      *            Account ID to which profile filter link belongs.
      * @param string $webPropertyId
-     *            Web property Id to which profile filter link belongs
+     *            Web property Id to which profile filter link
+     *            belongs
      * @param string $profileId
      *            Profile ID to which filter link belongs
      * @param string $linkId
@@ -3085,7 +3095,8 @@ class Google_Service_Analytics_ManagementProfileFilterLinks_Resource extends Goo
      * @param string $accountId
      *            Account ID to which profile filter link belongs.
      * @param string $webPropertyId
-     *            Web property Id to which profile filter link belongs
+     *            Web property Id to which profile filter link
+     *            belongs
      * @param string $profileId
      *            Profile ID to which filter link belongs
      * @param string $linkId
@@ -3185,21 +3196,24 @@ class Google_Service_Analytics_ManagementProfileUserLinks_Resource extends Googl
      * (profileUserLinks.listManagementProfileUserLinks)
      *
      * @param string $accountId
-     *            Account ID which the given view (profile) belongs to.
+     *            Account ID which the given view (profile) belongs
+     *            to.
      * @param string $webPropertyId
-     *            Web Property ID which the given view (profile) belongs to. Can either be a specific web property
-     *            ID or '~all', which refers to all the web properties that user has access to.
+     *            Web Property ID which the given view (profile)
+     *            belongs to. Can either be a specific web property ID or '~all', which refers
+     *            to all the web properties that user has access to.
      * @param string $profileId
-     *            View (Profile) ID to retrieve the profile-user links for. Can either be a specific profile ID or
-     *            '~all', which refers to all the profiles that user has access to.
+     *            View (Profile) ID to retrieve the profile-user links
+     *            for. Can either be a specific profile ID or '~all', which refers to all the
+     *            profiles that user has access to.
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of profile-user links to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first profile-user link to retrieve. Use this parameter as a pagination
-     *            mechanism along with the max-results parameter.
+     *            @opt_param int max-results The maximum number of profile-user links to
+     *            include in this response.
+     *            @opt_param int start-index An index of the first profile-user link to
+     *            retrieve. Use this parameter as a pagination mechanism along with the max-
+     *            results parameter.
      * @return Google_Service_Analytics_EntityUserLinks
      */
     public function listManagementProfileUserLinks($accountId, $webPropertyId, $profileId, $optParams = array())
@@ -3266,7 +3280,8 @@ class Google_Service_Analytics_ManagementProfiles_Resource extends Google_Servic
      * @param string $accountId
      *            Account ID to delete the view (profile) for.
      * @param string $webPropertyId
-     *            Web property ID to delete the view (profile) for.
+     *            Web property ID to delete the view (profile)
+     *            for.
      * @param string $profileId
      *            ID of the view (profile) to be deleted.
      * @param array $optParams
@@ -3319,7 +3334,8 @@ class Google_Service_Analytics_ManagementProfiles_Resource extends Google_Servic
      * @param string $accountId
      *            Account ID to create the view (profile) for.
      * @param string $webPropertyId
-     *            Web property ID to create the view (profile) for.
+     *            Web property ID to create the view (profile)
+     *            for.
      * @param Google_Profile $postBody            
      * @param array $optParams
      *            Optional parameters.
@@ -3343,19 +3359,20 @@ class Google_Service_Analytics_ManagementProfiles_Resource extends Google_Servic
      * (profiles.listManagementProfiles)
      *
      * @param string $accountId
-     *            Account ID for the view (profiles) to retrieve. Can either be a specific account ID or '~all',
-     *            which refers to all the accounts to which the user has access.
+     *            Account ID for the view (profiles) to retrieve. Can
+     *            either be a specific account ID or '~all', which refers to all the accounts
+     *            to which the user has access.
      * @param string $webPropertyId
-     *            Web property ID for the views (profiles) to retrieve. Can either be a specific web property ID
-     *            or '~all', which refers to all the web properties to which the user has access.
+     *            Web property ID for the views (profiles) to
+     *            retrieve. Can either be a specific web property ID or '~all', which refers to
+     *            all the web properties to which the user has access.
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of views (profiles) to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first entity to retrieve. Use this parameter as a pagination mechanism along
-     *            with the max-results parameter.
+     *            @opt_param int max-results The maximum number of views (profiles) to include
+     *            in this response.
+     *            @opt_param int start-index An index of the first entity to retrieve. Use this
+     *            parameter as a pagination mechanism along with the max-results parameter.
      * @return Google_Service_Analytics_Profiles
      */
     public function listManagementProfiles($accountId, $webPropertyId, $optParams = array())
@@ -3378,7 +3395,8 @@ class Google_Service_Analytics_ManagementProfiles_Resource extends Google_Servic
      * @param string $accountId
      *            Account ID to which the view (profile) belongs
      * @param string $webPropertyId
-     *            Web property ID to which the view (profile) belongs
+     *            Web property ID to which the view (profile)
+     *            belongs
      * @param string $profileId
      *            ID of the view (profile) to be updated.
      * @param Google_Profile $postBody            
@@ -3407,7 +3425,8 @@ class Google_Service_Analytics_ManagementProfiles_Resource extends Google_Servic
      * @param string $accountId
      *            Account ID to which the view (profile) belongs
      * @param string $webPropertyId
-     *            Web property ID to which the view (profile) belongs
+     *            Web property ID to which the view (profile)
+     *            belongs
      * @param string $profileId
      *            ID of the view (profile) to be updated.
      * @param Google_Profile $postBody            
@@ -3448,11 +3467,11 @@ class Google_Service_Analytics_ManagementSegments_Resource extends Google_Servic
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of segments to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first segment to retrieve. Use this parameter as a pagination mechanism along
-     *            with the max-results parameter.
+     *            @opt_param int max-results The maximum number of segments to include in this
+     *            response.
+     *            @opt_param int start-index An index of the first segment to retrieve. Use
+     *            this parameter as a pagination mechanism along with the max-results
+     *            parameter.
      * @return Google_Service_Analytics_Segments
      */
     public function listManagementSegments($optParams = array())
@@ -3483,7 +3502,8 @@ class Google_Service_Analytics_ManagementUnsampledReports_Resource extends Googl
      * @param string $accountId
      *            Account ID to retrieve unsampled report for.
      * @param string $webPropertyId
-     *            Web property ID to retrieve unsampled reports for.
+     *            Web property ID to retrieve unsampled reports
+     *            for.
      * @param string $profileId
      *            View (Profile) ID to retrieve unsampled report for.
      * @param string $unsampledReportId
@@ -3513,9 +3533,11 @@ class Google_Service_Analytics_ManagementUnsampledReports_Resource extends Googl
      * @param string $accountId
      *            Account ID to create the unsampled report for.
      * @param string $webPropertyId
-     *            Web property ID to create the unsampled report for.
+     *            Web property ID to create the unsampled report
+     *            for.
      * @param string $profileId
-     *            View (Profile) ID to create the unsampled report for.
+     *            View (Profile) ID to create the unsampled report
+     *            for.
      * @param Google_UnsampledReport $postBody            
      * @param array $optParams
      *            Optional parameters.
@@ -3540,22 +3562,22 @@ class Google_Service_Analytics_ManagementUnsampledReports_Resource extends Googl
      * (unsampledReports.listManagementUnsampledReports)
      *
      * @param string $accountId
-     *            Account ID to retrieve unsampled reports for. Must be a specific account ID, ~all is not
-     *            supported.
+     *            Account ID to retrieve unsampled reports for. Must
+     *            be a specific account ID, ~all is not supported.
      * @param string $webPropertyId
-     *            Web property ID to retrieve unsampled reports for. Must be a specific web property ID, ~all is
-     *            not supported.
+     *            Web property ID to retrieve unsampled reports
+     *            for. Must be a specific web property ID, ~all is not supported.
      * @param string $profileId
-     *            View (Profile) ID to retrieve unsampled reports for. Must be a specific view (profile) ID, ~all
-     *            is not supported.
+     *            View (Profile) ID to retrieve unsampled reports for.
+     *            Must be a specific view (profile) ID, ~all is not supported.
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of unsampled reports to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first unsampled report to retrieve. Use this parameter as a pagination mechanism
-     *            along with the max-results parameter.
+     *            @opt_param int max-results The maximum number of unsampled reports to include
+     *            in this response.
+     *            @opt_param int start-index An index of the first unsampled report to
+     *            retrieve. Use this parameter as a pagination mechanism along with the max-
+     *            results parameter.
      * @return Google_Service_Analytics_UnsampledReports
      */
     public function listManagementUnsampledReports($accountId, $webPropertyId, $profileId, $optParams = array())
@@ -3592,7 +3614,8 @@ class Google_Service_Analytics_ManagementUploads_Resource extends Google_Service
      * @param string $webPropertyId
      *            Web property Id for the uploads to be deleted.
      * @param string $customDataSourceId
-     *            Custom data source Id for the uploads to be deleted.
+     *            Custom data source Id for the uploads to be
+     *            deleted.
      * @param Google_AnalyticsDataimportDeleteUploadDataRequest $postBody            
      * @param array $optParams
      *            Optional parameters.
@@ -3620,7 +3643,8 @@ class Google_Service_Analytics_ManagementUploads_Resource extends Google_Service
      * @param string $webPropertyId
      *            Web property Id for the upload to retrieve.
      * @param string $customDataSourceId
-     *            Custom data source Id for upload to retrieve.
+     *            Custom data source Id for upload to
+     *            retrieve.
      * @param string $uploadId
      *            Upload Id to retrieve.
      * @param array $optParams
@@ -3650,15 +3674,16 @@ class Google_Service_Analytics_ManagementUploads_Resource extends Google_Service
      * @param string $webPropertyId
      *            Web property Id for the uploads to retrieve.
      * @param string $customDataSourceId
-     *            Custom data source Id for uploads to retrieve.
+     *            Custom data source Id for uploads to
+     *            retrieve.
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of uploads to include in this response.
-     *            @opt_param int start-index
-     *            A 1-based index of the first upload to retrieve. Use this parameter as a pagination mechanism
-     *            along with the max-results parameter.
+     *            @opt_param int max-results The maximum number of uploads to include in this
+     *            response.
+     *            @opt_param int start-index A 1-based index of the first upload to retrieve.
+     *            Use this parameter as a pagination mechanism along with the max-results
+     *            parameter.
      * @return Google_Service_Analytics_Uploads
      */
     public function listManagementUploads($accountId, $webPropertyId, $customDataSourceId, $optParams = array())
@@ -3707,9 +3732,11 @@ class Google_Service_Analytics_ManagementUploads_Resource extends Google_Service
      * @param string $accountId
      *            Account Id associated with the upload.
      * @param string $webPropertyId
-     *            Web property UA-string associated with the upload.
+     *            Web property UA-string associated with the
+     *            upload.
      * @param string $customDataSourceId
-     *            Custom data source Id to which the data being uploaded belongs.
+     *            Custom data source Id to which the data
+     *            being uploaded belongs.
      * @param array $optParams
      *            Optional parameters.
      * @return Google_Service_Analytics_Upload
@@ -3744,7 +3771,8 @@ class Google_Service_Analytics_ManagementWebPropertyAdWordsLinks_Resource extend
      * (webPropertyAdWordsLinks.delete)
      *
      * @param string $accountId
-     *            ID of the account which the given web property belongs to.
+     *            ID of the account which the given web property
+     *            belongs to.
      * @param string $webPropertyId
      *            Web property ID to delete the AdWords link for.
      * @param string $webPropertyAdWordsLinkId
@@ -3770,9 +3798,11 @@ class Google_Service_Analytics_ManagementWebPropertyAdWordsLinks_Resource extend
      * (webPropertyAdWordsLinks.get)
      *
      * @param string $accountId
-     *            ID of the account which the given web property belongs to.
+     *            ID of the account which the given web property
+     *            belongs to.
      * @param string $webPropertyId
-     *            Web property ID to retrieve the AdWords link for.
+     *            Web property ID to retrieve the AdWords link
+     *            for.
      * @param string $webPropertyAdWordsLinkId
      *            Web property-AdWords link ID.
      * @param array $optParams
@@ -3797,7 +3827,8 @@ class Google_Service_Analytics_ManagementWebPropertyAdWordsLinks_Resource extend
      * (webPropertyAdWordsLinks.insert)
      *
      * @param string $accountId
-     *            ID of the Google Analytics account to create the link for.
+     *            ID of the Google Analytics account to create the
+     *            link for.
      * @param string $webPropertyId
      *            Web property ID to create the link for.
      * @param Google_EntityAdWordsLink $postBody            
@@ -3823,17 +3854,19 @@ class Google_Service_Analytics_ManagementWebPropertyAdWordsLinks_Resource extend
      * (webPropertyAdWordsLinks.listManagementWebPropertyAdWordsLinks)
      *
      * @param string $accountId
-     *            ID of the account which the given web property belongs to.
+     *            ID of the account which the given web property
+     *            belongs to.
      * @param string $webPropertyId
-     *            Web property ID to retrieve the AdWords links for.
+     *            Web property ID to retrieve the AdWords links
+     *            for.
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of webProperty-AdWords links to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first webProperty-AdWords link to retrieve. Use this parameter as a pagination
-     *            mechanism along with the max-results parameter.
+     *            @opt_param int max-results The maximum number of webProperty-AdWords links to
+     *            include in this response.
+     *            @opt_param int start-index An index of the first webProperty-AdWords link to
+     *            retrieve. Use this parameter as a pagination mechanism along with the max-
+     *            results parameter.
      * @return Google_Service_Analytics_EntityAdWordsLinks
      */
     public function listManagementWebPropertyAdWordsLinks($accountId, $webPropertyId, $optParams = array())
@@ -3854,9 +3887,11 @@ class Google_Service_Analytics_ManagementWebPropertyAdWordsLinks_Resource extend
      * semantics. (webPropertyAdWordsLinks.patch)
      *
      * @param string $accountId
-     *            ID of the account which the given web property belongs to.
+     *            ID of the account which the given web property
+     *            belongs to.
      * @param string $webPropertyId
-     *            Web property ID to retrieve the AdWords link for.
+     *            Web property ID to retrieve the AdWords link
+     *            for.
      * @param string $webPropertyAdWordsLinkId
      *            Web property-AdWords link ID.
      * @param Google_EntityAdWordsLink $postBody            
@@ -3883,9 +3918,11 @@ class Google_Service_Analytics_ManagementWebPropertyAdWordsLinks_Resource extend
      * (webPropertyAdWordsLinks.update)
      *
      * @param string $accountId
-     *            ID of the account which the given web property belongs to.
+     *            ID of the account which the given web property
+     *            belongs to.
      * @param string $webPropertyId
-     *            Web property ID to retrieve the AdWords link for.
+     *            Web property ID to retrieve the AdWords link
+     *            for.
      * @param string $webPropertyAdWordsLinkId
      *            Web property-AdWords link ID.
      * @param Google_EntityAdWordsLink $postBody            
@@ -3973,16 +4010,16 @@ class Google_Service_Analytics_ManagementWebproperties_Resource extends Google_S
      * (webproperties.listManagementWebproperties)
      *
      * @param string $accountId
-     *            Account ID to retrieve web properties for. Can either be a specific account ID or '~all', which
-     *            refers to all the accounts that user has access to.
+     *            Account ID to retrieve web properties for. Can
+     *            either be a specific account ID or '~all', which refers to all the accounts
+     *            that user has access to.
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of web properties to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first entity to retrieve. Use this parameter as a pagination mechanism along
-     *            with the max-results parameter.
+     *            @opt_param int max-results The maximum number of web properties to include in
+     *            this response.
+     *            @opt_param int start-index An index of the first entity to retrieve. Use this
+     *            parameter as a pagination mechanism along with the max-results parameter.
      * @return Google_Service_Analytics_Webproperties
      */
     public function listManagementWebproperties($accountId, $optParams = array())
@@ -4120,16 +4157,17 @@ class Google_Service_Analytics_ManagementWebpropertyUserLinks_Resource extends G
      * @param string $accountId
      *            Account ID which the given web property belongs to.
      * @param string $webPropertyId
-     *            Web Property ID for the webProperty-user links to retrieve. Can either be a specific web
-     *            property ID or '~all', which refers to all the web properties that user has access to.
+     *            Web Property ID for the webProperty-user links
+     *            to retrieve. Can either be a specific web property ID or '~all', which refers
+     *            to all the web properties that user has access to.
      * @param array $optParams
      *            Optional parameters.
      *            
-     *            @opt_param int max-results
-     *            The maximum number of webProperty-user Links to include in this response.
-     *            @opt_param int start-index
-     *            An index of the first webProperty-user link to retrieve. Use this parameter as a pagination
-     *            mechanism along with the max-results parameter.
+     *            @opt_param int max-results The maximum number of webProperty-user Links to
+     *            include in this response.
+     *            @opt_param int start-index An index of the first webProperty-user link to
+     *            retrieve. Use this parameter as a pagination mechanism along with the max-
+     *            results parameter.
      * @return Google_Service_Analytics_EntityUserLinks
      */
     public function listManagementWebpropertyUserLinks($accountId, $webPropertyId, $optParams = array())
@@ -4151,7 +4189,8 @@ class Google_Service_Analytics_ManagementWebpropertyUserLinks_Resource extends G
      * @param string $accountId
      *            Account ID to update the account-user link for.
      * @param string $webPropertyId
-     *            Web property ID to update the account-user link for.
+     *            Web property ID to update the account-user link
+     *            for.
      * @param string $linkId
      *            Link ID to update the account-user link for.
      * @param Google_EntityUserLink $postBody            
@@ -4201,7 +4240,8 @@ class Google_Service_Analytics_MetadataColumns_Resource extends Google_Service_R
      * Lists all columns for a report type (columns.listMetadataColumns)
      *
      * @param string $reportType
-     *            Report type. Allowed Values: 'ga'. Where 'ga' corresponds to the Core Reporting API
+     *            Report type. Allowed Values: 'ga'. Where 'ga'
+     *            corresponds to the Core Reporting API
      * @param array $optParams
      *            Optional parameters.
      * @return Google_Service_Analytics_Columns
@@ -4252,6 +4292,8 @@ class Google_Service_Analytics_Provisioning_Resource extends Google_Service_Reso
 
 class Google_Service_Analytics_Account extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     protected $childLinkType = 'Google_Service_Analytics_AccountChildLink';
 
@@ -4357,6 +4399,8 @@ class Google_Service_Analytics_Account extends Google_Model
 class Google_Service_Analytics_AccountChildLink extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $href;
 
     public $type;
@@ -4385,6 +4429,10 @@ class Google_Service_Analytics_AccountChildLink extends Google_Model
 class Google_Service_Analytics_AccountPermissions extends Google_Collection
 {
 
+    protected $collection_key = 'effective';
+
+    protected $internal_gapi_mappings = array();
+
     public $effective;
 
     public function setEffective($effective)
@@ -4400,6 +4448,8 @@ class Google_Service_Analytics_AccountPermissions extends Google_Collection
 
 class Google_Service_Analytics_AccountRef extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $href;
 
@@ -4452,6 +4502,10 @@ class Google_Service_Analytics_AccountRef extends Google_Model
 
 class Google_Service_Analytics_AccountSummaries extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_AccountSummary';
 
@@ -4555,6 +4609,10 @@ class Google_Service_Analytics_AccountSummaries extends Google_Collection
 class Google_Service_Analytics_AccountSummary extends Google_Collection
 {
 
+    protected $collection_key = 'webProperties';
+
+    protected $internal_gapi_mappings = array();
+
     public $id;
 
     public $kind;
@@ -4608,6 +4666,8 @@ class Google_Service_Analytics_AccountSummary extends Google_Collection
 
 class Google_Service_Analytics_AccountTicket extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     protected $accountType = 'Google_Service_Analytics_Account';
 
@@ -4690,6 +4750,10 @@ class Google_Service_Analytics_AccountTicket extends Google_Model
 
 class Google_Service_Analytics_Accounts extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_Account';
 
@@ -4793,6 +4857,8 @@ class Google_Service_Analytics_Accounts extends Google_Collection
 class Google_Service_Analytics_AdWordsAccount extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $autoTaggingEnabled;
 
     public $customerId;
@@ -4833,6 +4899,10 @@ class Google_Service_Analytics_AdWordsAccount extends Google_Model
 class Google_Service_Analytics_AnalyticsDataimportDeleteUploadDataRequest extends Google_Collection
 {
 
+    protected $collection_key = 'customDataImportUids';
+
+    protected $internal_gapi_mappings = array();
+
     public $customDataImportUids;
 
     public function setCustomDataImportUids($customDataImportUids)
@@ -4848,6 +4918,8 @@ class Google_Service_Analytics_AnalyticsDataimportDeleteUploadDataRequest extend
 
 class Google_Service_Analytics_Column extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $attributes;
 
@@ -4886,8 +4958,16 @@ class Google_Service_Analytics_Column extends Google_Model
     }
 }
 
+class Google_Service_Analytics_ColumnAttributes extends Google_Model
+{
+}
+
 class Google_Service_Analytics_Columns extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     public $attributeNames;
 
@@ -4954,6 +5034,10 @@ class Google_Service_Analytics_Columns extends Google_Collection
 
 class Google_Service_Analytics_CustomDataSource extends Google_Collection
 {
+
+    protected $collection_key = 'profilesLinked';
+
+    protected $internal_gapi_mappings = array();
 
     public $accountId;
 
@@ -5143,6 +5227,8 @@ class Google_Service_Analytics_CustomDataSource extends Google_Collection
 class Google_Service_Analytics_CustomDataSourceChildLink extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $href;
 
     public $type;
@@ -5171,6 +5257,8 @@ class Google_Service_Analytics_CustomDataSourceChildLink extends Google_Model
 class Google_Service_Analytics_CustomDataSourceParentLink extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $href;
 
     public $type;
@@ -5198,6 +5286,10 @@ class Google_Service_Analytics_CustomDataSourceParentLink extends Google_Model
 
 class Google_Service_Analytics_CustomDataSources extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_CustomDataSource';
 
@@ -5300,6 +5392,10 @@ class Google_Service_Analytics_CustomDataSources extends Google_Collection
 
 class Google_Service_Analytics_DailyUpload extends Google_Collection
 {
+
+    protected $collection_key = 'recentChanges';
+
+    protected $internal_gapi_mappings = array();
 
     public $accountId;
 
@@ -5441,6 +5537,8 @@ class Google_Service_Analytics_DailyUpload extends Google_Collection
 class Google_Service_Analytics_DailyUploadAppend extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $accountId;
 
     public $appendNumber;
@@ -5529,6 +5627,8 @@ class Google_Service_Analytics_DailyUploadAppend extends Google_Model
 class Google_Service_Analytics_DailyUploadParentLink extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $href;
 
     public $type;
@@ -5557,6 +5657,8 @@ class Google_Service_Analytics_DailyUploadParentLink extends Google_Model
 class Google_Service_Analytics_DailyUploadRecentChanges extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $change;
 
     public $time;
@@ -5584,6 +5686,10 @@ class Google_Service_Analytics_DailyUploadRecentChanges extends Google_Model
 
 class Google_Service_Analytics_DailyUploads extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_DailyUpload';
 
@@ -5687,6 +5793,10 @@ class Google_Service_Analytics_DailyUploads extends Google_Collection
 class Google_Service_Analytics_EntityAdWordsLink extends Google_Collection
 {
 
+    protected $collection_key = 'profileIds';
+
+    protected $internal_gapi_mappings = array();
+
     protected $adWordsAccountsType = 'Google_Service_Analytics_AdWordsAccount';
 
     protected $adWordsAccountsDataType = 'array';
@@ -5779,6 +5889,8 @@ class Google_Service_Analytics_EntityAdWordsLink extends Google_Collection
 class Google_Service_Analytics_EntityAdWordsLinkEntity extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     protected $webPropertyRefType = 'Google_Service_Analytics_WebPropertyRef';
 
     protected $webPropertyRefDataType = '';
@@ -5796,6 +5908,10 @@ class Google_Service_Analytics_EntityAdWordsLinkEntity extends Google_Model
 
 class Google_Service_Analytics_EntityAdWordsLinks extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_EntityAdWordsLink';
 
@@ -5887,6 +6003,8 @@ class Google_Service_Analytics_EntityAdWordsLinks extends Google_Collection
 class Google_Service_Analytics_EntityUserLink extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     protected $entityType = 'Google_Service_Analytics_EntityUserLinkEntity';
 
     protected $entityDataType = '';
@@ -5969,6 +6087,8 @@ class Google_Service_Analytics_EntityUserLink extends Google_Model
 class Google_Service_Analytics_EntityUserLinkEntity extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     protected $accountRefType = 'Google_Service_Analytics_AccountRef';
 
     protected $accountRefDataType = '';
@@ -6015,6 +6135,10 @@ class Google_Service_Analytics_EntityUserLinkEntity extends Google_Model
 class Google_Service_Analytics_EntityUserLinkPermissions extends Google_Collection
 {
 
+    protected $collection_key = 'local';
+
+    protected $internal_gapi_mappings = array();
+
     public $effective;
 
     public $local;
@@ -6042,6 +6166,10 @@ class Google_Service_Analytics_EntityUserLinkPermissions extends Google_Collecti
 
 class Google_Service_Analytics_EntityUserLinks extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_EntityUserLink';
 
@@ -6132,6 +6260,10 @@ class Google_Service_Analytics_EntityUserLinks extends Google_Collection
 
 class Google_Service_Analytics_Experiment extends Google_Collection
 {
+
+    protected $collection_key = 'variations';
+
+    protected $internal_gapi_mappings = array();
 
     public $accountId;
 
@@ -6477,6 +6609,8 @@ class Google_Service_Analytics_Experiment extends Google_Collection
 class Google_Service_Analytics_ExperimentParentLink extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $href;
 
     public $type;
@@ -6504,6 +6638,8 @@ class Google_Service_Analytics_ExperimentParentLink extends Google_Model
 
 class Google_Service_Analytics_ExperimentVariations extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $name;
 
@@ -6568,6 +6704,10 @@ class Google_Service_Analytics_ExperimentVariations extends Google_Model
 
 class Google_Service_Analytics_Experiments extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_Experiment';
 
@@ -6670,6 +6810,8 @@ class Google_Service_Analytics_Experiments extends Google_Collection
 
 class Google_Service_Analytics_Filter extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $accountId;
 
@@ -6869,6 +7011,8 @@ class Google_Service_Analytics_Filter extends Google_Model
 class Google_Service_Analytics_FilterAdvancedDetails extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $caseSensitive;
 
     public $extractA;
@@ -6993,6 +7137,8 @@ class Google_Service_Analytics_FilterAdvancedDetails extends Google_Model
 class Google_Service_Analytics_FilterExpression extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $caseSensitive;
 
     public $expressionValue;
@@ -7057,6 +7203,8 @@ class Google_Service_Analytics_FilterExpression extends Google_Model
 class Google_Service_Analytics_FilterLowercaseDetails extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $field;
 
     public function setField($field)
@@ -7072,6 +7220,8 @@ class Google_Service_Analytics_FilterLowercaseDetails extends Google_Model
 
 class Google_Service_Analytics_FilterParentLink extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $href;
 
@@ -7100,6 +7250,8 @@ class Google_Service_Analytics_FilterParentLink extends Google_Model
 
 class Google_Service_Analytics_FilterRef extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $accountId;
 
@@ -7165,6 +7317,8 @@ class Google_Service_Analytics_FilterRef extends Google_Model
 class Google_Service_Analytics_FilterSearchAndReplaceDetails extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $caseSensitive;
 
     public $field;
@@ -7217,6 +7371,8 @@ class Google_Service_Analytics_FilterSearchAndReplaceDetails extends Google_Mode
 class Google_Service_Analytics_FilterUppercaseDetails extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $field;
 
     public function setField($field)
@@ -7232,6 +7388,10 @@ class Google_Service_Analytics_FilterUppercaseDetails extends Google_Model
 
 class Google_Service_Analytics_Filters extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_Filter';
 
@@ -7334,6 +7494,10 @@ class Google_Service_Analytics_Filters extends Google_Collection
 
 class Google_Service_Analytics_GaData extends Google_Collection
 {
+
+    protected $collection_key = 'rows';
+
+    protected $internal_gapi_mappings = array();
 
     protected $columnHeadersType = 'Google_Service_Analytics_GaDataColumnHeaders';
 
@@ -7539,6 +7703,8 @@ class Google_Service_Analytics_GaData extends Google_Collection
 class Google_Service_Analytics_GaDataColumnHeaders extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $columnType;
 
     public $dataType;
@@ -7579,6 +7745,10 @@ class Google_Service_Analytics_GaDataColumnHeaders extends Google_Model
 class Google_Service_Analytics_GaDataDataTable extends Google_Collection
 {
 
+    protected $collection_key = 'rows';
+
+    protected $internal_gapi_mappings = array();
+
     protected $colsType = 'Google_Service_Analytics_GaDataDataTableCols';
 
     protected $colsDataType = 'array';
@@ -7610,6 +7780,8 @@ class Google_Service_Analytics_GaDataDataTable extends Google_Collection
 
 class Google_Service_Analytics_GaDataDataTableCols extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $id;
 
@@ -7651,6 +7823,10 @@ class Google_Service_Analytics_GaDataDataTableCols extends Google_Model
 class Google_Service_Analytics_GaDataDataTableRows extends Google_Collection
 {
 
+    protected $collection_key = 'c';
+
+    protected $internal_gapi_mappings = array();
+
     protected $cType = 'Google_Service_Analytics_GaDataDataTableRowsC';
 
     protected $cDataType = 'array';
@@ -7669,6 +7845,8 @@ class Google_Service_Analytics_GaDataDataTableRows extends Google_Collection
 class Google_Service_Analytics_GaDataDataTableRowsC extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $v;
 
     public function setV($v)
@@ -7684,6 +7862,8 @@ class Google_Service_Analytics_GaDataDataTableRowsC extends Google_Model
 
 class Google_Service_Analytics_GaDataProfileInfo extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $accountId;
 
@@ -7760,6 +7940,15 @@ class Google_Service_Analytics_GaDataProfileInfo extends Google_Model
 
 class Google_Service_Analytics_GaDataQuery extends Google_Collection
 {
+
+    protected $collection_key = 'sort';
+
+    protected $internal_gapi_mappings = array(
+        "endDate" => "end-date",
+        "maxResults" => "max-results",
+        "startDate" => "start-date",
+        "startIndex" => "start-index"
+    );
 
     public $dimensions;
 
@@ -7894,8 +8083,14 @@ class Google_Service_Analytics_GaDataQuery extends Google_Collection
     }
 }
 
+class Google_Service_Analytics_GaDataTotalsForAllResults extends Google_Model
+{
+}
+
 class Google_Service_Analytics_Goal extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $accountId;
 
@@ -8127,6 +8322,10 @@ class Google_Service_Analytics_Goal extends Google_Model
 class Google_Service_Analytics_GoalEventDetails extends Google_Collection
 {
 
+    protected $collection_key = 'eventConditions';
+
+    protected $internal_gapi_mappings = array();
+
     protected $eventConditionsType = 'Google_Service_Analytics_GoalEventDetailsEventConditions';
 
     protected $eventConditionsDataType = 'array';
@@ -8156,6 +8355,8 @@ class Google_Service_Analytics_GoalEventDetails extends Google_Collection
 
 class Google_Service_Analytics_GoalEventDetailsEventConditions extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $comparisonType;
 
@@ -8221,6 +8422,8 @@ class Google_Service_Analytics_GoalEventDetailsEventConditions extends Google_Mo
 class Google_Service_Analytics_GoalParentLink extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $href;
 
     public $type;
@@ -8248,6 +8451,10 @@ class Google_Service_Analytics_GoalParentLink extends Google_Model
 
 class Google_Service_Analytics_GoalUrlDestinationDetails extends Google_Collection
 {
+
+    protected $collection_key = 'steps';
+
+    protected $internal_gapi_mappings = array();
 
     public $caseSensitive;
 
@@ -8315,6 +8522,8 @@ class Google_Service_Analytics_GoalUrlDestinationDetails extends Google_Collecti
 class Google_Service_Analytics_GoalUrlDestinationDetailsSteps extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $name;
 
     public $number;
@@ -8355,6 +8564,8 @@ class Google_Service_Analytics_GoalUrlDestinationDetailsSteps extends Google_Mod
 class Google_Service_Analytics_GoalVisitNumPagesDetails extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $comparisonType;
 
     public $comparisonValue;
@@ -8383,6 +8594,8 @@ class Google_Service_Analytics_GoalVisitNumPagesDetails extends Google_Model
 class Google_Service_Analytics_GoalVisitTimeOnSiteDetails extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $comparisonType;
 
     public $comparisonValue;
@@ -8410,6 +8623,10 @@ class Google_Service_Analytics_GoalVisitTimeOnSiteDetails extends Google_Model
 
 class Google_Service_Analytics_Goals extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_Goal';
 
@@ -8512,6 +8729,10 @@ class Google_Service_Analytics_Goals extends Google_Collection
 
 class Google_Service_Analytics_McfData extends Google_Collection
 {
+
+    protected $collection_key = 'rows';
+
+    protected $internal_gapi_mappings = array();
 
     protected $columnHeadersType = 'Google_Service_Analytics_McfDataColumnHeaders';
 
@@ -8705,6 +8926,8 @@ class Google_Service_Analytics_McfData extends Google_Collection
 class Google_Service_Analytics_McfDataColumnHeaders extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $columnType;
 
     public $dataType;
@@ -8744,6 +8967,8 @@ class Google_Service_Analytics_McfDataColumnHeaders extends Google_Model
 
 class Google_Service_Analytics_McfDataProfileInfo extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $accountId;
 
@@ -8820,6 +9045,15 @@ class Google_Service_Analytics_McfDataProfileInfo extends Google_Model
 
 class Google_Service_Analytics_McfDataQuery extends Google_Collection
 {
+
+    protected $collection_key = 'sort';
+
+    protected $internal_gapi_mappings = array(
+        "endDate" => "end-date",
+        "maxResults" => "max-results",
+        "startDate" => "start-date",
+        "startIndex" => "start-index"
+    );
 
     public $dimensions;
 
@@ -8957,6 +9191,10 @@ class Google_Service_Analytics_McfDataQuery extends Google_Collection
 class Google_Service_Analytics_McfDataRows extends Google_Collection
 {
 
+    protected $collection_key = 'conversionPathValue';
+
+    protected $internal_gapi_mappings = array();
+
     protected $conversionPathValueType = 'Google_Service_Analytics_McfDataRowsConversionPathValue';
 
     protected $conversionPathValueDataType = 'array';
@@ -8987,6 +9225,8 @@ class Google_Service_Analytics_McfDataRows extends Google_Collection
 class Google_Service_Analytics_McfDataRowsConversionPathValue extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $interactionType;
 
     public $nodeValue;
@@ -9012,8 +9252,14 @@ class Google_Service_Analytics_McfDataRowsConversionPathValue extends Google_Mod
     }
 }
 
+class Google_Service_Analytics_McfDataTotalsForAllResults extends Google_Model
+{
+}
+
 class Google_Service_Analytics_Profile extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $accountId;
 
@@ -9028,6 +9274,8 @@ class Google_Service_Analytics_Profile extends Google_Model
     public $defaultPage;
 
     public $eCommerceTracking;
+
+    public $enhancedECommerceTracking;
 
     public $excludeQueryParameters;
 
@@ -9125,6 +9373,16 @@ class Google_Service_Analytics_Profile extends Google_Model
     public function getECommerceTracking()
     {
         return $this->eCommerceTracking;
+    }
+
+    public function setEnhancedECommerceTracking($enhancedECommerceTracking)
+    {
+        $this->enhancedECommerceTracking = $enhancedECommerceTracking;
+    }
+
+    public function getEnhancedECommerceTracking()
+    {
+        return $this->enhancedECommerceTracking;
     }
 
     public function setExcludeQueryParameters($excludeQueryParameters)
@@ -9301,6 +9559,8 @@ class Google_Service_Analytics_Profile extends Google_Model
 class Google_Service_Analytics_ProfileChildLink extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $href;
 
     public $type;
@@ -9328,6 +9588,8 @@ class Google_Service_Analytics_ProfileChildLink extends Google_Model
 
 class Google_Service_Analytics_ProfileFilterLink extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     protected $filterRefType = 'Google_Service_Analytics_FilterRef';
 
@@ -9408,6 +9670,10 @@ class Google_Service_Analytics_ProfileFilterLink extends Google_Model
 
 class Google_Service_Analytics_ProfileFilterLinks extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_ProfileFilterLink';
 
@@ -9511,6 +9777,8 @@ class Google_Service_Analytics_ProfileFilterLinks extends Google_Collection
 class Google_Service_Analytics_ProfileParentLink extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $href;
 
     public $type;
@@ -9539,6 +9807,10 @@ class Google_Service_Analytics_ProfileParentLink extends Google_Model
 class Google_Service_Analytics_ProfilePermissions extends Google_Collection
 {
 
+    protected $collection_key = 'effective';
+
+    protected $internal_gapi_mappings = array();
+
     public $effective;
 
     public function setEffective($effective)
@@ -9554,6 +9826,8 @@ class Google_Service_Analytics_ProfilePermissions extends Google_Collection
 
 class Google_Service_Analytics_ProfileRef extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $accountId;
 
@@ -9643,6 +9917,8 @@ class Google_Service_Analytics_ProfileRef extends Google_Model
 class Google_Service_Analytics_ProfileSummary extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $id;
 
     public $kind;
@@ -9694,6 +9970,10 @@ class Google_Service_Analytics_ProfileSummary extends Google_Model
 
 class Google_Service_Analytics_Profiles extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_Profile';
 
@@ -9796,6 +10076,10 @@ class Google_Service_Analytics_Profiles extends Google_Collection
 
 class Google_Service_Analytics_RealtimeData extends Google_Collection
 {
+
+    protected $collection_key = 'rows';
+
+    protected $internal_gapi_mappings = array();
 
     protected $columnHeadersType = 'Google_Service_Analytics_RealtimeDataColumnHeaders';
 
@@ -9915,6 +10199,8 @@ class Google_Service_Analytics_RealtimeData extends Google_Collection
 class Google_Service_Analytics_RealtimeDataColumnHeaders extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $columnType;
 
     public $dataType;
@@ -9954,6 +10240,8 @@ class Google_Service_Analytics_RealtimeDataColumnHeaders extends Google_Model
 
 class Google_Service_Analytics_RealtimeDataProfileInfo extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $accountId;
 
@@ -10031,6 +10319,12 @@ class Google_Service_Analytics_RealtimeDataProfileInfo extends Google_Model
 class Google_Service_Analytics_RealtimeDataQuery extends Google_Collection
 {
 
+    protected $collection_key = 'sort';
+
+    protected $internal_gapi_mappings = array(
+        "maxResults" => "max-results"
+    );
+
     public $dimensions;
 
     public $filters;
@@ -10104,8 +10398,14 @@ class Google_Service_Analytics_RealtimeDataQuery extends Google_Collection
     }
 }
 
+class Google_Service_Analytics_RealtimeDataTotalsForAllResults extends Google_Model
+{
+}
+
 class Google_Service_Analytics_Segment extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $created;
 
@@ -10219,6 +10519,10 @@ class Google_Service_Analytics_Segment extends Google_Model
 class Google_Service_Analytics_Segments extends Google_Collection
 {
 
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
+
     protected $itemsType = 'Google_Service_Analytics_Segment';
 
     protected $itemsDataType = 'array';
@@ -10320,6 +10624,11 @@ class Google_Service_Analytics_Segments extends Google_Collection
 
 class Google_Service_Analytics_UnsampledReport extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array(
+        "endDate" => "end-date",
+        "startDate" => "start-date"
+    );
 
     public $accountId;
 
@@ -10557,6 +10866,8 @@ class Google_Service_Analytics_UnsampledReport extends Google_Model
 class Google_Service_Analytics_UnsampledReportCloudStorageDownloadDetails extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $bucketId;
 
     public $objectId;
@@ -10585,6 +10896,8 @@ class Google_Service_Analytics_UnsampledReportCloudStorageDownloadDetails extend
 class Google_Service_Analytics_UnsampledReportDriveDownloadDetails extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $documentId;
 
     public function setDocumentId($documentId)
@@ -10600,6 +10913,10 @@ class Google_Service_Analytics_UnsampledReportDriveDownloadDetails extends Googl
 
 class Google_Service_Analytics_UnsampledReports extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_UnsampledReport';
 
@@ -10703,6 +11020,10 @@ class Google_Service_Analytics_UnsampledReports extends Google_Collection
 class Google_Service_Analytics_Upload extends Google_Collection
 {
 
+    protected $collection_key = 'errors';
+
+    protected $internal_gapi_mappings = array();
+
     public $accountId;
 
     public $customDataSourceId;
@@ -10778,6 +11099,10 @@ class Google_Service_Analytics_Upload extends Google_Collection
 
 class Google_Service_Analytics_Uploads extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_Upload';
 
@@ -10869,6 +11194,8 @@ class Google_Service_Analytics_Uploads extends Google_Collection
 class Google_Service_Analytics_UserRef extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $email;
 
     public $id;
@@ -10908,6 +11235,8 @@ class Google_Service_Analytics_UserRef extends Google_Model
 
 class Google_Service_Analytics_WebPropertyRef extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $accountId;
 
@@ -10984,6 +11313,10 @@ class Google_Service_Analytics_WebPropertyRef extends Google_Model
 
 class Google_Service_Analytics_WebPropertySummary extends Google_Collection
 {
+
+    protected $collection_key = 'profiles';
+
+    protected $internal_gapi_mappings = array();
 
     public $id;
 
@@ -11074,6 +11407,10 @@ class Google_Service_Analytics_WebPropertySummary extends Google_Collection
 
 class Google_Service_Analytics_Webproperties extends Google_Collection
 {
+
+    protected $collection_key = 'items';
+
+    protected $internal_gapi_mappings = array();
 
     protected $itemsType = 'Google_Service_Analytics_Webproperty';
 
@@ -11176,6 +11513,8 @@ class Google_Service_Analytics_Webproperties extends Google_Collection
 
 class Google_Service_Analytics_Webproperty extends Google_Model
 {
+
+    protected $internal_gapi_mappings = array();
 
     public $accountId;
 
@@ -11379,6 +11718,8 @@ class Google_Service_Analytics_Webproperty extends Google_Model
 class Google_Service_Analytics_WebpropertyChildLink extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $href;
 
     public $type;
@@ -11407,6 +11748,8 @@ class Google_Service_Analytics_WebpropertyChildLink extends Google_Model
 class Google_Service_Analytics_WebpropertyParentLink extends Google_Model
 {
 
+    protected $internal_gapi_mappings = array();
+
     public $href;
 
     public $type;
@@ -11434,6 +11777,10 @@ class Google_Service_Analytics_WebpropertyParentLink extends Google_Model
 
 class Google_Service_Analytics_WebpropertyPermissions extends Google_Collection
 {
+
+    protected $collection_key = 'effective';
+
+    protected $internal_gapi_mappings = array();
 
     public $effective;
 

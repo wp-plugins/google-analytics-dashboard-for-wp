@@ -1,5 +1,5 @@
 <?php
-require_once 'Google/Exception.php';
+require_once realpath(dirname(__FILE__) . '/../../../autoload.php');
 
 class Google_Service_Exception extends Google_Exception
 {
@@ -26,7 +26,6 @@ class Google_Service_Exception extends Google_Exception
         } else {
             parent::__construct($message, $code);
         }
-        
         $this->errors = $errors;
     }
 

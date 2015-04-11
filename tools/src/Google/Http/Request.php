@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require_once 'Google/Utils.php';
+require_once realpath(dirname(__FILE__) . '/../../../autoload.php');
 
 /**
  * HTTP Request to be executed by IO classes.
@@ -219,7 +219,6 @@ class Google_Http_Request
         if ($this->responseHeaders) {
             $headers = array_merge($this->responseHeaders, $headers);
         }
-        
         $this->responseHeaders = $headers;
     }
 
@@ -385,15 +384,12 @@ class Google_Http_Request
     public function getCacheKey()
     {
         $key = $this->getUrl();
-        
         if (isset($this->accessKey)) {
             $key .= $this->accessKey;
         }
-        
         if (isset($this->requestHeaders['authorization'])) {
             $key .= $this->requestHeaders['authorization'];
         }
-        
         return md5($key);
     }
 
@@ -405,7 +401,6 @@ class Google_Http_Request
             $rawCacheControl = str_replace(', ', '&', $rawCacheControl);
             parse_str($rawCacheControl, $parsed);
         }
-        
         return $parsed;
     }
 
@@ -419,24 +414,19 @@ class Google_Http_Request
         $str = '';
         $path = parse_url($this->getUrl(), PHP_URL_PATH) . "?" . http_build_query($this->queryParams);
         $str .= $this->getRequestMethod() . ' ' . $path . " HTTP/1.1\n";
-        
         foreach ($this->getRequestHeaders() as $key => $val) {
             $str .= $key . ': ' . $val . "\n";
         }
-        
         if ($this->getPostBody()) {
             $str .= "\n";
             $str .= $this->getPostBody();
         }
-        
         $headers = '';
         foreach ($this->batchHeaders as $key => $val) {
             $headers .= $key . ': ' . $val . "\n";
         }
-        
         $headers .= "Content-ID: $id\n";
         $str = $headers . "\n" . $str;
-        
         return $str;
     }
 

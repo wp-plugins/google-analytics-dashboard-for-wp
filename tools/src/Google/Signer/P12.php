@@ -14,8 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require_once 'Google/Auth/Exception.php';
-require_once 'Google/Signer/Abstract.php';
+require_once realpath(dirname(__FILE__) . '/../../../autoload.php');
 
 /**
  * Signs data.
@@ -28,14 +27,12 @@ class Google_Signer_P12 extends Google_Signer_Abstract
 {
     // OpenSSL private key resource
     private $privateKey;
-    
     // Creates a new signer from a .p12 file.
     public function __construct($p12, $password)
     {
         if (! function_exists('openssl_x509_read')) {
             throw new Google_Exception('The Google PHP API library needs the openssl PHP extension');
         }
-        
         // If the private key is provided directly, then this isn't in the p12
         // format. Different versions of openssl support different p12 formats
         // and the key from google wasn't being accepted by the version available
@@ -55,7 +52,6 @@ class Google_Signer_P12 extends Google_Signer_Abstract
             }
             $this->privateKey = openssl_pkey_get_private($certs['pkey']);
         }
-        
         if (! $this->privateKey) {
             throw new Google_Auth_Exception("Unable to load private key");
         }

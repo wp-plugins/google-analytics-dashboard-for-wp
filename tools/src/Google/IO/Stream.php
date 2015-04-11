@@ -14,13 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Http Streams based implementation of Google_IO.
  *
  * @author Stuart Langley <slangley@google.com>
  */
-require_once 'Google/IO/Abstract.php';
+require_once realpath(dirname(__FILE__) . '/../../../autoload.php');
 
 class Google_IO_Stream extends Google_IO_Abstract
 {
@@ -56,13 +55,10 @@ class Google_IO_Stream extends Google_IO_Abstract
     public function executeRequest(Google_Http_Request $request)
     {
         $default_options = stream_context_get_options(stream_context_get_default());
-        
         $requestHttpContext = array_key_exists('http', $default_options) ? $default_options['http'] : array();
-        
         if ($request->getPostBody()) {
             $requestHttpContext["content"] = $request->getPostBody();
         }
-        
         $requestHeaders = $request->getRequestHeaders();
         if ($requestHeaders && is_array($requestHeaders)) {
             $headers = "";
@@ -71,34 +67,31 @@ class Google_IO_Stream extends Google_IO_Abstract
             }
             $requestHttpContext["header"] = $headers;
         }
-        
         $requestHttpContext["method"] = $request->getRequestMethod();
         $requestHttpContext["user_agent"] = $request->getUserAgent();
-        
         $requestSslContext = array_key_exists('ssl', $default_options) ? $default_options['ssl'] : array();
-        
         if (! array_key_exists("cafile", $requestSslContext)) {
             $requestSslContext["cafile"] = dirname(__FILE__) . '/cacerts.pem';
         }
-        
         $options = array(
             "http" => array_merge(self::$DEFAULT_HTTP_CONTEXT, $requestHttpContext),
             "ssl" => array_merge(self::$DEFAULT_SSL_CONTEXT, $requestSslContext)
         );
-        
         $context = stream_context_create($options);
-        
         $url = $request->getUrl();
-        
         if ($request->canGzip()) {
             $url = self::ZLIB . $url;
         }
-        
+        $this->client->getLogger()->debug('Stream request', array(
+            'url' => $url,
+            'method' => $request->getRequestMethod(),
+            'headers' => $requestHeaders,
+            'body' => $request->getPostBody()
+        ));
         // We are trapping any thrown errors in this method only and
         // throwing an exception.
         $this->trappedErrorNumber = null;
         $this->trappedErrorString = null;
-        
         // START - error trap.
         set_error_handler(array(
             $this,
@@ -107,30 +100,32 @@ class Google_IO_Stream extends Google_IO_Abstract
         $fh = fopen($url, 'r', false, $context);
         restore_error_handler();
         // END - error trap.
-        
         if ($this->trappedErrorNumber) {
-            throw new Google_IO_Exception(sprintf("HTTP Error: Unable to connect: '%s'", $this->trappedErrorString), $this->trappedErrorNumber);
+            $error = sprintf("HTTP Error: Unable to connect: '%s'", $this->trappedErrorString);
+            $this->client->getLogger()->error('Stream ' . $error);
+            throw new Google_IO_Exception($error, $this->trappedErrorNumber);
         }
-        
         $response_data = false;
         $respHttpCode = self::UNKNOWN_CODE;
         if ($fh) {
             if (isset($this->options[self::TIMEOUT])) {
                 stream_set_timeout($fh, $this->options[self::TIMEOUT]);
             }
-            
             $response_data = stream_get_contents($fh);
             fclose($fh);
-            
             $respHttpCode = $this->getHttpResponseCode($http_response_header);
         }
-        
         if (false === $response_data) {
-            throw new Google_IO_Exception(sprintf("HTTP Error: Unable to connect: '%s'", $respHttpCode), $respHttpCode);
+            $error = sprintf("HTTP Error: Unable to connect: '%s'", $respHttpCode);
+            $this->client->getLogger()->error('Stream ' . $error);
+            throw new Google_IO_Exception($error, $respHttpCode);
         }
-        
         $responseHeaders = $this->getHttpResponseHeaders($http_response_header);
-        
+        $this->client->getLogger()->debug('Stream response', array(
+            'code' => $respHttpCode,
+            'headers' => $responseHeaders,
+            'body' => $response_data
+        ));
         return array(
             $response_data,
             $responseHeaders,
@@ -195,7 +190,6 @@ class Google_IO_Stream extends Google_IO_Abstract
     protected function getHttpResponseCode($response_headers)
     {
         $header_count = count($response_headers);
-        
         for ($i = 0; $i < $header_count; $i ++) {
             $header = $response_headers[$i];
             if (strncasecmp("HTTP", $header, strlen("HTTP")) == 0) {

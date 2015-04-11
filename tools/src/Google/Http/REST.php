@@ -14,10 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require_once 'Google/Client.php';
-require_once 'Google/Http/Request.php';
-require_once 'Google/Service/Exception.php';
-require_once 'Google/Utils/URITemplate.php';
+require_once realpath(dirname(__FILE__) . '/../../../autoload.php');
 
 /**
  * This class implements the RESTful transport of apiServiceRequest()'s
@@ -41,7 +38,7 @@ class Google_Http_REST
     {
         $httpRequest = $client->getIo()->makeRequest($req);
         $httpRequest->setExpectedClass($req->getExpectedClass());
-        return self::decodeHttpResponse($httpRequest);
+        return self::decodeHttpResponse($httpRequest, $client);
     }
 
     /**
@@ -52,14 +49,14 @@ class Google_Http_REST
      * @throws Google_Service_Exception
      * @param Google_Http_Request $response
      *            The http response to be decoded.
+     * @param Google_Client $client            
      * @return mixed|null
      */
-    public static function decodeHttpResponse($response)
+    public static function decodeHttpResponse($response, Google_Client $client = null)
     {
         $code = $response->getResponseHttpCode();
         $body = $response->getResponseBody();
         $decoded = null;
-        
         if ((intVal($code)) >= 300) {
             $decoded = json_decode($body, true);
             $err = 'Error calling ' . $response->getRequestMethod() . ' ' . $response->getUrl();
@@ -70,23 +67,29 @@ class Google_Http_REST
             } else {
                 $err .= ": ($code) $body";
             }
-            
             $errors = null;
             // Specific check for APIs which don't return error details, such as Blogger.
             if (isset($decoded['error']) && isset($decoded['error']['errors'])) {
                 $errors = $decoded['error']['errors'];
             }
-            
+            if ($client) {
+                $client->getLogger()->error($err, array(
+                    'code' => $code,
+                    'errors' => $errors
+                ));
+            }
             throw new Google_Service_Exception($err, $code, null, $errors);
         }
-        
         // Only attempt to decode the response, if the response code wasn't (204) 'no content'
         if ($code != '204') {
             $decoded = json_decode($body, true);
             if ($decoded === null || $decoded === "") {
-                throw new Google_Service_Exception("Invalid json in service response: $body");
+                $error = "Invalid json in service response: $body";
+                if ($client) {
+                    $client->getLogger()->error($error);
+                }
+                throw new Google_Service_Exception($error);
             }
-            
             if ($response->getExpectedClass()) {
                 $class = $response->getExpectedClass();
                 $decoded = new $class($decoded);
@@ -128,16 +131,13 @@ class Google_Http_REST
                     }
                 }
         }
-        
         if (count($uriTemplateVars)) {
             $uriTemplateParser = new Google_Utils_URITemplate();
             $requestUrl = $uriTemplateParser->parse($requestUrl, $uriTemplateVars);
         }
-        
         if (count($queryVars)) {
             $requestUrl .= '?' . implode($queryVars, '&');
         }
-        
         return $requestUrl;
     }
 }

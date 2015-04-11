@@ -14,8 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require_once "Google/Cache/Abstract.php";
-require_once "Google/Cache/Exception.php";
+require_once realpath(dirname(__FILE__) . '/../../../autoload.php');
 
 /**
  * A blank storage class, for cases where caching is not
