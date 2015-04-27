@@ -126,7 +126,8 @@ jQuery.fn.extend({
         var options = {
           page : 'enable',
           pageSize : 10,
-          width : '100%'
+          width : '100%',
+          allowHtml: true
         };
 
         var chart = new google.visualization.Table(document.getElementById('gadwp-prs' + slug));
@@ -617,9 +618,9 @@ jQuery.fn.extend({
       height : 'auto',
       modal : true,
       fluid : true,
-      dialogClass : 'wp-dialog',
+      dialogClass : 'gadwp wp-dialog',
       resizable : false,
-      title : jQuery('#gadwp'+slug).attr( "title" ).substring(0,44),
+      title : jQuery('#gadwp'+slug).attr( "title" ),
       position : {
         my : "top",
         at : "top+100",
