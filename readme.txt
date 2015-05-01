@@ -3,8 +3,8 @@ Contributors: deconf
 Donate link: https://deconf.com/donate/
 Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking,realtime,wpmu,multisite
 Requires at least: 3.5
-Tested up to: 4.2
-Stable tag: 4.7
+Tested up to: 4.2.1
+Stable tag: 4.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,6 +12,8 @@ Displays Google Analytics reports and real-time statistics in your WordPress Das
 
 == Description ==
 Using a widget, [Google Analytics Dashboard](https://deconf.com/google-analytics-dashboard-wordpress/) displays detailed analytics data and reports about: number of sessions, number of visitors (users), page views, bounce rates, organic searches, pages per visit directly on your WordPress Dashboard.
+
+In addition, in-depth Page reports and in-depth Post reports allow further segmentation of your analytics data, providing performance details for each post or page from your website.
 
 This plugin also inserts the latest version of the Google Analytics tracking code in every page of your site. The tracking code is fully customizable through options and hooks. 
 
@@ -132,8 +134,14 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
+= 4.7.1 =
+- Enhancement: Italian translation updated
+- Bug Fix: use url-encoding for API filters to avoid generating invalid parameters
+- Bug Fix: cache reports for pages and posts with queries in URI
+- Bug Fix: avoid double encoding while doing API requests
+
 = 4.7 =
-- Enhancement: Dutch translation
+- Enhancement: Dutch translation updated
 - Enhancement: using wp_get_current_user() to check users' roles
 - Enhancement: fit longer titles in backend item reports widget
 - Enhancement: disable the drop-down select list while a single View is available
@@ -141,9 +149,9 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - Bug Fix: unable to add new widgets on frontend
 
 = 4.6 =
-- Enhancement: Italian translation
-- Enhancement: Japanese translation
-- Enhancement: Portuguese (Brazil) translation
+- Enhancement: Italian translation updated
+- Enhancement: Japanese translation updated
+- Enhancement: Portuguese (Brazil) translation updated
 - Enhancement: introducing a manager class to keep track of all instances and their references
 - Enhancement: push the tracking code at the end of head section
 - Enhancement: better support for remove_action and wp_dequeue_script
@@ -169,7 +177,7 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - Enhancement: gadwp_backenditem_uri allows URI corrections for backend item reports
 - Enhancement: option to enable/disable the custom dashboard widget
 - Enhancement: Japanese translation
-- Enhancement: Dutch translation
+- Enhancement: Dutch translation updated
 - Enhancement: Portuguese (Brazil) translation
 - Enhancement: UI improvements, props by [Paal Joachim Romdahl](https://github.com/paaljoachim)
 - Bug Fix: Arabic translation not loading properly
