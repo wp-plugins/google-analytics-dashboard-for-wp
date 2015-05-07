@@ -134,6 +134,11 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
+= 4.7.2 =
+- Enhancement: Czech translation
+- Bug Fix: apply tooltips only on GADWP widget
+- Bug Fix: use a custom data attribute instead of title to attach the tooltip
+
 = 4.7.1 =
 - Enhancement: Italian translation updated
 - Bug Fix: use url-encoding for API filters to avoid generating invalid parameters
