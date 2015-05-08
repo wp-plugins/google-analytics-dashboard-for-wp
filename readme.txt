@@ -3,8 +3,8 @@ Contributors: deconf
 Donate link: https://deconf.com/donate/
 Tags: google,analytics,google analytics,dashboard,analytics dashboard,google analytics dashboard,google analytics widget,tracking,realtime,wpmu,multisite
 Requires at least: 3.5
-Tested up to: 4.2.1
-Stable tag: 4.7.1
+Tested up to: 4.2.2
+Stable tag: 4.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,7 +79,7 @@ Install the Google Analytics tracking code in less than a minute and customize i
 
 = Translations =
 
-Google Analytics Dashboard has been translated into the following languages: Arabic, Dutch, English, French, German, Hungarian, Italian, Japanese, Polish, Portuguese, and Spanish.
+Google Analytics Dashboard has been translated into the following languages: Arabic, Czech, Dutch, French, German, Hungarian, Italian, Japanese, Polish, Portuguese, and Spanish.
 
 = Further reading and info =
 
