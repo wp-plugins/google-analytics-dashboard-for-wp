@@ -134,6 +134,11 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
+= 4.7.3 =
+- Enhancement: Russian translation
+- Enhancement: Romanian translation
+- Enhancement: Hungarian translation updated
+
 = 4.7.2 =
 - Enhancement: Czech translation
 - Bug Fix: apply tooltips only on GADWP widget
