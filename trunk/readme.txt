@@ -79,7 +79,7 @@ Install the Google Analytics tracking code in less than a minute and customize i
 
 = Translations =
 
-Google Analytics Dashboard has been translated into the following languages: Arabic, Czech, Dutch, French, German, Hungarian, Italian, Japanese, Polish, Portuguese, and Spanish.
+Google Analytics Dashboard has been translated and is available in more than 12 languages.
 
 = Further reading and info =
 
@@ -138,6 +138,8 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 - Enhancement: Russian translation
 - Enhancement: Romanian translation
 - Enhancement: Hungarian translation updated
+- Enhancement: UX improvements, props by [adipop](https://github.com/adipop)
+- Enhancement: settings page cleanup
 
 = 4.7.2 =
 - Enhancement: Czech translation
