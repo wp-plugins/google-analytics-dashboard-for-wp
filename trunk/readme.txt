@@ -134,6 +134,12 @@ This plugin it's released under the GPLv2, you can use it free of charge on your
 
 == Changelog ==
 
+= 4.7.4 =
+- Bug Fix: Settings action unavailable on Installed Plugins screen
+- Enhancement: German translation updated
+- Enhancement: Romanian translation updated
+- Enhancement: Dutch translation updated
+
 = 4.7.3 =
 - Enhancement: Russian translation
 - Enhancement: Romanian translation
