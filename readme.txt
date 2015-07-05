@@ -70,9 +70,9 @@ With Google Analytics Dashboard for WP you can use custom dimensions to track:
 
 This plugin is fully compatible with multisite network installs, allowing three setup modes:
 
-- <em>Mode 1:</em> network activated using multiple Google Analytics accounts
-- <em>Mode 2:</em> network activated using a single Google Analytics account
-- <em>Mode 3:</em> network deactivated using multiple Google Analytics accounts
+- Mode 1: network activated using multiple Google Analytics accounts
+- Mode 2: network activated using a single Google Analytics account
+- Mode 3: network deactivated using multiple Google Analytics accounts
 
 > <strong>Google Analytics Dashboard for WP on GitHub</strong><br>
 > You can submit feature requests or bugs on [Google Analytics Dashboard for WP](https://github.com/deconf/Google-Analytics-Dashboard-for-WP) repository.
