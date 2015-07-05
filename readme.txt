@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Displays Google Analytics reports in your WordPress Dashboard. Inserts the latest Google Analytics tracking code in your pages.
 
 == Description ==
-This Google Analytics for WordPress plugin enables you to track your site using the latest Google Analytics tracking code and allows you to view the analytics reports in your WordPress install.
+This Google Analytics for WordPress plugin enables you to track your site using the latest Google Analytics tracking code and allows you to view key Google Analytics reports in your WordPress install.
 
 In addition to a set of general Google Analytics reports, in-depth Page reports and in-depth Post reports allow further segmentation of your analytics data, providing performance details for each post or page from your website.
 
@@ -19,7 +19,7 @@ The Google Analytics tracking code is fully customizable through options and hoo
 
 = Google Analytics Real-Time =
 
-Google Analytics reports, in real-time, on your dashboard screen:
+Google Analytics reports, in real-time, in your dashboard screen:
 
 - Real-time number of visitors 
 - Real-time acquisition channels
@@ -27,7 +27,7 @@ Google Analytics reports, in real-time, on your dashboard screen:
 
 = Google Analytics Reports =
 
-The Google Analytics reports you need, in your dashboard, in your All Posts and All Pages screens, and on site's frontend:  
+The Google Analytics reports you need, on your dashboard, in your All Posts and All Pages screens, and on site's frontend:  
 
 - Sessions, organic searches, page views, bounce rate analytics reports
 - Locations, pages, referrers, keywords analytics reports
